@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DefaultController {
-	
+
 	@GetMapping("/testSuccess")
 	public ResponseEntity<String> testSuccess() {
 		String response = "success";
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/testNotFound")
 	public ResponseEntity<String> testNotFound() {
 		return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
 	}
-	
+
 	@GetMapping("/testError")
 	public ResponseEntity<String> testError() {
 		return new ResponseEntity<>("error", HttpStatus.INTERNAL_SERVER_ERROR);
