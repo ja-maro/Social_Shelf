@@ -11,7 +11,7 @@
 	<groupId>com.quest</groupId>
 	<artifactId>quest_web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>quest_web</name>
+	<name>quest_web_java</name>
 	<description>Quest web project step 1</description>
 	<properties>
 		<java.version>8</java.version>
