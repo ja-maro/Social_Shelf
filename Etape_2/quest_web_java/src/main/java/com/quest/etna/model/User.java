@@ -1,6 +1,6 @@
 package com.quest.etna.model;
 
-import java.sql.Date;
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -35,23 +35,41 @@ public class User {
 
     @CreatedDate
     @Column(name = "creation_date", columnDefinition = "datetime")
-    private Date creationDate;
+    private Instant creationDate;
 
     @LastModifiedDate
     @Column(name = "updated_date", columnDefinition = "datetime")
-    private Date updatedDate;
+    private Instant updatedDate;
 
     public User() {
     }
 
-    public User(String username, UserRole role, Date creationDate, Date updatedDate) {
-        this.username = username;
-        this.role = role;
-        this.creationDate = creationDate;
-        this.updatedDate = updatedDate;
-    }
+   
 
-    public Integer getId() {
+    public User(User user) {
+		super();
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.role = UserRole.ROLE_USER;
+		this.creationDate = Instant.now();
+	}
+
+
+
+	public User(Integer id, String username, String password, UserRole role, Instant creationDate,
+			Instant updatedDate) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.creationDate = creationDate;
+		this.updatedDate = updatedDate;
+	}
+
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -79,21 +97,6 @@ public class User {
         this.role = role;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
 
     @Override
     public boolean equals(Object obj) {

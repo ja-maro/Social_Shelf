@@ -3,8 +3,16 @@ package com.quest.etna.model;
 public class UserDetails {
     private String username;
     private UserRole role;
+    
+    
 
-    public String getUsername() {
+    public UserDetails(String username, UserRole role) {
+		super();
+		this.username = username;
+		this.role = role;
+	}
+
+	public String getUsername() {
         return username;
     }
 
