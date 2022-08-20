@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.quest.etna.model.User;
 import com.quest.etna.model.UserDetails;
-import com.quest.etna.model.UserRole;
 import com.quest.etna.repositories.UserRepository;
 
 import java.time.Instant;
@@ -37,7 +36,7 @@ public class AuthenticationController {
 			UserDetails userDetails = new UserDetails(user.getUsername(), user.getUserRole());
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
-			if (userRequest.getPassword() == null) {
+			if (userRequest.getPassword() == null || userRequest.getUsername() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
 			}
 			throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
