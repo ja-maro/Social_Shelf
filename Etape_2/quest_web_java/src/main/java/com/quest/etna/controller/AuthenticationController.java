@@ -1,5 +1,6 @@
 package com.quest.etna.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +35,10 @@ public class AuthenticationController {
 				return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 			}
 			return new ResponseEntity<>(userDetails, HttpStatus.CONFLICT);
+		} catch (DataIntegrityViolationException error) {
+		    throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-
 }
