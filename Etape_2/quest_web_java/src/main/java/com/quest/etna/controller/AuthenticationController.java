@@ -13,6 +13,8 @@ import com.quest.etna.model.UserDetails;
 import com.quest.etna.model.UserRole;
 import com.quest.etna.repositories.UserRepository;
 
+import java.time.Instant;
+
 @RestController
 public class AuthenticationController {
 
@@ -24,24 +26,23 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<UserDetails> register(@RequestBody User requestUser) {
+	public ResponseEntity<UserDetails> userRegister(@RequestBody User userRequest) {
 
 		try {
-			UserDetails userDetails = new UserDetails(requestUser.getUsername(), UserRole.ROLE_USER);
-			if (!userRepository.existsByUsernameIgnoreCase(requestUser.getUsername())) {
-				User user = new User(requestUser);
-				userRepository.save(user);
-
-				return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
-			}
-			return new ResponseEntity<>(userDetails, HttpStatus.CONFLICT);
+			User user = new User();
+			user.setUsername(userRequest.getUsername());
+			user.setPassword(userRequest.getPassword());
+			user.setCreationDate(Instant.now());
+			userRepository.save(user);
+			UserDetails userDetails = new UserDetails(user.getUsername(), user.getUserRole());
+			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
-			if (requestUser.getPassword() == null || requestUser.getUsername() == null) {
+			if (userRequest.getPassword() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
 			}
-		    throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
+		} catch (Exception error) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
 		}
 	}
 }

@@ -97,6 +97,14 @@ public class User {
         this.role = role;
     }
 
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setUpdatedDate(Instant updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
