@@ -1,3 +1,5 @@
 /.project
 */mysql-db
 */.vscode
+*/.idea
+.idea

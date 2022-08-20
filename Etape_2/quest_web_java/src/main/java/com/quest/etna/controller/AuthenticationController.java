@@ -16,7 +16,7 @@ import com.quest.etna.repositories.UserRepository;
 @RestController
 public class AuthenticationController {
 
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	public AuthenticationController(UserRepository userRepo) {
 		super();
@@ -36,6 +36,9 @@ public class AuthenticationController {
 			}
 			return new ResponseEntity<>(userDetails, HttpStatus.CONFLICT);
 		} catch (DataIntegrityViolationException error) {
+			if (requestUser.getPassword() == null || requestUser.getUsername() == null) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
+			}
 		    throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
