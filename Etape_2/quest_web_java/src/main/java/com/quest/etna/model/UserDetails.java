@@ -11,6 +11,12 @@ public class UserDetails {
 		this.username = username;
 		this.role = role;
 	}
+    
+    public UserDetails(User user) {
+    	super();
+    	this.username = user.getUsername();
+    	this.role = user.getUserRole();
+    }
 
 	public String getUsername() {
         return username;

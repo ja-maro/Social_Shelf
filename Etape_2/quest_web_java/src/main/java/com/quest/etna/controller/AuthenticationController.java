@@ -33,7 +33,7 @@ public class AuthenticationController {
 			user.setPassword(userRequest.getPassword());
 			user.setCreationDate(Instant.now());
 			userRepository.save(user);
-			UserDetails userDetails = new UserDetails(user.getUsername(), user.getUserRole());
+			UserDetails userDetails = new UserDetails(user);
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
 			if (userRequest.getPassword() == null || userRequest.getUsername() == null) {
