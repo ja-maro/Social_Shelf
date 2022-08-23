@@ -129,8 +129,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                "username:'" + username + '\'' +
+                "id=" + id + '\'' +
+                ", username:'" + username + '\'' +
                 ", role:'" + role + '\'' +
                 ", creation_date:" + creationDate +
                 ", updated_date:" + updatedDate +
