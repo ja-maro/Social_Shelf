@@ -1,21 +1,25 @@
 package com.quest.etna.model;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUserDetails implements UserDetails {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String username;
-    private UserRole role;
+	private final String username;
+	private final String password;
+    private final UserRole role;
     
     public JwtUserDetails(User user) {
     	super();
     	this.username = user.getUsername();
     	this.role = user.getUserRole();
+		this.password = user.getPassword();
     }
 
     public UserRole getRole() {
@@ -24,44 +28,37 @@ public class JwtUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return username;
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }
