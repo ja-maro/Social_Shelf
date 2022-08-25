@@ -1,4 +1,4 @@
-package com.quest.etna.config;
+package com.quest.etna.service;
 
 import com.quest.etna.model.JwtUserDetails;
 import com.quest.etna.model.User;
@@ -17,7 +17,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     public JwtUserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (null == user || ! user.getUsername().equals(username)) {
-            throw new UsernameNotFoundException("User not found " + username);
+            throw new UsernameNotFoundException("User not found: " + username);
         } else {
             return new JwtUserDetails(user);
         }
