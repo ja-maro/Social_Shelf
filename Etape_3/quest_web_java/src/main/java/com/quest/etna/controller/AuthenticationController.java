@@ -1,14 +1,20 @@
 package com.quest.etna.controller;
 
 import com.quest.etna.config.JwtTokenUtil;
+import com.quest.etna.model.JwtRequest;
+import com.quest.etna.model.JwtResponse;
 import com.quest.etna.model.JwtUserDetails;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,23 +25,35 @@ import com.quest.etna.model.UserDetails;
 import com.quest.etna.repositories.UserRepository;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @RestController
 public class AuthenticationController {
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-	private final UserRepository userRepository;
-	private final UserDetailsService userDetailsService;
-	private final JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 
-	public AuthenticationController(UserRepository userRepo,
-									UserDetailsService userDetailsService,
-									JwtTokenUtil jwtTokenUtil) {
-		super();
-		this.userRepository = userRepo;
-		this.userDetailsService = userDetailsService;
-		this.jwtTokenUtil = jwtTokenUtil;
-	}
+//	public AuthenticationController(UserRepository userRepo,
+//									UserDetailsService userDetailsService,
+//									JwtTokenUtil jwtTokenUtil) {
+//		super();
+//		this.userRepository = userRepo;
+//		this.userDetailsService = userDetailsService;
+//		this.jwtTokenUtil = jwtTokenUtil;
+//	}
 
 	@PostMapping("/register")
 	public ResponseEntity<UserDetails> userRegister(@RequestBody User userRequest) {
@@ -43,8 +61,9 @@ public class AuthenticationController {
 		try {
 			User user = new User();
 			user.setUsername(userRequest.getUsername());
-			user.setPassword(userRequest.getPassword());
+			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 			user.setCreationDate(Instant.now());
+			
 			userRepository.save(user);
 			UserDetails userDetails = new UserDetails(user);
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
@@ -58,21 +77,43 @@ public class AuthenticationController {
 		}
 	}
 
-	@PostMapping("/authenticate")
-	public ResponseEntity<String> authenticateUser(@RequestBody User userRequest) {
+//	@PostMapping("/authenticate")
+//	public ResponseEntity<String> authenticateUser(@RequestBody User userRequest) {
+//		try {
+//			User user = new User();
+//			user.setUsername(userRequest.getUsername());
+//			user.setPassword(userRequest.getPassword());
+//
+//			Authentication token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+//			SecurityContextHolder.getContext().setAuthentication(token);
+//
+//			JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getUsername());
+//			String tokenFinal = jwtTokenUtil.generateToken(userDetails);
+//			return new ResponseEntity<>(tokenFinal, HttpStatus.OK);
+//		} catch (Exception error) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
+//		}
+//	}
+	
+	@PostMapping(value = "/authenticate")
+	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
+
+		authenticate(authRequest.getUsername(), passwordEncoder.encode(authRequest.getPassword()));
+		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(authRequest.getUsername());
+		final String token = jwtTokenUtil.generateToken(userDetails);
+
+		return ResponseEntity.ok(new JwtResponse(token));
+	}
+
+	private void authenticate(String username, String password) throws Exception {
+		Objects.requireNonNull(username);
+		Objects.requireNonNull(password);
 		try {
-			User user = new User();
-			user.setUsername(userRequest.getUsername());
-			user.setPassword(userRequest.getPassword());
-
-			Authentication token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-			SecurityContextHolder.getContext().setAuthentication(token);
-
-			JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getUsername());
-			String tokenFinal = jwtTokenUtil.generateToken(userDetails);
-			return new ResponseEntity<>(tokenFinal, HttpStatus.OK);
-		} catch (Exception error) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		} catch (DisabledException e) {
+			throw new Exception("USER_DISABLED", e);
+		} catch (BadCredentialsException e) {
+			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
 }
