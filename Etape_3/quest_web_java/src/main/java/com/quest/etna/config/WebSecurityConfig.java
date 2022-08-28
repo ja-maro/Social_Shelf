@@ -1,5 +1,6 @@
 package com.quest.etna.config;
 
+import com.quest.etna.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,27 +11,34 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	
 	@Autowired
-	UserDetailsService userDetailsService;
+	JwtUserDetailsService userDetailsService;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
 
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		  http.csrf().disable();
-	      http.authorizeRequests().anyRequest().authenticated()
-	      .antMatchers("/register", "/authenticate").permitAll()
-	      .and().httpBasic().authenticationEntryPoint(authenticationEntryPoint);
+	      http.authorizeRequests()
+	      .antMatchers("/register", "/authenticate").permitAll().anyRequest().authenticated()
+	      .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+				  .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		  http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		  //super.configure(http);
 	      
 //        http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 //        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
@@ -44,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 //		auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("password")).roles("USER");
 	}
 

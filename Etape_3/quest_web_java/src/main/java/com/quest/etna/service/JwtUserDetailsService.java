@@ -5,7 +5,9 @@ import com.quest.etna.model.User;
 import com.quest.etna.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JwtUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
