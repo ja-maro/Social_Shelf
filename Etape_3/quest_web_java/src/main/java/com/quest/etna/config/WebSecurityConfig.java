@@ -19,8 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-	
 	@Autowired
 	JwtUserDetailsService userDetailsService;
 
@@ -62,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
-	@Bean
+	@Autowired
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}

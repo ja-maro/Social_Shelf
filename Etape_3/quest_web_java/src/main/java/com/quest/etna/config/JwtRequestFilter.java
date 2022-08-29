@@ -31,6 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
 
+    //TODO : Correction des if/else et try/catch
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -38,13 +39,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // Get authorization header and validate
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!header.startsWith("Bearer ")) {
+        if (header != null && !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
+            // Get jwt token
+            final String token = header.split(" ")[1].trim();
             return;
         }
 
-        // Get jwt token
-        final String token = header.split(" ")[1].trim();
+
 
         // Get user identity and set it on the spring security context
         JwtUserDetails userDetails = new JwtUserDetails(userRepository
