@@ -63,8 +63,8 @@ public class AuthenticationController {
 			user.setUsername(userRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 			user.setCreationDate(Instant.now());
-			
 			userRepository.save(user);
+			
 			UserDetails userDetails = new UserDetails(user);
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
@@ -77,31 +77,11 @@ public class AuthenticationController {
 		}
 	}
 
-//	@PostMapping("/authenticate")
-//	public ResponseEntity<String> authenticateUser(@RequestBody User userRequest) {
-//		try {
-//			User user = new User();
-//			user.setUsername(userRequest.getUsername());
-//			user.setPassword(userRequest.getPassword());
-//
-//			Authentication token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//			SecurityContextHolder.getContext().setAuthentication(token);
-//
-//			JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(user.getUsername());
-//			String tokenFinal = jwtTokenUtil.generateToken(userDetails);
-//			return new ResponseEntity<>(tokenFinal, HttpStatus.OK);
-//		} catch (Exception error) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
-//		}
-//	}
-	
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
-
-		authenticate(authRequest.getUsername(), passwordEncoder.encode(authRequest.getPassword()));
+		authenticate(authRequest.getUsername(), authRequest.getPassword());
 		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(authRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
-
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 

@@ -14,10 +14,6 @@ public class JwtUserDetailsService implements UserDetailsService {
 	
 	@Autowired
     private UserRepository userRepository;
-//
-//    public JwtUserDetailsService(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
 
     @Override
     public JwtUserDetails loadUserByUsername(String username) {
