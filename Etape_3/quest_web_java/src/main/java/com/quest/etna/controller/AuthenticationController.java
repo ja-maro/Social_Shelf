@@ -13,8 +13,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,31 +33,21 @@ import java.util.Objects;
 
 @RestController
 public class AuthenticationController {
-	
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-
-//	public AuthenticationController(UserRepository userRepo,
-//									UserDetailsService userDetailsService,
-//									JwtTokenUtil jwtTokenUtil) {
-//		super();
-//		this.userRepository = userRepo;
-//		this.userDetailsService = userDetailsService;
-//		this.jwtTokenUtil = jwtTokenUtil;
-//	}
 
 	@PostMapping("/register")
 	public ResponseEntity<UserDetails> userRegister(@RequestBody User userRequest) {
@@ -64,7 +58,7 @@ public class AuthenticationController {
 			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 			user.setCreationDate(Instant.now());
 			userRepository.save(user);
-			
+
 			UserDetails userDetails = new UserDetails(user);
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
@@ -80,7 +74,8 @@ public class AuthenticationController {
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
 		authenticate(authRequest.getUsername(), authRequest.getPassword());
-		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService.loadUserByUsername(authRequest.getUsername());
+		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
+				.loadUserByUsername(authRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
@@ -95,5 +90,12 @@ public class AuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
+	}
+
+	@GetMapping(value = "/me")
+	public ResponseEntity<UserDetails> me(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {	
+		String name = authentication.getName();
+		UserDetails userDetails = new UserDetails(userRepository.findByUsername(name));		
+		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 }
