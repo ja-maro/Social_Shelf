@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,8 +85,6 @@ public class AuthenticationController {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("error", "wrong username/password");
 			return  new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
-//			return  new ResponseEntity<>("wrong login/password", HttpStatus.UNAUTHORIZED);
-//			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, error.getMessage());
 		}
 	}
 
@@ -109,7 +106,7 @@ public class AuthenticationController {
 	public ResponseEntity<UserDetails> me(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String name = authentication.getName();
-		UserDetails userDetails = new UserDetails(userRepository.findByUsername(name));
+		UserDetails userDetails = new UserDetails(userRepository.findByUsernameIgnoreCase(name));
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 }
