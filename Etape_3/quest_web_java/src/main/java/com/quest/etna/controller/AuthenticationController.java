@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +30,8 @@ import com.quest.etna.model.UserDetails;
 import com.quest.etna.repositories.UserRepository;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -73,11 +76,19 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
-		authenticate(authRequest.getUsername(), authRequest.getPassword());
-		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
-				.loadUserByUsername(authRequest.getUsername());
-		final String token = jwtTokenUtil.generateToken(userDetails);
-		return ResponseEntity.ok(new JwtResponse(token));
+		try {
+			authenticate(authRequest.getUsername(), authRequest.getPassword());
+			final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
+					.loadUserByUsername(authRequest.getUsername());
+			final String token = jwtTokenUtil.generateToken(userDetails);
+			return ResponseEntity.ok(new JwtResponse(token));
+		} catch (Exception error) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("error", "wrong username/password");
+			return  new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
+//			return  new ResponseEntity<>("wrong login/password", HttpStatus.UNAUTHORIZED);
+//			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, error.getMessage());
+		}
 	}
 
 	private void authenticate(String username, String password) throws Exception {
@@ -89,13 +100,16 @@ public class AuthenticationController {
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
+		} catch (AuthenticationException authExc){
+			 throw new RuntimeException("Invalid Login Credentials");
 		}
 	}
 
 	@GetMapping(value = "/me")
-	public ResponseEntity<UserDetails> me(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {	
+	public ResponseEntity<UserDetails> me(
+			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String name = authentication.getName();
-		UserDetails userDetails = new UserDetails(userRepository.findByUsername(name));		
+		UserDetails userDetails = new UserDetails(userRepository.findByUsername(name));
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 }
