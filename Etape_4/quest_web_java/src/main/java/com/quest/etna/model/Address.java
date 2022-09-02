@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -37,11 +39,11 @@ public class Address {
     @ManyToOne
     private User user;
     
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "creation_date", columnDefinition = "datetime")
     private Instant creationDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_date", columnDefinition = "datetime")
     private Instant updatedDate;
     

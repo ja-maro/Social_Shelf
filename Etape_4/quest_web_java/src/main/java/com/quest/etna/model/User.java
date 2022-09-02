@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "user")
@@ -38,25 +38,24 @@ public class User {
     @OneToMany
     private List<Address> addresses;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "creation_date", columnDefinition = "datetime")
     private Instant creationDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_date", columnDefinition = "datetime")
     private Instant updatedDate;
 
+    // CONSTRUCTORS
+    
     public User() {
     }
-
-   
 
     public User(User user) {
 		super();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.role = UserRole.ROLE_USER;
-		this.creationDate = Instant.now();
 	}
 
 
@@ -72,7 +71,7 @@ public class User {
 		this.updatedDate = updatedDate;
 	}
 
-
+	// GETTERS & SETTERS
 
 	public Integer getId() {
         return id;
