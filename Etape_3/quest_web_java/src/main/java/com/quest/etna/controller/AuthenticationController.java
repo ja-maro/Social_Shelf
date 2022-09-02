@@ -29,8 +29,6 @@ import com.quest.etna.model.UserDetails;
 import com.quest.etna.repositories.UserRepository;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -75,17 +73,11 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
-		try {
 			authenticate(authRequest.getUsername(), authRequest.getPassword());
 			final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
 					.loadUserByUsername(authRequest.getUsername());
 			final String token = jwtTokenUtil.generateToken(userDetails);
 			return ResponseEntity.ok(new JwtResponse(token));
-		} catch (Exception error) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("error", "wrong username/password");
-			return  new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
-		}
 	}
 
 	private void authenticate(String username, String password) throws Exception {
