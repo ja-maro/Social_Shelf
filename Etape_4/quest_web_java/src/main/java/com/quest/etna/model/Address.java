@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -37,11 +39,95 @@ public class Address {
     @ManyToOne
     private User user;
     
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "creation_date", columnDefinition = "datetime")
     private Instant creationDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_date", columnDefinition = "datetime")
     private Instant updatedDate;
+    
+    // CONSTRUCTORS
+
+	public Address() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Address(String street, String postalCode, String city, String country, User user) {
+		super();
+		this.street = street;
+		this.postalCode = postalCode;
+		this.city = city;
+		this.country = country;
+		this.user = user;
+	}
+
+	// GETTERS & SETTERS
+
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Instant getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Instant creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Instant getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Instant updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+    
+    
 }

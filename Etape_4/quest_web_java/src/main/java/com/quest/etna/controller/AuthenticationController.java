@@ -56,7 +56,6 @@ public class AuthenticationController {
 			User user = new User();
 			user.setUsername(userRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-			user.setCreationDate(Instant.now());
 			userRepository.save(user);
 
 			UserDetails userDetails = new UserDetails(user);
