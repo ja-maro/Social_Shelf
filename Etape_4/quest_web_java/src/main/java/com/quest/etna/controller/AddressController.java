@@ -5,21 +5,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.quest.etna.model.User;
+import com.quest.etna.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.quest.etna.model.Address;
 import com.quest.etna.repositories.AddressRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/address")
@@ -27,21 +26,23 @@ public class AddressController {
 
 	@Autowired
 	private AddressRepository addressRepo;
+
+	@Autowired
+	private UserRepository userRepository;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Address> getById(@RequestParam int id) {
+	public ResponseEntity<Address> getById(@PathVariable int id) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		if (dbAddress.isPresent()) {
 			return ResponseEntity.ok(dbAddress.get());
 		} else {
-//			return ResponseEntity.notFound();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found");
 		}
-		return null;
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Address>> getAll() {
-		List<Address> addresses = new ArrayList<Address>();
+		List<Address> addresses = new ArrayList<>();
 		Iterable<Address> dbAddress = addressRepo.findAll();
 		while (dbAddress.iterator().hasNext()) {
 			addresses.add(
@@ -52,11 +53,27 @@ public class AddressController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Address> create(@RequestBody Address address) {
-		//TODO: Add current user to address
-//		address.setUser(null);
-		Address savedAddress = addressRepo.save(address);
-		return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
+	public ResponseEntity<Address> create(@RequestBody Address address,
+										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+		String currentUser = authentication.getName();
+		User user = userRepository.findByUsernameIgnoreCase(currentUser);
+		address.setUser(user);
+		try {
+			Address savedAddress = addressRepo.save(address);
+			return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
+		} catch (DataIntegrityViolationException e) {
+			if (address.getCity() == null ||
+					address.getCountry() == null ||
+					address.getPostalCode() == null ||
+					address.getStreet() == null) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			} else {
+				throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+			}
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+
 	}
 	
 	@PutMapping("/{id}")

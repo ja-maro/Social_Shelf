@@ -27,7 +27,7 @@ public class Address {
     @Column(name = "street", columnDefinition = "varchar(100) not null unique")
     public String street;
     
-    @Column(name = "postalCode", columnDefinition = "varchar(30) not null unique")
+    @Column(name = "postal_code", columnDefinition = "varchar(30) not null unique")
     public String postalCode;
     
     @Column(name = "city", columnDefinition = "varchar(50) not null unique")
