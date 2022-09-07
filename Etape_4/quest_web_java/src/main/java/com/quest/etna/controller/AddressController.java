@@ -1,11 +1,7 @@
 package com.quest.etna.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.quest.etna.model.User;
 import com.quest.etna.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +30,17 @@ public class AddressController {
 	private UserRepository userRepository;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Address> getById(@PathVariable int id) {
+	public ResponseEntity<Address> getById(@PathVariable int id,
+										   @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
-		if (dbAddress.isPresent()) {
-			return ResponseEntity.ok(dbAddress.get());
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not found");
-		}
+		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
+			if (dbAddress.isPresent()) {
+				return ResponseEntity.ok(dbAddress.get());
+			} else {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			}
+		} else
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping
@@ -81,32 +81,42 @@ public class AddressController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Address>update(@PathVariable int id, @RequestBody Address formAddress) {
+	public ResponseEntity<Address>update(@PathVariable int id, @RequestBody Address formAddress,
+										 @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
-		if (dbAddress.isPresent()) {
-			Address updatedAddress = updateAddress(formAddress, dbAddress.get());		
-			updatedAddress = addressRepo.save(updatedAddress);
-			return ResponseEntity.ok(updatedAddress);		
+		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
+			if (dbAddress.isPresent()) {
+				Address updatedAddress = updateAddress(formAddress, dbAddress.get());
+				updatedAddress = addressRepo.save(updatedAddress);
+				return ResponseEntity.ok(updatedAddress);
+			} else {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			}
 		} else {
-			return new ResponseEntity<>(formAddress, HttpStatus.NOT_FOUND);
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 		}
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable int id) {
+	public ResponseEntity<String> delete(@PathVariable int id,
+										 @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		HttpHeaders responseHeader = new HttpHeaders();
 		responseHeader.setContentType(MediaType.valueOf("application/json"));
-		if(dbAddress.isPresent()) {
-			try {
-				addressRepo.delete(dbAddress.get());
-				return new ResponseEntity<>("{\"success\": \"TRUE\"}", responseHeader, HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity<>("{\"success\": \"FALSE\"}", responseHeader, HttpStatus.FORBIDDEN);
+		String FalseBody = "{\"success\": \"FALSE\"}";
+		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
+			if(dbAddress.isPresent()) {
+				try {
+					addressRepo.delete(dbAddress.get());
+					return new ResponseEntity<>("{\"success\": \"TRUE\"}", responseHeader, HttpStatus.OK);
+				} catch (Exception e) {
+					return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
+				}
+			} else {
+				return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.NOT_FOUND);
 			}
-		} else {
-			return new ResponseEntity<>("{\"success\": \"FALSE\"}", responseHeader, HttpStatus.NOT_FOUND);
-		}
+		} else
+			return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
 	}
 	
 	/**
@@ -131,13 +141,7 @@ public class AddressController {
 		}
 		return addressToUpdate;
 	}
-	
-	/**
-	 * Checks if current user has given role
-	 * 
-	 * @param roleName
-	 * @return
-	 */
+
 	public boolean hasRole (String roleName)
 	{
 	    return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
@@ -151,5 +155,3 @@ public class AddressController {
 		return userOwner.equals(userAuthenticated);
 	}
 }
-
-
