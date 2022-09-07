@@ -41,15 +41,9 @@ public class AddressController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Address>> getAll() {
-		List<Address> addresses = new ArrayList<>();
+	public ResponseEntity<Iterable<Address>> getAll() {
 		Iterable<Address> dbAddress = addressRepo.findAll();
-		while (dbAddress.iterator().hasNext()) {
-			addresses.add(
-					dbAddress.iterator().next()
-					);
-		} 
-		return ResponseEntity.ok(addresses);
+		return ResponseEntity.ok(dbAddress);
 	}
 	
 	@PostMapping

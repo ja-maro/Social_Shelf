@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +29,7 @@ public class User {
     @Column(name = "username", columnDefinition = "varchar(255) not null unique")
     public String username;
 
+    @JsonIgnore
     @Column(name = "password", columnDefinition = "varchar(255) not null")
     private String password;
 
@@ -54,7 +56,6 @@ public class User {
     public User(User user) {
 		super();
 		this.username = user.getUsername();
-		this.password = user.getPassword();
 		this.role = UserRole.ROLE_USER;
 	}
 
