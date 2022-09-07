@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -56,5 +55,16 @@ public class ControllerTests {
                 .andExpect(jsonPath("$.username").exists())
                 .andExpect(jsonPath("$.role").exists());
 
+    }
+
+    @Test
+    public void testUser() {
+//      TODO after CRUD user
+    }
+
+    @Test
+    public void testAddress() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/address"))
+                .andExpect(status().isUnauthorized());
     }
 }
