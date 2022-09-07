@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.quest.etna.model.User;
 import com.quest.etna.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -71,7 +74,7 @@ public class AddressController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Address>update(@RequestParam int id, @RequestBody Address formAddress) {
+	public ResponseEntity<Address>update(@PathVariable int id, @RequestBody Address formAddress) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		if (dbAddress.isPresent()) {
 			Address updatedAddress = updateAddress(formAddress, dbAddress.get());		
@@ -83,15 +86,19 @@ public class AddressController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@RequestParam int id) {
+	public ResponseEntity<String> delete(@PathVariable int id) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
-		try {
-			addressRepo.delete(dbAddress.get());
-			return new ResponseEntity<String>("{\"success\": \"TRUE\"}", HttpStatus.OK);
-		} catch(NoSuchElementException e) {
-			return new ResponseEntity<String>("{\"success\": \"FALSE\"}", HttpStatus.OK);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<String>("{\"success\": \"FALSE\"}", HttpStatus.OK);
+		HttpHeaders responseHeader = new HttpHeaders();
+		responseHeader.setContentType(MediaType.valueOf("application/json"));
+		if(dbAddress.isPresent()) {
+			try {
+				addressRepo.delete(dbAddress.get());
+				return new ResponseEntity<>("{\"success\": \"TRUE\"}", responseHeader, HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>("{\"success\": \"FALSE\"}", responseHeader, HttpStatus.FORBIDDEN);
+			}
+		} else {
+			return new ResponseEntity<>("{\"success\": \"FALSE\"}", responseHeader, HttpStatus.NOT_FOUND);
 		}
 	}
 	
