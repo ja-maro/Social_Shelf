@@ -44,9 +44,16 @@ public class AddressController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Iterable<Address>> getAll() {
-		Iterable<Address> dbAddress = addressRepo.findAll();
-		return ResponseEntity.ok(dbAddress);
+	public ResponseEntity<Iterable<Address>> getAll(
+			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+		if(hasRole("ROLE_ADMIN")) {
+			Iterable<Address> dbAddress = addressRepo.findAll();
+			return ResponseEntity.ok(dbAddress);
+		} else {
+			User userAuthenticated = userRepository.findByUsernameIgnoreCase(authentication.getName());
+			Iterable<Address> dbAddress = addressRepo.findAllByUser(userAuthenticated);
+			return ResponseEntity.ok(dbAddress);
+		}
 	}
 	
 	@PostMapping
@@ -131,9 +138,18 @@ public class AddressController {
 	 * @param roleName
 	 * @return
 	 */
-	public static boolean hasRole (String roleName)
+	public boolean hasRole (String roleName)
 	{
 	    return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
 	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
 	}
+
+	public boolean isOwner(Authentication authentication, int id) {
+		String currentUser = authentication.getName();
+		User userAuthenticated = userRepository.findByUsernameIgnoreCase(currentUser);
+		User userOwner = addressRepo.findById(id).get().getUser();
+		return userOwner.equals(userAuthenticated);
+	}
 }
+
+

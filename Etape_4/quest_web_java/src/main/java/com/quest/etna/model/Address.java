@@ -24,16 +24,16 @@ public class Address {
     @Column(name = "id")
     public Integer id;
 
-    @Column(name = "street", columnDefinition = "varchar(100) not null unique")
+    @Column(name = "street", columnDefinition = "varchar(100) not null")
     public String street;
     
-    @Column(name = "postal_code", columnDefinition = "varchar(30) not null unique")
+    @Column(name = "postal_code", columnDefinition = "varchar(30) not null")
     public String postalCode;
     
-    @Column(name = "city", columnDefinition = "varchar(50) not null unique")
+    @Column(name = "city", columnDefinition = "varchar(50) not null")
     public String city;
     
-    @Column(name = "country", columnDefinition = "varchar(50) not null unique")
+    @Column(name = "country", columnDefinition = "varchar(50) not null")
     public String country;
     
     @ManyToOne
@@ -51,7 +51,7 @@ public class Address {
 
 	public Address() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Address(String street, String postalCode, String city, String country, User user) {
@@ -106,6 +106,7 @@ public class Address {
 	}
 
 	public User getUser() {
+		user.setPassword("*****");
 		return user;
 	}
 

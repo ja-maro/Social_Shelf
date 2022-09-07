@@ -29,7 +29,6 @@ public class User {
     @Column(name = "username", columnDefinition = "varchar(255) not null unique")
     public String username;
 
-    @JsonIgnore
     @Column(name = "password", columnDefinition = "varchar(255) not null")
     private String password;
 
