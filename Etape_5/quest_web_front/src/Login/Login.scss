@@ -1,0 +1,17 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #171515;
+        padding: 20px;
+        input {
+            margin: 10px;
+        }
+    }
+}
