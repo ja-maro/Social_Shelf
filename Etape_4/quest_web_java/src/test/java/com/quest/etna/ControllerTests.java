@@ -2,7 +2,7 @@ package com.quest.etna;
 
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,9 +57,47 @@ public class ControllerTests {
 
     }
 
+    @Sql(scripts = "/user-db.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/user-db.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
-    public void testUser() {
-//      TODO after CRUD user
+    public void testUser() throws Exception {
+
+    	// unauth user gets 401
+    	 mockMvc.perform(MockMvcRequestBuilders.get("/user"))
+    	 		.andExpect(status().isUnauthorized());
+    	 
+    	 // authenticate as user
+    	 JSONObject jsonBody = new JSONObject();
+         jsonBody.put("username", "brice");
+         jsonBody.put("password", "1234");
+         MvcResult tokenResult = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+                         .contentType(MediaType.APPLICATION_JSON)
+                         .content(jsonBody.toString()))
+                 .andReturn();
+         String token = JsonPath.read(tokenResult.getResponse().getContentAsString(), "$.token");
+         
+         // authenticated user gets 200
+         mockMvc.perform(MockMvcRequestBuilders.get("/user")
+                         .header("Authorization", "Bearer " + token))
+                 .andExpect(status().isOk());
+         
+         // ROLE_USER gets 403 on delete other
+         mockMvc.perform(MockMvcRequestBuilders.delete("/user/2")
+                 .header("Authorization", "Bearer " + token))
+         .andExpect(status().isForbidden());
+    	
+         //authenticate as admin
+         jsonBody.put("username", "JeanAntoine");
+         tokenResult = mockMvc.perform(MockMvcRequestBuilders.post("/authenticate")
+                 .contentType(MediaType.APPLICATION_JSON)
+                 .content(jsonBody.toString()))
+         .andReturn();
+         token = JsonPath.read(tokenResult.getResponse().getContentAsString(), "$.token");
+         
+         // ROLE_USER gets 403 on delete other
+         mockMvc.perform(MockMvcRequestBuilders.delete("/user/1")
+                 .header("Authorization", "Bearer " + token))
+         .andExpect(status().isOk());
     }
 
     @Sql(scripts = "/user-db.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
