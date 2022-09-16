@@ -30,17 +30,23 @@ public class AddressController {
 	private UserRepository userRepository;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Address> getById(@PathVariable int id,
+	public ResponseEntity getById(@PathVariable int id,
 										   @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
-		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
-			if (dbAddress.isPresent()) {
+		if (dbAddress.isPresent()) {
+			if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
 				return ResponseEntity.ok(dbAddress.get());
 			} else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				return ResponseEntity
+						.status(HttpStatus.FORBIDDEN)
+						.headers(headers)
+						.body( "{\"Message\": \"Forbidden to get this address\"}");
 			}
-		} else
+		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@GetMapping
