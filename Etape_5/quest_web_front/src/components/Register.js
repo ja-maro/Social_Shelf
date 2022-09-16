@@ -1,24 +1,22 @@
 import "../styles/Login.scss";
-import { useState } from "react";
 import AuthService from "../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
-function Login({ isLog, setIsLog }) {
+function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
-        const response = AuthService.login(username, password);
+    const handleSubmit = () => {
+        const response = AuthService.register(username, password);
         console.log(response);
-        setIsLog(true);
-        navigate("/");
+        Navigate("/");
     };
 
     return (
         <div className="login">
             <form onSubmit={handleSubmit}>
-                <h1 className="title"> Login </h1>
+                <h1 className="title"> Register </h1>
                 <label>
                     Username :
                     <input
@@ -42,5 +40,4 @@ function Login({ isLog, setIsLog }) {
         </div>
     );
 }
-
-export default Login;
+export default Register;

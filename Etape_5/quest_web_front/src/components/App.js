@@ -1,32 +1,21 @@
 import "../styles/App.scss";
 import Login from "./Login";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Register from "./Register";
+import { useState } from "react";
+import NavBar from "./NavBar";
 
 function App() {
+    const [isLog, setIsLog] = useState(false);
+
     return (
         <div>
-            <BrowserRouter>
-                <nav className="navbar">
-                    <div className="navbar-left">
-                        <h2>Quest Web</h2>
-                        <Link to="/" className="link">
-                            <h4>Home</h4>
-                        </Link>
-                    </div>
-
-                    <div className="navbar-log">
-                        <Link to="/login" className="link">
-                            <h4>Login</h4>
-                        </Link>
-                        <Link to="/register" className="link">
-                            <h4>Register</h4>
-                        </Link>
-                    </div>
-                </nav>
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                </Routes>
-            </BrowserRouter>
+            <NavBar isLog={isLog} />
+            <Routes>
+                <Route path="/login" element={<Login setIsLog={setIsLog} />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/logout" element={<Login />} />
+            </Routes>
         </div>
     );
 }
