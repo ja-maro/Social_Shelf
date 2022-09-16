@@ -42,7 +42,7 @@ public class AddressController {
 				return ResponseEntity
 						.status(HttpStatus.FORBIDDEN)
 						.headers(headers)
-						.body( "{\"Message\": \"Forbidden to get this address\"}");
+						.body( "{\"Message\": \"Forbidden\"}");
 			}
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -87,7 +87,7 @@ public class AddressController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Address>update(@PathVariable int id, @RequestBody Address formAddress,
+	public ResponseEntity update(@PathVariable int id, @RequestBody Address formAddress,
 										 @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
@@ -99,7 +99,12 @@ public class AddressController {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
 		} else {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			return ResponseEntity
+					.status(HttpStatus.FORBIDDEN)
+					.headers(headers)
+					.body( "{\"Message\": \"Forbidden\"}");
 		}
 	}
 	
