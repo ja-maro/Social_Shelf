@@ -81,13 +81,11 @@ public class AddressController {
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String currentUser = authentication.getName();
 		User user = userRepository.findByUsernameIgnoreCase(currentUser);
-		UserDTO userDTO = new UserDTO(user);
+		addressDTO.setUser(new UserDTO(user));
 		Address address = new Address(addressDTO);
-		addressDTO.setUser(userDTO);
 		try {
-			System.out.println("Ready to save ???");
 			addressRepo.save(address);
-			return new ResponseEntity<>(addressDTO, HttpStatus.CREATED);
+			return new ResponseEntity<>(new AddressDTO(address), HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException e) {
 			if (address.getCity() == null ||
 					address.getCountry() == null ||
