@@ -21,19 +21,19 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public Integer id;
+    private Integer id;
 
     @Column(name = "street", columnDefinition = "varchar(100) not null")
-    public String street;
+    private String street;
     
     @Column(name = "postal_code", columnDefinition = "varchar(30) not null")
-    public String postalCode;
+    private String postalCode;
     
     @Column(name = "city", columnDefinition = "varchar(50) not null")
-    public String city;
+    private String city;
     
     @Column(name = "country", columnDefinition = "varchar(50) not null")
-    public String country;
+    private String country;
     
     @ManyToOne
     @JoinColumn(referencedColumnName = "id", nullable = false)

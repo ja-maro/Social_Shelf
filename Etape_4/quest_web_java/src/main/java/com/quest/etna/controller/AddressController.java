@@ -34,6 +34,9 @@ public class AddressController {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private JsonService jsonService;
 	
 	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathVariable int id,
@@ -133,15 +136,15 @@ public class AddressController {
 			if(dbAddress.isPresent()) {
 				try {
 					addressRepo.delete(dbAddress.get());
-					return new ResponseEntity<>(successBody(true), responseHeader, HttpStatus.OK);
+					return new ResponseEntity<>(jsonService.successBody(true), responseHeader, HttpStatus.OK);
 				} catch (Exception e) {
-					return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.FORBIDDEN);
+					return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 				}
 			} else {
-				return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.NOT_FOUND);
 			}
 		} else
-			return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 	}
 	/**
 	 * Updates and returns an address object.

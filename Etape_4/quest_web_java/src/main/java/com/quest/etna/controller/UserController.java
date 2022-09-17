@@ -2,6 +2,8 @@ package com.quest.etna.controller;
 
 import java.util.Optional;
 
+import com.quest.etna.model.UserDTO;
+import com.quest.etna.service.JsonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,8 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepo;
+	@Autowired
+	private JsonService jsonService;
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getById(@PathVariable int id) {	
@@ -100,20 +104,19 @@ public class UserController {
 		Optional<User> dbUser = userRepo.findById(id);
 		HttpHeaders responseHeader = new HttpHeaders();
 		responseHeader.setContentType(MediaType.valueOf("application/json"));
-		String FalseBody = "{\"success\": \"FALSE\"}";
 		if (isUser(auth, id) || hasRole("ROLE_ADMIN")) {
 			if(dbUser.isPresent()) {
 				try {
 					userRepo.delete(dbUser.get());
-					return new ResponseEntity<>("{\"success\": \"TRUE\"}", responseHeader, HttpStatus.OK);
+					return new ResponseEntity<>(jsonService.successBody(true), responseHeader, HttpStatus.OK);
 				} catch (Exception e) {
-					return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
+					return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 				}
 			} else {
-				return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.NOT_FOUND);
 			}
 		} else
-			return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 	}
 
 	/**
@@ -136,9 +139,13 @@ public class UserController {
 	 * @return
 	 */
 	public boolean isUser(Authentication authentication, int id) {
-		String currentUser = authentication.getName();
-		User userAuthenticated = userRepo.findByUsernameIgnoreCase(currentUser);
-		User userToModify = userRepo.findById(id).get();
-		return userToModify.equals(userAuthenticated);
+		try {
+			String currentUser = authentication.getName();
+			User userAuthenticated = userRepo.findByUsernameIgnoreCase(currentUser);
+			User userToModify = userRepo.findById(id).get();
+			return userToModify.equals(userAuthenticated);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
