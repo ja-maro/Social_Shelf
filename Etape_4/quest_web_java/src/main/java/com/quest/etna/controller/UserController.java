@@ -1,5 +1,7 @@
 package com.quest.etna.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.quest.etna.model.UserDTO;
@@ -34,26 +36,30 @@ public class UserController {
 	private JsonService jsonService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getById(@PathVariable int id) {	
+	public ResponseEntity<UserDTO> getById(@PathVariable int id) {	
 		Optional<User> dbUser = userRepo.findById(id);
 		if (dbUser.isPresent()) {
 			User user = dbUser.get();
-			user.setPassword("*****");
-			return ResponseEntity.ok(user);
+			UserDTO userDTO = new UserDTO(user);
+			return ResponseEntity.ok(userDTO);
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@GetMapping
-	public ResponseEntity<Iterable<User>> getAll() {	
+	public ResponseEntity<List<UserDTO>> getAll() {
+		List<UserDTO> results = new ArrayList<UserDTO>();
 		Iterable<User> users = userRepo.findAll();
-		users.forEach(user -> user.setPassword("*****"));
-		return ResponseEntity.ok(users);
+		users.forEach(user -> {
+			UserDTO userDTO = new UserDTO(user);
+			results.add(userDTO);
+		});
+		return ResponseEntity.ok(results);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> update(@PathVariable int id, @RequestBody User formUser, @CurrentSecurityContext(expression = "authentication") Authentication auth) {	
+	public ResponseEntity<UserDTO> update(@PathVariable int id, @RequestBody User formUser, @CurrentSecurityContext(expression = "authentication") Authentication auth) {	
 		Optional<User> dbUser = userRepo.findById(id);
 		if (isUser(auth, id) || hasRole("ROLE_ADMIN")) {
 			if (dbUser.isPresent()) {		
@@ -62,7 +68,8 @@ public class UserController {
 					updatedUser = updateRole(formUser, updatedUser);
 				}
 				updatedUser = userRepo.save(updatedUser);
-				return ResponseEntity.ok(updatedUser);
+				UserDTO userDTO = new UserDTO(updatedUser);
+				return ResponseEntity.ok(userDTO);
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
