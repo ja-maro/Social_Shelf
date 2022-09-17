@@ -1,8 +1,12 @@
 package com.quest.etna.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import com.quest.etna.model.User;
+import com.quest.etna.model.UserDTO;
 import com.quest.etna.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,8 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.quest.etna.model.Address;
+import com.quest.etna.model.AddressDTO;
 import com.quest.etna.repositories.AddressRepository;
 import org.springframework.web.server.ResponseStatusException;
+import com.quest.etna.service.JsonService;
 
 @RestController
 @RequestMapping("/address")
@@ -35,7 +41,8 @@ public class AddressController {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		if (dbAddress.isPresent()) {
 			if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
-				return ResponseEntity.ok(dbAddress.get());
+				AddressDTO addressDTO = new AddressDTO(dbAddress.get());
+				return ResponseEntity.ok(addressDTO);
 			} else {
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_JSON);
@@ -50,27 +57,34 @@ public class AddressController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Iterable<Address>> getAll(
+	public ResponseEntity<Iterable<AddressDTO>> getAll(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		if(hasRole("ROLE_ADMIN")) {
 			Iterable<Address> dbAddress = addressRepo.findAll();
-			return ResponseEntity.ok(dbAddress);
+			List<AddressDTO> addressDTOS= new ArrayList<>();
+			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
+			return ResponseEntity.ok(addressDTOS);
 		} else {
 			User userAuthenticated = userRepository.findByUsernameIgnoreCase(authentication.getName());
 			Iterable<Address> dbAddress = addressRepo.findAllByUser(userAuthenticated);
-			return ResponseEntity.ok(dbAddress);
+			List<AddressDTO> addressDTOS= new ArrayList<>();
+			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
+			return ResponseEntity.ok(addressDTOS);
 		}
 	}
 	
 	@PostMapping
-	public ResponseEntity<Address> create(@RequestBody Address address,
+	public ResponseEntity<AddressDTO> create(@RequestBody AddressDTO addressDTO,
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String currentUser = authentication.getName();
 		User user = userRepository.findByUsernameIgnoreCase(currentUser);
-		address.setUser(user);
+		UserDTO userDTO = new UserDTO(user);
+		Address address = new Address(addressDTO);
+		addressDTO.setUser(userDTO);
 		try {
-			Address savedAddress = addressRepo.save(address);
-			return new ResponseEntity<>(savedAddress, HttpStatus.CREATED);
+			System.out.println("Ready to save ???");
+			addressRepo.save(address);
+			return new ResponseEntity<>(addressDTO, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException e) {
 			if (address.getCity() == null ||
 					address.getCountry() == null ||
@@ -94,7 +108,8 @@ public class AddressController {
 			if (dbAddress.isPresent()) {
 				Address updatedAddress = updateAddress(formAddress, dbAddress.get());
 				updatedAddress = addressRepo.save(updatedAddress);
-				return ResponseEntity.ok(updatedAddress);
+				AddressDTO addressDTO = new AddressDTO(updatedAddress);
+				return ResponseEntity.ok(addressDTO);
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
@@ -127,10 +142,6 @@ public class AddressController {
 			}
 		} else
 			return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.FORBIDDEN);
-	}
-
-	public String successBody(Boolean success) {
-		return "{\"success\":" + success + "}";
 	}
 	/**
 	 * Updates and returns an address object.

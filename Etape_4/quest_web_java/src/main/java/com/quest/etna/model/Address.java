@@ -11,10 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.lang.NonNull;
 
 @Entity
 @Table(name="address")
@@ -53,7 +51,16 @@ public class Address {
 
 	public Address() {
 		super();
+	}
 
+	public Address(AddressDTO addressDTO) {
+		super();
+		this.user = new User(addressDTO.getUser());
+		this.city = addressDTO.getCity();
+		this.id = addressDTO.getId();
+		this.country = addressDTO.getCountry();
+		this.postalCode = addressDTO.getPostalCode();
+		this.street = addressDTO.getStreet();
 	}
 
 	public Address(String street, String postalCode, String city, String country, User user) {

@@ -59,6 +59,12 @@ public class User {
 		this.role = UserRole.ROLE_USER;
 	}
 
+    public User(UserDTO userDTO) {
+        super();
+        this.username = userDTO.getUsername();
+        this.role = userDTO.getRole();
+        this.id = userDTO.getUser_id();
+    }
 
 
 	public User(Integer id, String username, String password, UserRole role, Instant creationDate,
