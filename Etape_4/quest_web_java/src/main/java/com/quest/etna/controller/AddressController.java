@@ -42,7 +42,7 @@ public class AddressController {
 				return ResponseEntity
 						.status(HttpStatus.FORBIDDEN)
 						.headers(headers)
-						.body( "{\"Message\": \"Forbidden\"}");
+						.body( "{\"message\": \"Forbidden\"}");
 			}
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -104,7 +104,7 @@ public class AddressController {
 			return ResponseEntity
 					.status(HttpStatus.FORBIDDEN)
 					.headers(headers)
-					.body( "{\"Message\": \"Forbidden\"}");
+					.body( "{\"message\": \"Forbidden\"}");
 		}
 	}
 	
@@ -114,22 +114,24 @@ public class AddressController {
 		Optional<Address> dbAddress = addressRepo.findById(id);
 		HttpHeaders responseHeader = new HttpHeaders();
 		responseHeader.setContentType(MediaType.valueOf("application/json"));
-		String FalseBody = "{\"success\": \"FALSE\"}";
 		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
 			if(dbAddress.isPresent()) {
 				try {
 					addressRepo.delete(dbAddress.get());
-					return new ResponseEntity<>("{\"success\": \"TRUE\"}", responseHeader, HttpStatus.OK);
+					return new ResponseEntity<>(successBody(true), responseHeader, HttpStatus.OK);
 				} catch (Exception e) {
-					return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
+					return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 				}
 			} else {
-				return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.NOT_FOUND);
 			}
 		} else
-			return new ResponseEntity<>(FalseBody, responseHeader, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 	}
-	
+
+	public String successBody(Boolean success) {
+		return "{\"success\":" + success + "}";
+	}
 	/**
 	 * Updates and returns an address object.
 	 * 
@@ -160,9 +162,13 @@ public class AddressController {
 	}
 
 	public boolean isOwner(Authentication authentication, int id) {
-		String currentUser = authentication.getName();
-		User userAuthenticated = userRepository.findByUsernameIgnoreCase(currentUser);
-		User userOwner = addressRepo.findById(id).get().getUser();
-		return userOwner.equals(userAuthenticated);
+		try {
+			String currentUser = authentication.getName();
+			User userAuthenticated = userRepository.findByUsernameIgnoreCase(currentUser);
+			User userOwner = addressRepo.findById(id).get().getUser();
+			return userOwner.equals(userAuthenticated);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }
