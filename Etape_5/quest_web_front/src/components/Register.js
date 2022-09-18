@@ -2,15 +2,17 @@ import "../styles/Login.scss";
 import AuthService from "../services/auth.service";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         const response = AuthService.register(username, password);
         console.log(response);
-        Navigate("/");
+        navigate("/");
     };
 
     return (
