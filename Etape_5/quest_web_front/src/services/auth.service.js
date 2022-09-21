@@ -17,16 +17,15 @@ const login = async (username, password) => {
             username,
             password,
         })
-        .catch(function (error) {
-            response = error.response;
-        })
         .then((result) => {
             response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
         });
-    if (response.data.token) {
+    if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
     }
-    console.log(response);
     return response;
 };
 

@@ -7,6 +7,11 @@ function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isAlert, setIsAlert] = useState(false);
+    const [authMessage, setAuthMessage] = useState({
+        severity: "",
+        message: "",
+        status: "",
+    });
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -14,13 +19,24 @@ function Login(props) {
         await AuthService.login(username, password).then(
             (res) => (response = res)
         );
-        console.log(response);
         if (response.status === 200) {
             setIsAlert(true);
+            setAuthMessage({
+                severity: "success",
+                message: "Connected",
+                status: "200",
+            });
             props.setIsLog(true);
-        } else {
-            console.log(response);
+        } else if (response.status === 401) {
+            console.log("Error : " + response.status);
+            setIsAlert(true);
+            setAuthMessage({
+                severity: "error",
+                message: "Wrong Username/Password",
+                status: "401",
+            });
         }
+        console.log(authMessage);
     };
 
     const form = (
@@ -55,8 +71,12 @@ function Login(props) {
         return (
             <div className="login">
                 {form}
-                <Alert className="alert" variant="filled" severity="success">
-                    success !
+                <Alert
+                    className="alert"
+                    variant="filled"
+                    severity={authMessage.severity}
+                >
+                    {authMessage.message}
                 </Alert>
             </div>
         );
