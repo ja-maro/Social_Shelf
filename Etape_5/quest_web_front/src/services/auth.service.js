@@ -11,18 +11,28 @@ const register = async (username, password) => {
 };
 
 const login = async (username, password) => {
-    const response = await axios.post(API_URL + "authenticate", {
-        username,
-        password,
-    });
+    let response;
+    await axios
+        .post(API_URL + "authenticate", {
+            username,
+            password,
+        })
+        .catch(function (error) {
+            response = error.response;
+        })
+        .then((result) => {
+            response = result;
+        });
     if (response.data.token) {
-        localStorage.setItem("token", JSON.stringify(response.data));
+        localStorage.setItem("token", response.data.token);
     }
-    return response.data;
+    console.log(response);
+    return response;
 };
 
 const logout = () => {
-    localStorage.removeItem("user");
+    console.log(localStorage.getItem("token"));
+    localStorage.removeItem("token");
 };
 
 const AuthService = {

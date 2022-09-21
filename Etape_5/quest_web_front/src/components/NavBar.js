@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 const NavBar = ({ isLog, setIsLog }) => {
     const logout = () => {
+        AuthService.logout();
         setIsLog(false);
     };
 

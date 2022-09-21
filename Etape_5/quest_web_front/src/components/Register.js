@@ -1,7 +1,6 @@
 import "../styles/Login.scss";
 import AuthService from "../services/auth.service";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
