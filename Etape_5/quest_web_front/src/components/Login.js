@@ -36,7 +36,6 @@ function Login(props) {
                 status: "401",
             });
         }
-        console.log(authMessage);
     };
 
     const form = (

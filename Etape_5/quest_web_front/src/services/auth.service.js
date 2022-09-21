@@ -3,11 +3,20 @@ import axios from "axios";
 const API_URL = "http://localhost:8090/";
 
 const register = async (username, password) => {
-    const response = await axios.post(API_URL + "register", {
-        username,
-        password,
-    });
-    return response.status;
+    let response;
+    await axios
+        .post(API_URL + "register", {
+            username,
+            password,
+        })
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    console.log(response);
+    return response;
 };
 
 const login = async (username, password) => {
