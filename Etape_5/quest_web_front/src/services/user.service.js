@@ -9,12 +9,10 @@ const getUserDetails = async () => {
     await axios
         .get(API_URL + "me", { headers: { Authorization: "Bearer " + token } })
         .then((result) => {
-            console.log(result);
             response = result;
         })
         .catch((error) => {
-            console.log(error);
-            response = error;
+            response = error.response;
         });
     return response;
 };

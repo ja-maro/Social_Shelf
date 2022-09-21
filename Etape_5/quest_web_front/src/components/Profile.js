@@ -7,19 +7,25 @@ const Profile = () => {
         username: "",
         role: "",
     });
+    const [isDisconnected, setIsDisconnected] = useState(true);
+
     useEffect(() => {
         if (userDetails.username === "") {
             UserService.getUserDetails().then((response) => {
-                setUserDetails({
-                    username: response.data.username,
-                    role: response.data.role,
-                });
+                if (response.status === 200) {
+                    console.log(response);
+                    setUserDetails({
+                        username: response.data.username,
+                        role: response.data.role,
+                    });
+                } else if (response.status === 401) {
+                }
             });
         }
     });
 
     return (
-        <div>
+        <div className="login">
             <h2>Profile</h2>
             <p>Username : {userDetails.username}</p>
             <p>Role : {userDetails.role}</p>
