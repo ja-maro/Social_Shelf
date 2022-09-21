@@ -17,7 +17,7 @@ const NavBar = ({ isLog, setIsLog }) => {
             </div>
 
             <div className="navbar-log">
-                <Link to="/me" className="link">
+                <Link to="/profile" className="link">
                     <h4>Profile</h4>
                 </Link>
                 <Link to="/login" className="link" onClick={logout}>

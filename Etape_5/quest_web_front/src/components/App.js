@@ -2,9 +2,10 @@ import "../styles/App.scss";
 import Login from "./Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./Register";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavBar from "./NavBar";
 import Home from "./Home";
+import Profile from "./Profile";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -16,6 +17,7 @@ const App = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/logout" element={<Login />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
             </Routes>
         </div>
     );

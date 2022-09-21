@@ -3,12 +3,24 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8090/";
 
-const getUserDetails = () => {
-  return axios.get(API_URL + "me", { headers: authHeader });
+const getUserDetails = async () => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .get(API_URL + "me", { headers: { Authorization: "Bearer " + token } })
+        .then((result) => {
+            console.log(result);
+            response = result;
+        })
+        .catch((error) => {
+            console.log(error);
+            response = error;
+        });
+    return response;
 };
 
-const userService = {
-  getUserDetails,
+const UserService = {
+    getUserDetails,
 };
 
-export default userService;
+export default UserService;
