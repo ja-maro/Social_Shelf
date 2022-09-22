@@ -18,7 +18,7 @@ public class JwtUserDetails implements UserDetails {
     public JwtUserDetails(User user) {
     	super();
     	this.username = user.getUsername();
-    	this.role = user.getUserRole();
+    	this.role = user.getRole();
 		this.password = user.getPassword();
     }
 

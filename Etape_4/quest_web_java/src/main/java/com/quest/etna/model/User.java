@@ -100,11 +100,11 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getUserRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setUserRole(UserRole role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 

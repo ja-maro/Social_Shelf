@@ -15,7 +15,7 @@ public class UserDetails {
     public UserDetails(User user) {
     	super();
     	this.username = user.getUsername();
-    	this.role = user.getUserRole();
+    	this.role = user.getRole();
     }
 
 	public String getUsername() {

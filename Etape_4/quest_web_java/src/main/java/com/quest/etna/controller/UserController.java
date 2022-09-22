@@ -88,8 +88,8 @@ public class UserController {
 	 * @return
 	 */
 	private User updateRole(User formUser, User user) {
-		if (null != formUser.getUserRole()) {
-			user.setUserRole(formUser.getUserRole());
+		if (null != formUser.getRole()) {
+			user.setRole(formUser.getRole());
 		}
 		return user;
 	}
