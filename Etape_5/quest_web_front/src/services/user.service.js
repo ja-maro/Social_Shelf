@@ -14,6 +14,10 @@ const getById = (id) => {
   return getRequestParam("user", id);
 };
 
+const update = (id, username, role) => {
+  return putRequest("user/" + id, username, role);
+};
+
 const deleteUser = async (id) => {
   let response;
   const token = localStorage.getItem("token");
@@ -43,6 +47,7 @@ const sendRequest = async (route) => {
         });
     return response;
 };
+
 const getRequestParam = async (route, id) => {
     let response;
     const token = localStorage.getItem("token");
@@ -55,6 +60,29 @@ const getRequestParam = async (route, id) => {
             response = error.response;
         });
     return response;
+};
+
+const putRequest = async (route, username, role) => {
+  let response;
+  const token = localStorage.getItem("token");
+  await axios
+      .put(
+          API_URL + route,
+          {
+              username,
+              role,
+          },
+          { headers: { Authorization: "Bearer " + token } }
+      )
+      .then((result) => {
+          response = result;
+      })
+      .catch((error) => {
+          response = error.toJSON();
+      });
+  console.log("Update of user");
+  console.log(response);
+  return response;
 };
 
 const UserService = {
