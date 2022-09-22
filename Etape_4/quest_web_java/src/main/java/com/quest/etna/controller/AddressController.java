@@ -25,6 +25,7 @@ import com.quest.etna.repositories.AddressRepository;
 import org.springframework.web.server.ResponseStatusException;
 import com.quest.etna.service.JsonService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/address")
 public class AddressController {
