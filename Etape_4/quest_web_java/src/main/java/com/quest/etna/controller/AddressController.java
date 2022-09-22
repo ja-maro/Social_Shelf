@@ -1,7 +1,6 @@
 package com.quest.etna.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +24,7 @@ import com.quest.etna.repositories.AddressRepository;
 import org.springframework.web.server.ResponseStatusException;
 import com.quest.etna.service.JsonService;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/address")
 public class AddressController {

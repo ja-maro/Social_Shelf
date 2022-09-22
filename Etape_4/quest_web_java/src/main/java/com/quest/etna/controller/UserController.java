@@ -27,7 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.quest.etna.model.User;
 import com.quest.etna.repositories.UserRepository;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/user")
 public class UserController {

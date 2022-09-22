@@ -27,7 +27,7 @@ import com.quest.etna.repositories.UserRepository;
 
 import java.util.Objects;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class AuthenticationController {
 
