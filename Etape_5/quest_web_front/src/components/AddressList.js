@@ -12,7 +12,9 @@ const AddressList = () => {
             AddressService.getAll().then((response) => {
                 if (response.status === 200) {
                     console.log(response);
-                    setAddressList(response.data)
+                    setAddressList(
+                        response.data.sort((a, b) => a.user.user_id - b.user.user_id)
+                    );
                 } else if (response.status === 401) {
 
                 }
