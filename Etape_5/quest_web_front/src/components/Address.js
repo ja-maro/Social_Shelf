@@ -20,7 +20,7 @@ const Address = () => {
     };
 
     useEffect(() => {
-        if (!address.street || !address.city) {
+        if (!address.street) {
             AddressService.getById(id).then((response) => {
                 if (response.status === 200) {
                     console.log(response);
@@ -38,6 +38,7 @@ const Address = () => {
             ...prevState,
             [name]: value,
         }));
+        console.log();
     };
 
     const form = (
@@ -57,30 +58,30 @@ const Address = () => {
                     Postal Code :
                     <input
                         type="text"
-                        name="Postal Code"
+                        name="postalCode"
                         placeholder="12345"
                         defaultValue={address.postalCode}
-                        onChange={() => setAddress.postalCode}
+                        onChange={handleChange}
                     />
                 </label>
                 <label>
                     City :
                     <input
                         type="text"
-                        name="Postal Code"
+                        name="city"
                         placeholder="12345"
                         defaultValue={address.city}
-                        onChange={(event) => "Hello World"}
+                        onChange={handleChange}
                     />
                 </label>
                 <label>
                     Country :
                     <input
                         type="text"
-                        name="Postal Code"
+                        name="country"
                         placeholder="12345"
                         defaultValue={address.country}
-                        onChange={(event) => "Hello World"}
+                        onChange={handleChange}
                     />
                 </label>
                 <input type="submit" value="Modify" />
