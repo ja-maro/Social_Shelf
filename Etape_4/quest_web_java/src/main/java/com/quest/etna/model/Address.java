@@ -115,7 +115,6 @@ public class Address {
 	}
 
 	public User getUser() {
-		user.setPassword("*****");
 		return user;
 	}
 
