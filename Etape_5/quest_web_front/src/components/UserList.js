@@ -19,10 +19,15 @@ const Users = () => {
     });
 
     return(
-        <div>
+        <div className="wrapper">
+            <h1>User list</h1>
+            <ul>
         {users.map(item => (
+            <li>
             <UserListItem key={item.user_id} item={item} />
+            </li>
         ))}
+        </ul>
     </div> 
     );
 };

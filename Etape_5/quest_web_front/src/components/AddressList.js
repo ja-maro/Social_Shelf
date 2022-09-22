@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AddressListItem from "./AddressListItem";
 import AddressService from "../services/address.service";
+import { Link } from "react-router-dom";
 
 
 const AddressList = () => {
@@ -23,11 +24,17 @@ const AddressList = () => {
     });
 
     return(
-    <ul>
-        {addressList.map(address => (
-            <AddressListItem key={address.id} address={address} />
-        ))}
-    </ul>
+    <div className="wrapper">  
+         <Link to="/createAddress" className="link">
+         <h4>- Add address -</h4>
+         </Link>
+        <h1>Address list</h1>
+        <ul>
+            {addressList.map(address => (
+                <AddressListItem key={address.id} address={address} />
+            ))}
+        </ul>
+    </div>
 )};
 
 export default AddressList;

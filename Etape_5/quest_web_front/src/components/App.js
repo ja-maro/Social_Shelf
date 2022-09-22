@@ -7,7 +7,9 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import Profile from "./Profile";
 import UserList from "./UserList";
+import User from "./User.js";
 import AddressList from "./AddressList";
+import CreateAddress from "./CreateAddress";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -21,7 +23,9 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/users" element={<UserList />} />
+                <Route path="/users/:id" element={<User />} />
                 <Route path="/address" element={<AddressList />} />
+                <Route path="/createAddress" element={<CreateAddress />} />
             </Routes>
         </div>
     );

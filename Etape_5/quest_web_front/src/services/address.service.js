@@ -3,10 +3,14 @@ import axios from "axios";
 const API_URL = "http://localhost:8090/";
 
 const getAll = () => {
-  return sendRequest("address");
+  return getRequest("address");
 }
 
-const sendRequest = async (route) => {
+const create = (street, postalCode, city, country) => {
+    return postRequest("address", street, postalCode, city, country);
+}
+
+const getRequest = async (route) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
@@ -20,8 +24,29 @@ const sendRequest = async (route) => {
     return response;
 };
 
+const postRequest = async (route, street, postalCode, city, country) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .post(API_URL + route, {
+            street,
+            postalCode,
+            city,
+            country,
+        }, { headers: { Authorization: "Bearer " + token } })
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    console.log(response);
+    return response;
+};
+
 const AddressService = {
-  getAll,
+    create,
+    getAll,
 };
 
 export default AddressService;
