@@ -8,10 +8,6 @@ import UserListItem from "./UserListItem";
 const Users = () => {
     const [users, setUsers] = useState( [] );
     let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-    let path = `/`; 
-    navigate(path);
-  }
 
     useEffect(() => {
         if (!users.length) {
@@ -26,10 +22,9 @@ const Users = () => {
         }
     });
 
-    function handleClick(item) {
+    function handleClickDetails(item) {
         console.log("id : " + item.user_id)
-        UserService.deleteUser(item.user_id);
-        routeChange();
+        navigate(`/users/` + item.user_id)
     }
 
     return(
@@ -39,7 +34,8 @@ const Users = () => {
         {users.map(item => (
             <li>
             <UserListItem key={item.user_id} item={item} />
-            <button onClick={() => handleClick(item)}>Delete user</button>
+            <button onClick={() => handleClickDetails(item)}>More</button>
+            <br />
             </li>
         ))}
         </ul>

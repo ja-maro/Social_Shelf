@@ -10,6 +10,10 @@ const getAll = () => {
   return sendRequest("user");
 };
 
+const getById = (id) => {
+  return getRequestParam("user", id);
+};
+
 const deleteUser = async (id) => {
   let response;
   const token = localStorage.getItem("token");
@@ -39,10 +43,24 @@ const sendRequest = async (route) => {
         });
     return response;
 };
+const getRequestParam = async (route, id) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .get(API_URL + route + "/" + id, { headers: { Authorization: "Bearer " + token } })
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.response;
+        });
+    return response;
+};
 
 const UserService = {
   deleteUser,
   getAll,
+  getById,
   getUserDetails,
 };
 
