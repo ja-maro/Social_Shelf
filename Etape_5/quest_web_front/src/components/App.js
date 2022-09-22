@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import Home from "./Home";
 import Profile from "./Profile";
 import UserList from "./UserList";
+import AddressList from "./AddressList";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/users" element={<UserList />} />
+                <Route path="/address" element={<AddressList />} />
             </Routes>
         </div>
     );
