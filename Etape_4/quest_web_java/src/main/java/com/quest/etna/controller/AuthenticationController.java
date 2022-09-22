@@ -25,7 +25,6 @@ import com.quest.etna.model.User;
 import com.quest.etna.model.UserDetails;
 import com.quest.etna.repositories.UserRepository;
 
-import java.time.Instant;
 import java.util.Objects;
 
 @CrossOrigin
