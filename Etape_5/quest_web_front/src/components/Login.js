@@ -2,6 +2,7 @@ import "../styles/Login.scss";
 import { useState } from "react";
 import AuthService from "../services/auth.service";
 import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
     const [username, setUsername] = useState("");
@@ -12,6 +13,11 @@ function Login(props) {
         message: "",
         status: "",
     });
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+        let path = `/profile`; 
+        navigate(path);
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,6 +33,7 @@ function Login(props) {
                 status: "200",
             });
             props.setIsLog(true);
+            routeChange();
         } else if (response.status === 401) {
             console.log("Error : " + response.status);
             setIsAlert(true);

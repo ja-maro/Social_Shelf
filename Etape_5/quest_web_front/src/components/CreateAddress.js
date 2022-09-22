@@ -1,6 +1,7 @@
 import "../styles/Login.scss";
 import { useState } from "react";
 import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import AddressService from "../services/address.service";
 
 function CreateAddress() {
@@ -14,6 +15,11 @@ function CreateAddress() {
         message: "",
         status: "",
     });
+    let navigate = useNavigate(); 
+    const routeChange = () =>{ 
+        let path = `/address`; 
+        navigate(path);
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -28,6 +34,7 @@ function CreateAddress() {
                 message: "Created",
                 status: "201",
             });
+            routeChange();
         } else if (response.status === 409) {
             setIsAlert(true);
             setAuthMessage({
