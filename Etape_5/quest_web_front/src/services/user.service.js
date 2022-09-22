@@ -1,13 +1,20 @@
 import axios from "axios";
-import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8090/";
 
-const getUserDetails = async () => {
+const getUserDetails = () => {
+  return sendRequest("me");
+}
+
+const getAll = () => {
+  return sendRequest("user");
+}
+
+const sendRequest = async (route) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .get(API_URL + "me", { headers: { Authorization: "Bearer " + token } })
+        .get(API_URL + route, { headers: { Authorization: "Bearer " + token } })
         .then((result) => {
             response = result;
         })
@@ -18,7 +25,8 @@ const getUserDetails = async () => {
 };
 
 const UserService = {
-    getUserDetails,
+  getAll,
+  getUserDetails,
 };
 
 export default UserService;

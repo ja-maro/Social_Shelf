@@ -1,40 +1,30 @@
 import { useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
-import UserListitem from "./UserListItem";
+import UserListItem from "./UserListItem";
 
-const List = [
-    {
-        "username": "Brice",
-        "role": "ROLE_USER",
-        "user_id": 1
-    },
-    {
-        "username": "JeanAntoine",
-        "role": "ROLE_ADMIN",
-        "user_id": 2
-    },
-    {
-        "username": "test",
-        "role": "ROLE_USER",
-        "user_id": 3
-    },
-  ];
+const Users = () => {
+    const [users, setUsers] = useState( [] );
 
-const UserList = () => (
-    <ul>
-        {List.map(item => (
-            <UserListitem key={item.user_id} item={item} />
+    useEffect(() => {
+        if (!users.length) {
+            UserService.getAll().then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                    setUsers(response.data)
+                } else if (response.status === 401) {
+
+                }
+            });
+        }
+    });
+
+    return(
+        <div>
+        {users.map(item => (
+            <UserListItem key={item.user_id} item={item} />
         ))}
-    </ul>
-);
+    </div> 
+    );
+};
 
-// const Users = () => {
-//     const [Users, setUsers] = useState(true);
-
-//     useEffect(() => {
-
-//     });
-// };
-
-export default UserList;
+export default Users;
