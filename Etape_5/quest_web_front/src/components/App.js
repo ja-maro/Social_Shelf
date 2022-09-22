@@ -10,6 +10,7 @@ import UserList from "./UserList";
 import User from "./User.js";
 import AddressList from "./AddressList";
 import CreateAddress from "./CreateAddress";
+import Address from "./Address";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/users" element={<UserList />} />
                 <Route path="/users/:id" element={<User />} />
+                <Route path="/address/:id" element={<Address />} />
                 <Route path="/address" element={<AddressList />} />
                 <Route path="/createAddress" element={<CreateAddress />} />
             </Routes>
