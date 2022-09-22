@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddressService from "../services/address.service";
 
 const Address = () => {
     const [address, setAddress] = useState({});
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         console.log("OK");
+        AddressService.update(
+            address.id,
+            address.street,
+            address.postalCode,
+            address.city,
+            address.country
+        );
+        navigate("/address");
     };
 
     useEffect(() => {
-        if (!address.street) {
+        if (!address.street || !address.city) {
             AddressService.getById(id).then((response) => {
                 if (response.status === 200) {
                     console.log(response);
@@ -23,6 +32,14 @@ const Address = () => {
         }
     });
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setAddress((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
     const form = (
         <div className="update">
             <form onSubmit={handleSubmit}>
@@ -33,7 +50,7 @@ const Address = () => {
                         name="street"
                         placeholder="12 rue du porc"
                         defaultValue={address.street}
-                        onChange={(event) => "Hello World"}
+                        onChange={handleChange}
                     />
                 </label>
                 <label>
@@ -43,7 +60,7 @@ const Address = () => {
                         name="Postal Code"
                         placeholder="12345"
                         defaultValue={address.postalCode}
-                        onChange={(event) => "Hello World"}
+                        onChange={() => setAddress.postalCode}
                     />
                 </label>
                 <label>

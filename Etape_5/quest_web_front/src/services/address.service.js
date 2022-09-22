@@ -84,6 +84,7 @@ const AddressService = {
     create,
     getAll,
     getById,
+    update,
 };
 
 export default AddressService;
