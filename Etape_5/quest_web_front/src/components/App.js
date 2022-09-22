@@ -6,6 +6,7 @@ import { useState } from "react";
 import NavBar from "./NavBar";
 import Home from "./Home";
 import Profile from "./Profile";
+import UserList from "./UserList";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -18,6 +19,7 @@ const App = () => {
                 <Route path="/logout" element={<Login />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/users" element={<UserList />} />
             </Routes>
         </div>
     );

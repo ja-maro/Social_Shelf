@@ -14,6 +14,9 @@ const NavBar = ({ isLog, setIsLog }) => {
                 <Link to="/" className="link">
                     <h4>Home</h4>
                 </Link>
+                <Link to="/users" className="link">
+                    <h4>Users</h4>
+                </Link>
             </div>
 
             <div className="navbar-log">
