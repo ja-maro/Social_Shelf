@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import AddressListItem from "./AddressListItem";
 import AddressService from "../services/address.service";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const AddressList = () => {
 
     const [addressList, setAddressList] = useState( [] );
+    let navigate = useNavigate(); 
 
     useEffect(() => {
         if (!addressList.length) {
@@ -25,9 +26,7 @@ const AddressList = () => {
 
     return(
     <div className="wrapper">  
-         <Link to="/createAddress" className="link">
-         <h4>- Add address -</h4>
-         </Link>
+         <button onClick={() => navigate(`/createAddress/`)}>Add new address</button>
         <h1>Address list</h1>
         <ul>
             {addressList.map(address => (
