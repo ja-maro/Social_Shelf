@@ -16,7 +16,7 @@ const Address = () => {
             address.city,
             address.country
         );
-        navigate("/address");
+        navigate("/");
     };
 
     useEffect(() => {
