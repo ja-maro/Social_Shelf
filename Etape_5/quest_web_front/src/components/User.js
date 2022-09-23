@@ -11,12 +11,8 @@ const User = () => {
 
     const handleSubmit = () => {
         console.log("OK");
-        UserService.update(
-            user.user_id,
-            user.username,
-            user.role
-        );
-        navigate("/users");
+        UserService.update(user.user_id, user.username, user.role);
+        navigate("/");
     };
 
     useEffect(() => {
@@ -46,10 +42,9 @@ const User = () => {
         console.log(user.username + user.role);
     };
 
-
-
     const form = (
         <div className="update">
+            <h1>Détails de l'utilisateur</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     Username :
@@ -61,25 +56,23 @@ const User = () => {
                     />
                 </label>
                 <label>
-                    Role : 
-                    <select name="role" value={user.role} onChange={handleChange}>
+                    Role :
+                    <select
+                        name="role"
+                        value={user.role}
+                        onChange={handleChange}
+                    >
                         <option value="ROLE_USER">User</option>
                         <option value="ROLE_ADMIN">Admin</option>
                     </select>
                 </label>
                 <button type="submit">Modify</button>
             </form>
+            <button onClick={() => handleDelete(user)}>Delete user</button>
         </div>
     );
 
-    return (
-        <div>
-            <h1>Détails de l'utilisateur</h1>
-            <UserListItem item={user} />
-            <button onClick={() => handleDelete(user)}>Delete user</button>
-            {form}
-        </div>
-    );
+    return form;
 };
 
 export default User;
