@@ -90,6 +90,7 @@ const UserService = {
   getAll,
   getById,
   getUserDetails,
+  update,
 };
 
 export default UserService;

@@ -62,7 +62,7 @@ const User = () => {
                 </label>
                 <label>
                     Role :
-                    <select name="role" value={user.role} onChange={handleChange}>
+                    <select name="role" defaultValue={user.role} onChange={handleChange}>
                         <option value="ROLE_USER">User</option>
                         <option value="ROLE_ADMIN">Admin</option>
                     </select>
