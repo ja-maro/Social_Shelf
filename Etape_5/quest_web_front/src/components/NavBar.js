@@ -1,13 +1,17 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import { DataContext } from "./DataContext";
 
-const NavBar = ({ isLog, setIsLog }) => {
+const NavBar = () => {
     const logout = () => {
         AuthService.logout();
         setIsLog(false);
     };
+    const context = React.useContext(DataContext);
+    const { setIsLog } = React.useContext(DataContext);
 
-    return isLog ? (
+    return context.isLog ? (
         <nav className="navbar">
             <div className="navbar-left">
                 <h2>Quest Web</h2>
