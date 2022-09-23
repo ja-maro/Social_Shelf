@@ -18,6 +18,10 @@ const getById = (id) => {
     return getRequest("address/" + id);
 };
 
+const deleteAddress = (id) => {
+    return deleteRequest("address/" + id);
+};
+
 const getRequest = async (route) => {
     let response;
     const token = localStorage.getItem("token");
@@ -80,11 +84,28 @@ const putRequest = async (route, street, postalCode, city, country) => {
     return response;
 };
 
+const deleteRequest = async (route) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .delete(API_URL + route, {
+            headers: { Authorization: "Bearer " + token },
+        })
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.response;
+        });
+    return response;
+};
+
 const AddressService = {
     create,
     getAll,
     getById,
     update,
+    deleteAddress,
 };
 
 export default AddressService;

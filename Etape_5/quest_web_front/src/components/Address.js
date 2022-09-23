@@ -41,6 +41,17 @@ const Address = () => {
         console.log();
     };
 
+    const deleteAddress = () => {
+        AddressService.deleteAddress(address.id).then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                navigate("/");
+            } else {
+                console.log(response);
+            }
+        });
+    };
+
     const form = (
         <div className="update">
             <form onSubmit={handleSubmit}>
@@ -86,6 +97,7 @@ const Address = () => {
                 </label>
                 <input type="submit" value="Modify" />
             </form>
+            <button onClick={deleteAddress}>Delete</button>
         </div>
     );
 
