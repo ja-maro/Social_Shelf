@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 
 const Profile = () => {
@@ -7,7 +6,6 @@ const Profile = () => {
         username: "",
         role: "",
     });
-    const [isDisconnected, setIsDisconnected] = useState(true);
 
     useEffect(() => {
         if (userDetails.username === "") {
