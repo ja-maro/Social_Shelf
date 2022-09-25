@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* Nom de SGBD :  MySQL 5.0                                     */
-/* Date de création :  25/09/2022 15:01:39                      */
+/* Date de création :  25/09/2022 16:09:30                      */
 /*==============================================================*/
 
 
@@ -32,7 +32,7 @@ create table address
    id                   int not null,
    player_id            int not null,
    street               varchar(254) not null,
-   postalCode           varchar(30) not null,
+   postalCode           int not null,
    city                 varchar(254) not null,
    country              varchar(254) not null,
    disableDate          datetime,
@@ -146,6 +146,7 @@ create table player
    nom                  varchar(254) not null,
    mail                 varchar(254) not null,
    password             varchar(254) not null,
+   role                 varchar(10) not null,
    disableDate          datetime,
    primary key (id)
 );
