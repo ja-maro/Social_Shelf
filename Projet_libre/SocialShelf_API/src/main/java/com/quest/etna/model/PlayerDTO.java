@@ -4,20 +4,23 @@ public class PlayerDTO {
     private String username;
     private UserRole role;
     private Integer playerId;
+    private String email;
 
 
 
-    public PlayerDTO(String username, UserRole role) {
+    public PlayerDTO(String username, UserRole role, String email) {
         super();
         this.username = username;
         this.role = role;
+        this.email = email;
     }
 
     public PlayerDTO(Player player) {
         super();
-        this.username = player.getName();
+        this.username = player.getUsername();
         this.role = player.getRole();
         this.playerId = player.getId();
+        this.email = player.getEmail();
     }
 
     public String getUsername() {
@@ -40,5 +43,13 @@ public class PlayerDTO {
 
     public void setPlayerId(Integer playerId) {
         this.playerId = playerId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,9 +1,7 @@
 package com.quest.etna.controller;
 
 import com.quest.etna.config.JwtTokenUtil;
-import com.quest.etna.model.JwtRequest;
-import com.quest.etna.model.JwtResponse;
-import com.quest.etna.model.JwtUserDetails;
+import com.quest.etna.model.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.quest.etna.model.Player;
-import com.quest.etna.model.UserDetails;
 import com.quest.etna.repositories.UserRepository;
 
 import java.util.Objects;
@@ -51,14 +47,15 @@ public class AuthenticationController {
 
 		try {
 			Player user = new Player();
-			user.setName(userRequest.getName());
+			user.setUsername(userRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+			user.setEmail(userRequest.getEmail());
 			userRepository.save(user);
 
 			UserDetails userDetails = new UserDetails(user);
 			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
-			if (userRequest.getPassword() == null || userRequest.getName() == null) {
+			if (userRequest.getPassword() == null || userRequest.getUsername() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
 			}
 			throw new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage());
@@ -69,16 +66,17 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/authenticate")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authRequest) throws Exception {
-			authenticate(authRequest.getUsername(), authRequest.getPassword());
-			final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
-					.loadUserByUsername(authRequest.getUsername());
-			final String token = jwtTokenUtil.generateToken(userDetails);
-			return ResponseEntity.ok(new JwtResponse(token));
+		authenticate(authRequest.getUsername(), authRequest.getPassword());
+		final JwtUserDetails userDetails = (JwtUserDetails) userDetailsService
+				.loadUserByUsername(authRequest.getUsername());
+		final String token = jwtTokenUtil.generateToken(userDetails);
+		return ResponseEntity.ok(new JwtResponse(token));
 	}
 
 	private void authenticate(String username, String password) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
+		System.out.println("require NonNull : " + username + password);
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 		} catch (DisabledException e) {
@@ -86,15 +84,15 @@ public class AuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		} catch (AuthenticationException authExc){
-			 throw new RuntimeException("Invalid Login Credentials");
+			throw new RuntimeException("Invalid Login Credentials");
 		}
 	}
 
 	@GetMapping(value = "/me")
 	public ResponseEntity<UserDetails> me(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		String name = authentication.getName();
-		UserDetails userDetails = new UserDetails(userRepository.findByNameIgnoreCase(name));
+		String username = authentication.getName();
+		UserDetails userDetails = new UserDetails(userRepository.findByUsernameIgnoreCase(username));
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 }

@@ -31,7 +31,7 @@ public class Player {
 	private int id;
 
 	@Column(name = "username", columnDefinition = "varchar(255) not null")
-	private String name;
+	private String username;
 
 	@Column(name = "email", columnDefinition = "varchar(255) not null unique")
 	private String email;
@@ -87,12 +87,12 @@ public class Player {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {

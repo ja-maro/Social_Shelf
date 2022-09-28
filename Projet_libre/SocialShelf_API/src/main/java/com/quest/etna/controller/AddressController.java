@@ -68,7 +68,7 @@ public class AddressController {
 			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
 			return ResponseEntity.ok(addressDTOS);
 		} else {
-			Player userAuthenticated = userRepository.findByNameIgnoreCase(authentication.getName());
+			Player userAuthenticated = userRepository.findByUsernameIgnoreCase(authentication.getName());
 			Iterable<Address> dbAddress = addressRepo.findAllByPlayer(userAuthenticated);
 			List<AddressDTO> addressDTOS= new ArrayList<>();
 			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
@@ -80,7 +80,7 @@ public class AddressController {
 	public ResponseEntity<AddressDTO> create(@RequestBody AddressDTO addressDTO,
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String currentUser = authentication.getName();
-		Player user = userRepository.findByNameIgnoreCase(currentUser);
+		Player user = userRepository.findByUsernameIgnoreCase(currentUser);
 		addressDTO.setUser(new PlayerDTO(user));
 		Address address = new Address(addressDTO);
 		try {
@@ -176,7 +176,7 @@ public class AddressController {
 	public boolean isOwner(Authentication authentication, int id) {
 		try {
 			String currentUser = authentication.getName();
-			Player userAuthenticated = userRepository.findByNameIgnoreCase(currentUser);
+			Player userAuthenticated = userRepository.findByUsernameIgnoreCase(currentUser);
 			Player userOwner = addressRepo.findById(id).get().getPlayer();
 			return userOwner.equals(userAuthenticated);
 		} catch (Exception e) {

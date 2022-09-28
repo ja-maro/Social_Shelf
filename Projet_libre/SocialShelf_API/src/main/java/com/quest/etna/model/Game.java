@@ -80,7 +80,7 @@ public class Game {
 		this.id = id;
 	}
 
-	public String getName() {
+	public String getUsername() {
 		return name;
 	}
 
