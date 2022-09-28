@@ -1,0 +1,11 @@
+package com.quest.etna.repositories;
+
+import com.quest.etna.model.Player;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends CrudRepository<Player, Integer> {
+    public Player findByNameIgnoreCase(String name);
+    public boolean existsByNameIgnoreCase(String name);
+}

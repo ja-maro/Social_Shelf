@@ -79,6 +79,14 @@ public class Address {
 		this.player = player;
 	}
 
+	public Address(AddressDTO addressDTO) {
+		this.street = addressDTO.getStreet();
+		this.id = addressDTO.getId();
+		this.city = addressDTO.getCity();
+		this.country = addressDTO.getCountry();
+		this.postalCode = addressDTO.getPostalCode();
+	}
+
 	// GETTERS & SETTERS
 
 	public Integer getId() {

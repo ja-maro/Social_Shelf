@@ -30,7 +30,7 @@ public class Player {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "name", columnDefinition = "varchar(255) not null")
+	@Column(name = "username", columnDefinition = "varchar(255) not null")
 	private String name;
 
 	@Column(name = "email", columnDefinition = "varchar(255) not null unique")
