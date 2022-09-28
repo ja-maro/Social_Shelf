@@ -61,16 +61,6 @@ public class Address {
 		super();
 	}
 
-//	public Address(AddressDTO addressDTO) {
-//		super();
-//		this.player = new Player(addressDTO.getPlayer());
-//		this.city = addressDTO.getCity();
-//		this.id = addressDTO.getId();
-//		this.country = addressDTO.getCountry();
-//		this.postalCode = addressDTO.getPostalCode();
-//		this.street = addressDTO.getStreet();
-//	}
-
 	public Address(String street, String postalCode, String city, String country, Player player) {
 		super();
 		this.street = street;
@@ -81,6 +71,7 @@ public class Address {
 	}
 
 	public Address(AddressDTO addressDTO) {
+		this.player = new Player(addressDTO.getPlayer());
 		this.street = addressDTO.getStreet();
 		this.id = addressDTO.getId();
 		this.city = addressDTO.getCity();

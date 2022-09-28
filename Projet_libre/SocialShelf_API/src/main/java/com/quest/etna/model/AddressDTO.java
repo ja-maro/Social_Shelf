@@ -10,7 +10,7 @@ public class AddressDTO {
     private String postalCode;
     private String city;
     private String country;
-    private PlayerDTO user;
+    private PlayerDTO player;
 
     public AddressDTO() {}
 
@@ -20,7 +20,7 @@ public class AddressDTO {
        this.city = city;
        this.country = country;
        this.postalCode = postalCode;
-       this.user = playerDTO;
+       this.player = playerDTO;
    }
 
     public AddressDTO(int id, String street, String postalCode, String city, String country, Player player) {
@@ -29,7 +29,7 @@ public class AddressDTO {
         this.city = city;
         this.country = country;
         this.postalCode = postalCode;
-        this.user = new PlayerDTO(player);
+        this.player = new PlayerDTO(player);
     }
 
     public AddressDTO(Address address) {
@@ -38,7 +38,7 @@ public class AddressDTO {
         this.city = address.getCity();
         this.country = address.getCountry();
         this.postalCode = address.getPostalCode();
-        this.user = new PlayerDTO(address.getPlayer());
+        this.player = new PlayerDTO(address.getPlayer());
     }
 
     public Integer getId() {
@@ -81,15 +81,15 @@ public class AddressDTO {
         this.country = country;
     }
 
-    public PlayerDTO getUser() {
-        return user;
+    public PlayerDTO getPlayer() {
+        return player;
     }
 
-    public void setUser(PlayerDTO playerDTO) {
-        this.user = playerDTO;
+    public void setPlayer(PlayerDTO playerDTO) {
+        this.player = playerDTO;
     }
 
     public void setUserDTO(Player player) {
-       this.user = new PlayerDTO(player);
+       this.player = new PlayerDTO(player);
     }
 }

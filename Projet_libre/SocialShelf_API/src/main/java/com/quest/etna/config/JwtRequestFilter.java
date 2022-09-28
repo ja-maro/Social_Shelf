@@ -58,10 +58,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			System.out.println(request.getRequestURI());
 			logger.warn("JWT Token does not begin with Bearer String");
 		}
-		logger.info("Pas de token OK ...");
 		//Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			logger.info("If username null ...");
 			JwtUserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
 
 			// if token is valid configure Spring Security to manually set authentication
@@ -75,7 +73,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(namePasswordAuthenticationToken);
 			}
 		}
-		logger.info("Before doFilter");
 		chain.doFilter(request, response);
 	}
 	

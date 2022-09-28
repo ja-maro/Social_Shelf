@@ -74,9 +74,15 @@ public class Player {
 
 // CONSTRUCTORS
 
-	public Player() {
+	public Player(PlayerDTO player) {
 		super();
+		this.username = player.getUsername();
+		this.email = player.getEmail();
+		this.role = player.getRole();
+		this.id = player.getPlayerId();
 	}
+
+	public Player() {}
 
 // GETTERS & SETTERS
 

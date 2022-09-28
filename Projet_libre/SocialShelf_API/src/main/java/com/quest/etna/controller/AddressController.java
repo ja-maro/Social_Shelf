@@ -80,8 +80,8 @@ public class AddressController {
 	public ResponseEntity<AddressDTO> create(@RequestBody AddressDTO addressDTO,
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String currentUser = authentication.getName();
-		Player user = userRepository.findByUsernameIgnoreCase(currentUser);
-		addressDTO.setUser(new PlayerDTO(user));
+		Player player = userRepository.findByUsernameIgnoreCase(currentUser);
+		addressDTO.setPlayer(new PlayerDTO(player));
 		Address address = new Address(addressDTO);
 		try {
 			addressRepo.save(address);
@@ -93,6 +93,7 @@ public class AddressController {
 					address.getStreet() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 			} else {
+				System.out.println(e);
 				throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
 			}
 		} catch (Exception e) {
