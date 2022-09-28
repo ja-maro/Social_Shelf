@@ -1,8 +1,12 @@
 package com.quest.etna.controller;
 
 import com.quest.etna.config.JwtTokenUtil;
-import com.quest.etna.model.*;
 
+import com.quest.etna.model.jwt.JwtRequest;
+import com.quest.etna.model.jwt.JwtResponse;
+import com.quest.etna.model.jwt.JwtUserDetails;
+import com.quest.etna.model.player.Player;
+import com.quest.etna.model.player.PlayerDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -43,7 +47,7 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/register")
-	public ResponseEntity<UserDetails> userRegister(@RequestBody Player userRequest) {
+	public ResponseEntity<PlayerDetails> userRegister(@RequestBody Player userRequest) {
 
 		try {
 			Player user = new Player();
@@ -52,8 +56,8 @@ public class AuthenticationController {
 			user.setEmail(userRequest.getEmail());
 			userRepository.save(user);
 
-			UserDetails userDetails = new UserDetails(user);
-			return new ResponseEntity<>(userDetails, HttpStatus.CREATED);
+			PlayerDetails playerDetails = new PlayerDetails(user);
+			return new ResponseEntity<>(playerDetails, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
 			if (userRequest.getPassword() == null || userRequest.getUsername() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
@@ -89,10 +93,10 @@ public class AuthenticationController {
 	}
 
 	@GetMapping(value = "/me")
-	public ResponseEntity<UserDetails> me(
+	public ResponseEntity<PlayerDetails> me(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String username = authentication.getName();
-		UserDetails userDetails = new UserDetails(userRepository.findByUsernameIgnoreCase(username));
-		return new ResponseEntity<>(userDetails, HttpStatus.OK);
+		PlayerDetails playerDetails = new PlayerDetails(userRepository.findByUsernameIgnoreCase(username));
+		return new ResponseEntity<>(playerDetails, HttpStatus.OK);
 	}
 }

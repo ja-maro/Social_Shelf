@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.quest.etna.model.Player;
-import com.quest.etna.model.PlayerDTO;
+import com.quest.etna.model.player.Player;
+import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

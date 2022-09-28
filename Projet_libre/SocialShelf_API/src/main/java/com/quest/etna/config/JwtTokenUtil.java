@@ -7,8 +7,7 @@ import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.quest.etna.model.JwtUserDetails;
-import com.quest.etna.model.UserDetails;
+import com.quest.etna.model.jwt.JwtUserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

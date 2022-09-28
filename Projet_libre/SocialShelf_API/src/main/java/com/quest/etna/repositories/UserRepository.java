@@ -1,6 +1,6 @@
 package com.quest.etna.repositories;
 
-import com.quest.etna.model.Player;
+import com.quest.etna.model.player.Player;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

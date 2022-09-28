@@ -1,4 +1,4 @@
-package com.quest.etna.model;
+package com.quest.etna.model.jwt;
 
 import java.io.Serializable;
 

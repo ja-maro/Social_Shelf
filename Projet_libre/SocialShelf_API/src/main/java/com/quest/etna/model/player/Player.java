@@ -1,4 +1,4 @@
-package com.quest.etna.model;
+package com.quest.etna.model.player;
 
 import java.time.Instant;
 import java.util.Set;
@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.quest.etna.model.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

@@ -1,5 +1,8 @@
 package com.quest.etna.model;
 
+import com.quest.etna.model.player.Player;
+import com.quest.etna.model.player.PlayerDTO;
+
 public class AddressDTO {
 
     private Integer id;

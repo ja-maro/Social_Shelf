@@ -1,6 +1,6 @@
 package com.quest.etna.config;
 
-import com.quest.etna.model.JwtUserDetails;
+import com.quest.etna.model.jwt.JwtUserDetails;
 import com.quest.etna.repositories.UserRepository;
 import com.quest.etna.service.JwtUserDetailsService;
 

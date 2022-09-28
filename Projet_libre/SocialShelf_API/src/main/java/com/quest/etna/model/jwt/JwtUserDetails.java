@@ -1,8 +1,10 @@
-package com.quest.etna.model;
+package com.quest.etna.model.jwt;
 
 import java.util.Collection;
 import java.util.Collections;
 
+import com.quest.etna.model.UserRole;
+import com.quest.etna.model.player.Player;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

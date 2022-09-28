@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.quest.etna.model.PlayerDTO;
+import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.service.JsonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.quest.etna.model.Player;
+import com.quest.etna.model.player.Player;
 import com.quest.etna.repositories.UserRepository;
 
 @CrossOrigin(origins = "http://localhost:3000")
