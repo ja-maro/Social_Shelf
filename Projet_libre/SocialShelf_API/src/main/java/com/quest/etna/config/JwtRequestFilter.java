@@ -1,7 +1,7 @@
 package com.quest.etna.config;
 
 import com.quest.etna.model.jwt.JwtUserDetails;
-import com.quest.etna.repositories.UserRepository;
+import com.quest.etna.repositories.PlayerRepository;
 import com.quest.etna.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,7 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUserDetailsService jwtUserDetailsService;
 
-	public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, UserRepository userRepository) {
+	public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, PlayerRepository playerRepository) {
 		this.jwtTokenUtil = jwtTokenUtil;
 	}
 

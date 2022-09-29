@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.service.JsonService;
+import com.quest.etna.service.PlayerService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,15 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.quest.etna.model.player.Player;
-import com.quest.etna.repositories.UserRepository;
+import com.quest.etna.repositories.PlayerRepository;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/player")
 public class PlayerController {
 
+
+	@Autowired
+	private PlayerService playerService;
     @Autowired
-    private UserRepository userRepo;
+    private PlayerRepository userRepo;
     @Autowired
     private JsonService jsonService;
 
@@ -51,12 +56,13 @@ public class PlayerController {
 
     @GetMapping
     public ResponseEntity<List<PlayerDTO>> getAll() {
-        List<PlayerDTO> results = new ArrayList<>();
-        Iterable<Player> players = userRepo.findAll();
-        players.forEach(user -> {
-            PlayerDTO playerDTO = new PlayerDTO(user);
-            results.add(playerDTO);
-        });
+        List<PlayerDTO> results = playerService.getAllDTO();
+//        List<PlayerDTO> results = new ArrayList<>();
+//        Iterable<Player> players = userRepo.findAll();
+//        players.forEach(user -> {
+//            PlayerDTO playerDTO = new PlayerDTO(user);
+//            results.add(playerDTO);
+//        });
         return ResponseEntity.ok(results);
     }
 

@@ -23,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.quest.etna.repositories.UserRepository;
+import com.quest.etna.repositories.PlayerRepository;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public class AuthenticationController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private UserRepository userRepository;
+	private PlayerRepository playerRepository;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -54,7 +54,7 @@ public class AuthenticationController {
 			user.setUsername(userRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 			user.setEmail(userRequest.getEmail());
-			userRepository.save(user);
+			playerRepository.save(user);
 
 			PlayerDetails playerDetails = new PlayerDetails(user);
 			return new ResponseEntity<>(playerDetails, HttpStatus.CREATED);
@@ -95,7 +95,7 @@ public class AuthenticationController {
 	public ResponseEntity<PlayerDetails> me(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String username = authentication.getName();
-		PlayerDetails playerDetails = new PlayerDetails(userRepository.findByUsernameIgnoreCase(username));
+		PlayerDetails playerDetails = new PlayerDetails(playerRepository.findByUsernameIgnoreCase(username));
 		return new ResponseEntity<>(playerDetails, HttpStatus.OK);
 	}
 }

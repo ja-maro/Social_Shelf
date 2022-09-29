@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDTO;
-import com.quest.etna.repositories.UserRepository;
+import com.quest.etna.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +33,7 @@ public class AddressController {
 	private AddressRepository addressRepo;
 
 	@Autowired
-	private UserRepository userRepository;
+	private PlayerRepository playerRepository;
 
 	@Autowired
 	private JsonService jsonService;
@@ -68,7 +68,7 @@ public class AddressController {
 			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
 			return ResponseEntity.ok(addressDTOS);
 		} else {
-			Player userAuthenticated = userRepository.findByUsernameIgnoreCase(authentication.getName());
+			Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(authentication.getName());
 			Iterable<Address> dbAddress = addressRepo.findAllByPlayer(userAuthenticated);
 			List<AddressDTO> addressDTOS= new ArrayList<>();
 			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
@@ -80,7 +80,7 @@ public class AddressController {
 	public ResponseEntity<AddressDTO> create(@RequestBody AddressDTO addressDTO,
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String currentUser = authentication.getName();
-		Player player = userRepository.findByUsernameIgnoreCase(currentUser);
+		Player player = playerRepository.findByUsernameIgnoreCase(currentUser);
 		addressDTO.setPlayer(new PlayerDTO(player));
 		Address address = new Address(addressDTO);
 		try {
@@ -177,7 +177,7 @@ public class AddressController {
 	public boolean isOwner(Authentication authentication, int id) {
 		try {
 			String currentUser = authentication.getName();
-			Player userAuthenticated = userRepository.findByUsernameIgnoreCase(currentUser);
+			Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(currentUser);
 			Player userOwner = addressRepo.findById(id).get().getPlayer();
 			return userOwner.equals(userAuthenticated);
 		} catch (Exception e) {
