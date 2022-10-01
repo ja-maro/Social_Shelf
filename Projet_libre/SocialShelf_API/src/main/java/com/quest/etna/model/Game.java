@@ -70,6 +70,18 @@ public class Game {
 		super();
 	}
 
+	public Game(GameDTO gameDTO) {
+		this.name = gameDTO.getName();
+		this.publisher = gameDTO.getPublisher();
+		this.description = gameDTO.getDescription();
+		this.minPlayer = gameDTO.getMinPlayer();
+		this.maxPlayer = gameDTO.getMaxPlayer();
+		this.averageDuration = gameDTO.getAverageDuration();
+		this.types = gameDTO.getGameType();
+		this.owners = gameDTO.getOwners();
+		this.events = gameDTO.getEvents();
+	}
+
 
 // GETTERS & SETTERS
 	public int getId() {
@@ -80,7 +92,7 @@ public class Game {
 		this.id = id;
 	}
 
-	public String getUsername() {
+	public String getName() {
 		return name;
 	}
 
