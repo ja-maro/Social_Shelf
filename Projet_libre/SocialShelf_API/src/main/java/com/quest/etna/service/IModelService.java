@@ -1,13 +1,20 @@
 package com.quest.etna.service;
 
+import com.quest.etna.model.player.Player;
+import com.quest.etna.model.player.PlayerDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 public interface IModelService<T> {
 	
 	public List<T> getAll();
-	public T getById(Integer id);
+	public PlayerDTO getById(Integer id);
 	public T create(T entity);
-	public T update (Integer id, T entity);
-	public Boolean delete(Integer id);
+	public ResponseEntity<PlayerDTO> update (Integer id, Authentication auth, PlayerDTO formPlayer);
+	public ResponseEntity<String> delete(Integer id, Authentication auth);
+	public ResponseEntity<String> disable(Integer id, Authentication auth);
 
 }
