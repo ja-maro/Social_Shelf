@@ -14,8 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDTO;
+import com.quest.etna.model.Player;
+import com.quest.etna.model.DTO.PlayerDTO;
 import com.quest.etna.repositories.PlayerRepository;
 import com.quest.etna.service.IPlayerService;
 import com.quest.etna.service.JsonService;

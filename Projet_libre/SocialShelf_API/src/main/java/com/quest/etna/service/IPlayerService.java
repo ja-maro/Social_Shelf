@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDTO;
+import com.quest.etna.model.Player;
+import com.quest.etna.model.DTO.PlayerDTO;
 
 public interface IPlayerService {
 	

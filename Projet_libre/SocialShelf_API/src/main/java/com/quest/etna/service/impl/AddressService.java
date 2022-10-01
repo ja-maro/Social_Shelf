@@ -1,9 +1,9 @@
 package com.quest.etna.service.impl;
 
 import com.quest.etna.model.Address;
+import com.quest.etna.model.Player;
 import com.quest.etna.model.DTO.AddressDTO;
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDTO;
+import com.quest.etna.model.DTO.PlayerDTO;
 import com.quest.etna.repositories.AddressRepository;
 import com.quest.etna.repositories.PlayerRepository;
 import com.quest.etna.service.IAddressService;

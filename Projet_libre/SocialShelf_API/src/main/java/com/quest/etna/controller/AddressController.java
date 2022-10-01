@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.repositories.AddressRepository;
 import com.quest.etna.repositories.PlayerRepository;
 
@@ -21,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.quest.etna.model.Address;
+import com.quest.etna.model.Player;
 import com.quest.etna.model.DTO.AddressDTO;
+import com.quest.etna.model.DTO.PlayerDTO;
 
 import org.springframework.web.server.ResponseStatusException;
 

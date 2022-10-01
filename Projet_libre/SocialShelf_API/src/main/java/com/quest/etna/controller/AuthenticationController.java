@@ -1,12 +1,11 @@
 package com.quest.etna.controller;
 
 import com.quest.etna.config.JwtTokenUtil;
-
+import com.quest.etna.model.Player;
+import com.quest.etna.model.DTO.PlayerDTO;
 import com.quest.etna.model.jwt.JwtRequest;
 import com.quest.etna.model.jwt.JwtResponse;
 import com.quest.etna.model.jwt.JwtUserDetails;
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDetails;
 import com.quest.etna.repositories.PlayerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class AuthenticationController {
 	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/register")
-	public ResponseEntity<PlayerDetails> userRegister(@RequestBody Player userRequest) {
+	public ResponseEntity<PlayerDTO> userRegister(@RequestBody Player userRequest) {
 
 		try {
 			Player user = new Player();
@@ -56,8 +55,8 @@ public class AuthenticationController {
 			user.setEmail(userRequest.getEmail());
 			playerRepository.save(user);
 
-			PlayerDetails playerDetails = new PlayerDetails(user);
-			return new ResponseEntity<>(playerDetails, HttpStatus.CREATED);
+			PlayerDTO playerDTO = new PlayerDTO(user);
+			return new ResponseEntity<>(playerDTO, HttpStatus.CREATED);
 		} catch (DataIntegrityViolationException error) {
 			if (userRequest.getPassword() == null || userRequest.getUsername() == null) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
@@ -92,10 +91,10 @@ public class AuthenticationController {
 	}
 
 	@GetMapping(value = "/me")
-	public ResponseEntity<PlayerDetails> me(
+	public ResponseEntity<PlayerDTO> me(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
 		String username = authentication.getName();
-		PlayerDetails playerDetails = new PlayerDetails(playerRepository.findByUsernameIgnoreCase(username));
-		return new ResponseEntity<>(playerDetails, HttpStatus.OK);
+		PlayerDTO playerDTO = new PlayerDTO(playerRepository.findByUsernameIgnoreCase(username));
+		return new ResponseEntity<>(playerDTO, HttpStatus.OK);
 	}
 }

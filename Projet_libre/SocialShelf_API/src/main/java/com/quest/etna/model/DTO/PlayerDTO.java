@@ -1,5 +1,6 @@
-package com.quest.etna.model.player;
+package com.quest.etna.model.DTO;
 
+import com.quest.etna.model.Player;
 import com.quest.etna.model.UserRole;
 
 public class PlayerDTO {

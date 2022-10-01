@@ -1,7 +1,7 @@
 package com.quest.etna.service;
 
+import com.quest.etna.model.Player;
 import com.quest.etna.model.jwt.JwtUserDetails;
-import com.quest.etna.model.player.Player;
 import com.quest.etna.repositories.PlayerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

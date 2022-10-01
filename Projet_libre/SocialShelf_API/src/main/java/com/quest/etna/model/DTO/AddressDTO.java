@@ -1,8 +1,7 @@
 package com.quest.etna.model.DTO;
 
 import com.quest.etna.model.Address;
-import com.quest.etna.model.player.Player;
-import com.quest.etna.model.player.PlayerDTO;
+import com.quest.etna.model.Player;
 
 public class AddressDTO {
 
