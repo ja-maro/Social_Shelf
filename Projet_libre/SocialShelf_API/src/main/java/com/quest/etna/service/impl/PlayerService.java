@@ -29,6 +29,7 @@ public class PlayerService implements IPlayerService {
 	private PlayerRepository playerRepository;
 	@Autowired
 	private JsonService jsonService;
+	private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
 
 	@Override
 	public List<Player> getAll() {
@@ -78,7 +79,7 @@ public class PlayerService implements IPlayerService {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 			}
 		} else {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
 		}
 	}
 

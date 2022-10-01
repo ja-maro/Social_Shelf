@@ -1,6 +1,6 @@
 package com.quest.etna.controller;
 
-import com.quest.etna.model.GameDTO;
+import com.quest.etna.model.DTO.GameDTO;
 import com.quest.etna.service.IGameService;
 import com.quest.etna.service.JsonService;
 import org.springframework.beans.factory.annotation.Autowired;

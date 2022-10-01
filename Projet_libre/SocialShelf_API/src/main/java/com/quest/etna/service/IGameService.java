@@ -1,6 +1,6 @@
 package com.quest.etna.service;
 
-import com.quest.etna.model.GameDTO;
+import com.quest.etna.model.DTO.GameDTO;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;

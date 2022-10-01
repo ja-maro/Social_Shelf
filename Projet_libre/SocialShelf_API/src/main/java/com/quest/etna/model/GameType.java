@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,7 +29,8 @@ public class GameType {
 	@Column(name = "name", columnDefinition = "varchar(50) not null unique")
 	private String name;
 
-	@ManyToMany(mappedBy = "types", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@JsonIgnore
+	@ManyToMany(mappedBy = "types", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<Game> games;
 
 	@CreationTimestamp

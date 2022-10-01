@@ -1,4 +1,7 @@
-package com.quest.etna.model;
+package com.quest.etna.model.DTO;
+
+import com.quest.etna.model.Game;
+import com.quest.etna.model.GameType;
 
 import java.util.Set;
 
@@ -12,8 +15,7 @@ public class GameDTO {
     private Integer maxPlayer;
     private Integer averageDuration;
     private Set<GameType> gameType;
-    private Set<Player> owners;
-    private Set<Event> events;
+
 
     public GameDTO(Integer id,
                    String name,
@@ -22,9 +24,7 @@ public class GameDTO {
                    Integer minPlayer,
                    Integer maxPlayer,
                    Integer averageDuration,
-                   Set<GameType> gameType,
-                   Set<Player> owners,
-                   Set<Event> events) {
+                   Set<GameType> gameType) {
         this.id = id;
         this.name = name;
         this.publisher = publisher;
@@ -33,8 +33,6 @@ public class GameDTO {
         this.maxPlayer = maxPlayer;
         this.averageDuration = averageDuration;
         this.gameType = gameType;
-        this.owners = owners;
-        this.events = events;
     }
 
     public GameDTO(Game game) {
@@ -46,8 +44,6 @@ public class GameDTO {
         this.maxPlayer = game.getMaxPlayer();
         this.averageDuration = game.getAverageDuration();
         this.gameType = game.getTypes();
-        this.owners = game.getOwners();
-        this.events = game.getEvents();
     }
 
     public Integer getId() {
@@ -112,21 +108,5 @@ public class GameDTO {
 
     public void setGameType(Set<GameType> gameType) {
         this.gameType = gameType;
-    }
-
-    public Set<Player> getOwners() {
-        return owners;
-    }
-
-    public void setOwners(Set<Player> owners) {
-        this.owners = owners;
-    }
-
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
     }
 }

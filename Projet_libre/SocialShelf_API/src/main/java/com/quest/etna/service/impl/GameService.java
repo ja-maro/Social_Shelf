@@ -1,7 +1,7 @@
 package com.quest.etna.service.impl;
 
 import com.quest.etna.model.Game;
-import com.quest.etna.model.GameDTO;
+import com.quest.etna.model.DTO.GameDTO;
 import com.quest.etna.repositories.GameRepository;
 import com.quest.etna.service.IGameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class GameService implements IGameService {
     PlayerService playerService;
 
     private static final String ADMIN = "ROLE_ADMIN";
+    private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
 
     public List<GameDTO> getAll() {
         Iterable<Game> games = gameRepository.findAll();
@@ -61,7 +62,7 @@ public class GameService implements IGameService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
         }
     }
 
@@ -73,7 +74,7 @@ public class GameService implements IGameService {
                 gameRepository.save(updatedGame);
                 return new GameDTO(updatedGame);
             } else {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
             }
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -109,7 +110,7 @@ public class GameService implements IGameService {
                 }
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
         }
         return false;
     }

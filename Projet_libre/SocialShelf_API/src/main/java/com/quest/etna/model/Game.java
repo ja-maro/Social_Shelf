@@ -16,7 +16,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.quest.etna.model.DTO.GameDTO;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -46,7 +49,8 @@ public class Game {
 	@Column(name = "average_duration", columnDefinition = "SMALLINT not null")
 	private int averageDuration;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "type_id"))
 	private Set<GameType> types;
 	
@@ -78,8 +82,6 @@ public class Game {
 		this.maxPlayer = gameDTO.getMaxPlayer();
 		this.averageDuration = gameDTO.getAverageDuration();
 		this.types = gameDTO.getGameType();
-		this.owners = gameDTO.getOwners();
-		this.events = gameDTO.getEvents();
 	}
 
 
