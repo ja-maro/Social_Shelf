@@ -1,5 +1,6 @@
 package com.quest.etna.controller;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,13 +39,13 @@ public class PlayerController {
 	@Autowired
 	private PlayerService playerService;
     @Autowired
-    private PlayerRepository userRepo;
+    private PlayerRepository playerRepo;
     @Autowired
     private JsonService jsonService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerDTO> getById(@PathVariable int id) {
-        Optional<Player> dbPlayer = userRepo.findById(id);
+        Optional<Player> dbPlayer = playerRepo.findById(id);
         if (dbPlayer.isPresent()) {
             Player player = dbPlayer.get();
             PlayerDTO playerDTO = new PlayerDTO(player);
@@ -58,7 +59,7 @@ public class PlayerController {
     public ResponseEntity<List<PlayerDTO>> getAll() {
         List<PlayerDTO> results = playerService.getAllDTO();
 //        List<PlayerDTO> results = new ArrayList<>();
-//        Iterable<Player> players = userRepo.findAll();
+//        Iterable<Player> players = playerRepo.findAll();
 //        players.forEach(user -> {
 //            PlayerDTO playerDTO = new PlayerDTO(user);
 //            results.add(playerDTO);
@@ -68,14 +69,14 @@ public class PlayerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PlayerDTO> update(@PathVariable int id, @RequestBody Player formPlayer, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
-        Optional<Player> dbPlayer = userRepo.findById(id);
+        Optional<Player> dbPlayer = playerRepo.findById(id);
         if (isUser(auth, id) || hasRole("ROLE_ADMIN")) {
             if (dbPlayer.isPresent()) {
                 Player updatedPlayer = updatePlayer(formPlayer, dbPlayer.get());
                 if (hasRole("ROLE_ADMIN")) {
                     updatedPlayer = updateRole(formPlayer, updatedPlayer);
                 }
-                updatedPlayer = userRepo.save(updatedPlayer);
+                updatedPlayer = playerRepo.save(updatedPlayer);
                 PlayerDTO playerDTO = new PlayerDTO(updatedPlayer);
                 return ResponseEntity.ok(playerDTO);
             } else {
@@ -120,13 +121,13 @@ public class PlayerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable int id, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
-        Optional<Player> dbUser = userRepo.findById(id);
+        Optional<Player> dbUser = playerRepo.findById(id);
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.setContentType(MediaType.valueOf("application/json"));
         if (isUser(auth, id) || hasRole("ROLE_ADMIN")) {
             if(dbUser.isPresent()) {
                 try {
-                    userRepo.delete(dbUser.get());
+                    playerRepo.delete(dbUser.get());
                     return new ResponseEntity<>(jsonService.successBody(true), responseHeader, HttpStatus.OK);
                 } catch (Exception e) {
                     return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
@@ -136,6 +137,27 @@ public class PlayerController {
             }
         } else
             return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
+    }
+    
+    @PutMapping("/disable/{id}")
+    public ResponseEntity<String> disable(@PathVariable int id, @CurrentSecurityContext(expression = "authentication") Authentication auth) {
+        Optional<Player> dbUser = playerRepo.findById(id);
+        HttpHeaders responseHeader = new HttpHeaders();
+        responseHeader.setContentType(MediaType.valueOf("application/json"));
+        if(dbUser.isPresent()) {
+            if (hasRole("ROLE_ADMIN")) {
+                Player userDisable = dbUser.get();
+                userDisable.setDisableDate(Instant.now());
+                System.out.println(userDisable.getEmail());
+                System.out.println(userDisable.getDisableDate());
+                playerRepo.save(userDisable);
+                return new ResponseEntity<>(jsonService.successBody(true), responseHeader, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -160,8 +182,8 @@ public class PlayerController {
     public boolean isUser(Authentication authentication, int id) {
         try {
             String currentUser = authentication.getName();
-            Player userAuthenticated = userRepo.findByUsernameIgnoreCase(currentUser);
-            Player userToModify = userRepo.findById(id).get();
+            Player userAuthenticated = playerRepo.findByUsernameIgnoreCase(currentUser);
+            Player userToModify = playerRepo.findById(id).get();
             return userToModify.equals(userAuthenticated);
         } catch (Exception e) {
             return false;

@@ -35,10 +35,7 @@ public class PlayerService implements IModelService<Player> {
 	@Override
 	public Player getById(Integer id) {
 		Optional<Player> player = playerRepository.findById(id);
-		if (player.isPresent()) {
-			return player.get();
-		}
-		return null;
+		return player.orElse(null);
 	}
 
 	@Override
