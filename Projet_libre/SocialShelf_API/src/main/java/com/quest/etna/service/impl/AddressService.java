@@ -1,11 +1,14 @@
-package com.quest.etna.service;
+package com.quest.etna.service.impl;
 
 import com.quest.etna.model.Address;
-import com.quest.etna.model.AddressDTO;
+import com.quest.etna.model.DTO.AddressDTO;
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.repositories.AddressRepository;
 import com.quest.etna.repositories.PlayerRepository;
+import com.quest.etna.service.IAddressService;
+import com.quest.etna.service.JsonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AddressService {
+public class AddressService implements IAddressService {
+	
     @Autowired
     AddressRepository addressRepository;
     @Autowired
@@ -31,6 +35,7 @@ public class AddressService {
     @Autowired
     private JsonService jsonService;
 
+    @Override
     public ResponseEntity getById(Integer id, Authentication authentication) {
         Optional<Address> dbAddress = addressRepository.findById(id);
         if (dbAddress.isPresent()) {
@@ -50,6 +55,7 @@ public class AddressService {
         }
     }
 
+    @Override
     public ResponseEntity<Iterable<AddressDTO>> getAll(Authentication authentication) {
         if(playerService.hasRole("ROLE_ADMIN")) {
             Iterable<Address> dbAddress = addressRepository.findAll();
@@ -65,6 +71,7 @@ public class AddressService {
         }
     }
 
+    @Override
     public ResponseEntity<AddressDTO> create (AddressDTO addressDTO, Authentication authentication) {
         String currentUser = authentication.getName();
         Player player = playerRepository.findByUsernameIgnoreCase(currentUser);
@@ -87,6 +94,7 @@ public class AddressService {
         }
     }
 
+    @Override
     public ResponseEntity update (Integer id, Address formAddress, Authentication authentication) {
         Optional<Address> dbAddress = addressRepository.findById(id);
         if (playerService.isUser(authentication, id) || playerService.hasRole("ROLE_ADMIN")) {
@@ -124,6 +132,7 @@ public class AddressService {
         return addressToUpdate;
     }
 
+    @Override
     public ResponseEntity<String> delete (Integer id, Authentication authentication) {
         Optional<Address> dbAddress = addressRepository.findById(id);
         HttpHeaders responseHeader = new HttpHeaders();
@@ -143,4 +152,5 @@ public class AddressService {
             return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
 
     }
+
 }

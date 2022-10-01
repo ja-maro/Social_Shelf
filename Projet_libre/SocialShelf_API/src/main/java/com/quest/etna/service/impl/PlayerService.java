@@ -1,4 +1,4 @@
-package com.quest.etna.service;
+package com.quest.etna.service.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,10 +17,13 @@ import org.springframework.stereotype.Service;
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.repositories.PlayerRepository;
+import com.quest.etna.service.IPlayerService;
+import com.quest.etna.service.JsonService;
+
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class PlayerService implements IModelService<Player> {
+public class PlayerService implements IPlayerService {
 
 	@Autowired
 	private PlayerRepository playerRepository;
@@ -32,6 +35,7 @@ public class PlayerService implements IModelService<Player> {
 		return null;
 	}
 
+	@Override
 	public List<PlayerDTO> getAllDTO() {
 		List<PlayerDTO> results = new ArrayList<>();
 		Iterable<Player> players = playerRepository.findAll();
@@ -54,9 +58,8 @@ public class PlayerService implements IModelService<Player> {
 	}
 
 	@Override
-	public Player create(Player entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player create(Player player) {
+		return playerRepository.save(player);
 	}
 
 	@Override

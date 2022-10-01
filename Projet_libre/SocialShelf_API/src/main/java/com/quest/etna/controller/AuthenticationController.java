@@ -7,6 +7,8 @@ import com.quest.etna.model.jwt.JwtResponse;
 import com.quest.etna.model.jwt.JwtUserDetails;
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDetails;
+import com.quest.etna.repositories.PlayerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.quest.etna.repositories.PlayerRepository;
 
 import java.util.Objects;
 

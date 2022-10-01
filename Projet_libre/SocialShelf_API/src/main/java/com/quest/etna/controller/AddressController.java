@@ -6,8 +6,9 @@ import java.util.Optional;
 
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDTO;
+import com.quest.etna.repositories.AddressRepository;
 import com.quest.etna.repositories.PlayerRepository;
-import com.quest.etna.service.AddressService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -20,10 +21,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.quest.etna.model.Address;
-import com.quest.etna.model.AddressDTO;
-import com.quest.etna.repositories.AddressRepository;
+import com.quest.etna.model.DTO.AddressDTO;
+
 import org.springframework.web.server.ResponseStatusException;
+
+import com.quest.etna.service.IAddressService;
 import com.quest.etna.service.JsonService;
+import com.quest.etna.service.impl.AddressService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,16 +35,10 @@ import com.quest.etna.service.JsonService;
 public class AddressController {
 
 	@Autowired
-	private AddressRepository addressRepo;
-
-	@Autowired
-	private PlayerRepository playerRepository;
+	private IAddressService addressService;
 
 	@Autowired
 	private JsonService jsonService;
-
-	@Autowired
-	private AddressService addressService;
 	
 	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathVariable int id,

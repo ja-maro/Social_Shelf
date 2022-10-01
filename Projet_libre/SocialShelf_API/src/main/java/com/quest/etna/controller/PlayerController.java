@@ -3,7 +3,8 @@ package com.quest.etna.controller;
 import java.util.List;
 
 import com.quest.etna.model.player.PlayerDTO;
-import com.quest.etna.service.PlayerService;
+import com.quest.etna.service.IPlayerService;
+import com.quest.etna.service.impl.PlayerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class PlayerController {
 
 
 	@Autowired
-	private PlayerService playerService;
+	private IPlayerService playerService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerDTO> getById(@PathVariable int id) {
