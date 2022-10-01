@@ -6,14 +6,12 @@ TRUNCATE TABLE type;
 TRUNCATE TABLE games_types;
 TRUNCATE TABLE owns;
 
-insert into social_shelf.player (id, creation_date, password, role, updated_date, username, email)
-values  (1, '2022-08-30 22:30:18', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_USER', null, 'Brice', 'brice@mail.fr'),
-        (2, '2022-08-30 22:30:18', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_ADMIN', null, 'JeanAntoine', 'ja@mail.com');
+INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('1', '2022-10-01 14:49:26', 'brice@brice.fr', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_USER', '2022-10-01 14:49:26', 'Brice');
+INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('2', '2022-10-01 14:49:26', 'ja@mail.com', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_ADMIN', '2022-10-01 14:49:26', 'ean-Antoine');
 
-insert into social_shelf.address (id, city, country, creation_date, postal_code, street, updated_date, player_id)
-values  (1, 'Gagny', 'France', '2022-09-07 09:48:56', '93220', 'rue de la mairie', '2022-09-07 09:48:56', 1),
-        (2, 'Paris', 'France', '2022-09-07 09:51:23', '75001', '12 rue de Rivoli', '2022-09-07 09:51:23', 2),
-        (3, 'Villemomble', 'France', '2022-09-07 09:51:23', '93250', 'rue de la paix', '2022-09-07 09:51:23', 2);
+INSERT INTO `social_shelf`.`address` (`id`, `city`, `country`, `creation_date`, `postal_code`, `street`, `updated_date`, `player_id`) VALUES ('1', 'Gagny', 'France', '2022-10-01 14:49:26', '93220', '1 rue de la mairie', '2022-10-01 14:49:26', '1');
+INSERT INTO `social_shelf`.`address` (`id`, `city`, `country`, `creation_date`, `postal_code`, `street`, `updated_date`, `player_id`) VALUES ('2', 'Paris', 'France', '2022-10-01 14:49:26', '75001', '22 rue de Rivoli', '2022-10-01 14:49:26', '2');
+
 
 INSERT INTO `social_shelf`.`game` (`id`, `average_duration`, `creation_date`, `description`, `max_player`, `min_player`, `name`, `publisher`, `updated_date`) VALUES ('1', '20', '2022-10-01 14:49:26', 'L\'objectif du jeu Uno est simple. Il s\'agit d\'être le premier joueur de la table à ne plus avoir de cartes en main. À la fin d\'une manche, le vainqueur établit les scores en additionnant tous les points des mains des autres joueurs.', '10', '2', 'Uno', 'Mattel', '2022-10-01 14:49:26');		
 INSERT INTO `social_shelf`.`game` (`id`, `average_duration`, `creation_date`, `description`, `max_player`, `min_player`, `name`, `publisher`, `updated_date`) VALUES ('2', '45', '2022-10-01 14:49:26', 'Dans 7 Wonders, vous êtes à la tête de l\'une des sept grandes cités du monde antique. Votre but est de faire prospérer votre ville pour la rendre plus influente que celles de vos adversaires. Le futur des cités légendaires comme Babylone, Éphèse ou encore Rhodes dépend de vos talents de gestionnaire. Pour inscrire votre cité dans l\'Histoire, vous devrez agir dans différents secteurs de développement. Exploitez les ressources naturelles de vos terres, participez aux progrès scientifiques, développez vos relations commerciales et affirmez votre suprématie militaire. Laissez votre empreinte dans l\'histoire des civilisations en bâtissant une merveille monumentale.', '7', '3', '7 Wonders', 'Repos Production', '2022-10-01 14:49:26');
