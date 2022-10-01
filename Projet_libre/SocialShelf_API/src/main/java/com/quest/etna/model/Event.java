@@ -34,13 +34,13 @@ public class Event {
 	@Column(name = "pitch", columnDefinition = "varchar(255) not null")
 	private String pitch;
 
-	@Column(name = "min_player", columnDefinition = "TINYINT not null")
+	@Column(name = "min_participants", columnDefinition = "TINYINT not null")
 	private int minPlayer;
 
-	@Column(name = "max_player", columnDefinition = "TINYINT not null")
+	@Column(name = "max_participants", columnDefinition = "TINYINT not null")
 	private int maxPlayer;
 
-	@Column(name = "average_duration", columnDefinition = "SMALLINT not null")
+	@Column(name = "duration", columnDefinition = "SMALLINT not null")
 	private int duration;
 
 	@Column(name = "start_date", columnDefinition = "datetime not null")
