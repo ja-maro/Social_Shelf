@@ -118,12 +118,14 @@ public class PlayerService implements IModelService<Player> {
 		}
 	}
 
+	@Override
 	public boolean hasRole (String roleName)
 	{
 		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
 				.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
 	}
 
+	@Override
 	public boolean isUser(Authentication authentication, int id) {
 		try {
 			String currentUser = authentication.getName();

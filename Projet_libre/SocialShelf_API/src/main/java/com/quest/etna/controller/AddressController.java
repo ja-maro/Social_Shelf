@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.quest.etna.model.player.Player;
 import com.quest.etna.model.player.PlayerDTO;
 import com.quest.etna.repositories.PlayerRepository;
+import com.quest.etna.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -37,151 +38,38 @@ public class AddressController {
 
 	@Autowired
 	private JsonService jsonService;
+
+	@Autowired
+	private AddressService addressService;
 	
 	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathVariable int id,
 										   @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		Optional<Address> dbAddress = addressRepo.findById(id);
-		if (dbAddress.isPresent()) {
-			if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
-				AddressDTO addressDTO = new AddressDTO(dbAddress.get());
-				return ResponseEntity.ok(addressDTO);
-			} else {
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				return ResponseEntity
-						.status(HttpStatus.FORBIDDEN)
-						.headers(headers)
-						.body( "{\"message\": \"Forbidden\"}");
-			}
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		}
+		return addressService.getById(id, authentication);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Iterable<AddressDTO>> getAll(
 			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		if(hasRole("ROLE_ADMIN")) {
-			Iterable<Address> dbAddress = addressRepo.findAll();
-			List<AddressDTO> addressDTOS= new ArrayList<>();
-			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
-			return ResponseEntity.ok(addressDTOS);
-		} else {
-			Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(authentication.getName());
-			Iterable<Address> dbAddress = addressRepo.findAllByPlayer(userAuthenticated);
-			List<AddressDTO> addressDTOS= new ArrayList<>();
-			dbAddress.forEach(address -> addressDTOS.add(new AddressDTO(address)));
-			return ResponseEntity.ok(addressDTOS);
-		}
+		return addressService.getAll(authentication);
 	}
 	
 	@PostMapping
 	public ResponseEntity<AddressDTO> create(@RequestBody AddressDTO addressDTO,
 										  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		String currentUser = authentication.getName();
-		Player player = playerRepository.findByUsernameIgnoreCase(currentUser);
-		addressDTO.setPlayer(new PlayerDTO(player));
-		Address address = new Address(addressDTO);
-		try {
-			addressRepo.save(address);
-			return new ResponseEntity<>(new AddressDTO(address), HttpStatus.CREATED);
-		} catch (DataIntegrityViolationException e) {
-			if (address.getCity() == null ||
-					address.getCountry() == null ||
-					address.getPostalCode() == null ||
-					address.getStreet() == null) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-			} else {
-				System.out.println(e);
-				throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-			}
-		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		return addressService.create(addressDTO, authentication);
 
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity update(@PathVariable int id, @RequestBody Address formAddress,
 										 @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		Optional<Address> dbAddress = addressRepo.findById(id);
-		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
-			if (dbAddress.isPresent()) {
-				Address updatedAddress = updateAddress(formAddress, dbAddress.get());
-				updatedAddress = addressRepo.save(updatedAddress);
-				AddressDTO addressDTO = new AddressDTO(updatedAddress);
-				return ResponseEntity.ok(addressDTO);
-			} else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-			}
-		} else {
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			return ResponseEntity
-					.status(HttpStatus.FORBIDDEN)
-					.headers(headers)
-					.body( "{\"message\": \"Forbidden\"}");
-		}
+		return addressService.update(id, formAddress, authentication);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable int id,
 										 @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-		Optional<Address> dbAddress = addressRepo.findById(id);
-		HttpHeaders responseHeader = new HttpHeaders();
-		responseHeader.setContentType(MediaType.valueOf("application/json"));
-		if (isOwner(authentication, id) || hasRole("ROLE_ADMIN")) {
-			if(dbAddress.isPresent()) {
-				try {
-					addressRepo.delete(dbAddress.get());
-					return new ResponseEntity<>(jsonService.successBody(true), responseHeader, HttpStatus.OK);
-				} catch (Exception e) {
-					return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
-				}
-			} else {
-				return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.NOT_FOUND);
-			}
-		} else
-			return new ResponseEntity<>(jsonService.successBody(false), responseHeader, HttpStatus.FORBIDDEN);
-	}
-	/**
-	 * Updates and returns an address object.
-	 * 
-	 * @param updatedAddressInfo new info
-	 * @param addressToUpdate address that needs to be updated with the new info
-	 * @return the updated address
-	 */
-	private Address updateAddress(Address updatedAddressInfo, Address addressToUpdate) {
-		if (null != updatedAddressInfo.getStreet()) {
-			addressToUpdate.setStreet(updatedAddressInfo.getStreet());
-		}
-		if (null != updatedAddressInfo.getPostalCode()) {
-			addressToUpdate.setPostalCode(updatedAddressInfo.getPostalCode());
-		}
-		if (null != updatedAddressInfo.getCity()) {
-			addressToUpdate.setCity(updatedAddressInfo.getCity());
-		}
-		if (null != updatedAddressInfo.getCountry()) {
-			addressToUpdate.setCountry(updatedAddressInfo.getCountry());
-		}
-		return addressToUpdate;
-	}
-
-	public boolean hasRole (String roleName)
-	{
-	    return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
-	}
-
-	public boolean isOwner(Authentication authentication, int id) {
-		try {
-			String currentUser = authentication.getName();
-			Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(currentUser);
-			Player userOwner = addressRepo.findById(id).get().getPlayer();
-			return userOwner.equals(userAuthenticated);
-		} catch (Exception e) {
-			return false;
-		}
+		return addressService.delete(id, authentication);
 	}
 }
