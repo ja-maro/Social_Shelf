@@ -8,4 +8,7 @@ import java.util.List;
 public interface IGameService {
     List<GameDTO> getAll();
     GameDTO create(GameDTO gameDTO, Authentication authentication);
+    GameDTO getById(Integer id);
+    GameDTO update(GameDTO gameDTO, Integer id);
+    Boolean delete(Integer id);
 }
