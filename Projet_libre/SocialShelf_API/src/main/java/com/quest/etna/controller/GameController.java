@@ -60,4 +60,9 @@ public class GameController {
     public ResponseEntity<GameDTO> addType (@PathVariable Integer gameId, @PathVariable Integer typeId) {
         return new ResponseEntity<>(iGameService.addType(gameId, typeId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{gameId}/type/{typeId}")
+    public ResponseEntity<GameDTO> removeType (@PathVariable Integer gameId, @PathVariable Integer typeId) {
+        return new ResponseEntity<>(iGameService.removeType(gameId, typeId), HttpStatus.OK);
+    }
 }

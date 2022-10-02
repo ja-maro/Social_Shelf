@@ -23,7 +23,7 @@ public class GameType {
 	private String name;
 
 	@JsonIgnore
-	@ManyToMany(mappedBy = "types", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(mappedBy = "types")
 	//@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "type_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
 	private Set<Game> games= new HashSet<>();
 

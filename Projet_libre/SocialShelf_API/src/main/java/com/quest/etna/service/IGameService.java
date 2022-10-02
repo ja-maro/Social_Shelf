@@ -11,5 +11,6 @@ public interface IGameService {
     GameDTO getById(Integer id);
     GameDTO update(GameDTO gameDTO, Integer id);
     Boolean delete(Integer id);
-    GameDTO addType(Integer GameId, Integer typeId);
+    GameDTO addType(Integer gameId, Integer typeId);
+    GameDTO removeType(Integer gameId, Integer typeId);
 }

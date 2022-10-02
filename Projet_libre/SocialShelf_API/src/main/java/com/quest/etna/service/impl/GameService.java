@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ public class GameService implements IGameService {
 
     private static final String ADMIN = "ROLE_ADMIN";
     private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
+    private static final String NOT_FOUND =  "{\"message\": \"Not Found\"}";
 
     public List<GameDTO> getAll() {
         Iterable<Game> games = gameRepository.findAll();
@@ -80,7 +82,7 @@ public class GameService implements IGameService {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
         }
     }
 
@@ -121,10 +123,47 @@ public class GameService implements IGameService {
         return false;
     }
 
-    public GameDTO addType(Integer GameId, Integer typeId) {
-        Game game = gameRepository.findById(GameId).get();
-        GameType gameType = gameTypeRepository.findById(typeId).get();
-        game.addType(gameType);
-        return new GameDTO(gameRepository.save(game));
+    public GameDTO addType(Integer gameId, Integer typeId) {
+        if (playerService.hasRole(ADMIN)) {
+            Optional<Game> gameOptional = gameRepository.findById(gameId);
+            Optional<GameType> gameTypeOptional = gameTypeRepository.findById(typeId);
+            if (gameOptional.isPresent() && gameTypeOptional.isPresent()) {
+                Game game = gameOptional.get();
+                GameType gameType = gameTypeOptional.get();
+                try {
+                    game.addType(gameType);
+                    return new GameDTO(gameRepository.save(game));
+                } catch (Exception e) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+                }
+
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
+        }
+    }
+
+    @Transactional
+    public GameDTO removeType(Integer gameId, Integer typeId) {
+        if (playerService.hasRole(ADMIN)) {
+            Optional<Game> gameOptional = gameRepository.findById(gameId);
+            Optional<GameType> gameTypeOptional = gameTypeRepository.findById(typeId);
+            if (gameOptional.isPresent() && gameTypeOptional.isPresent()) {
+                Game game = gameOptional.get();
+                GameType gameType = gameTypeOptional.get();
+                try {
+                    game.removeType(gameType);
+                    return new GameDTO(gameRepository.save(game));
+                } catch (Exception e) {
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
+        }
     }
 }

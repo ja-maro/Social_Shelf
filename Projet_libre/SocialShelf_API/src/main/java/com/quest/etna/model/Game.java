@@ -4,18 +4,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.quest.etna.model.DTO.GameDTO;
 import org.hibernate.annotations.CreationTimestamp;
@@ -185,5 +174,10 @@ public class Game {
 
 	public void addType(GameType gameType) {
 		types.add(gameType);
+	}
+
+	public void removeType(GameType gameType) {
+		types.remove(gameType);
+		gameType.getGames().remove(this);
 	}
 }
