@@ -55,4 +55,9 @@ public class GameController {
             return new ResponseEntity<>(jsonService.successBody(true),responseHeader, HttpStatus.OK);
         else return new ResponseEntity<>(jsonService.successBody(false),responseHeader, HttpStatus.OK);
     }
+
+    @PutMapping("/{gameId}/type/{typeId}")
+    public ResponseEntity<GameDTO> addType (@PathVariable Integer gameId, @PathVariable Integer typeId) {
+        return new ResponseEntity<>(iGameService.addType(gameId, typeId), HttpStatus.OK);
+    }
 }

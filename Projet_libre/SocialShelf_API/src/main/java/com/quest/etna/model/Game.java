@@ -1,6 +1,7 @@
 package com.quest.etna.model;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -52,7 +53,7 @@ public class Game {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "type_id"))
-	private Set<GameType> types;
+	private Set<GameType> types = new HashSet<>();
 	
 	@ManyToMany(mappedBy = "games", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Player> owners;
@@ -181,5 +182,8 @@ public class Game {
 	public void setEvents(Set<Event> events) {
 		this.events = events;
 	}
-	
+
+	public void addType(GameType gameType) {
+		types.add(gameType);
+	}
 }

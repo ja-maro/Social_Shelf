@@ -2,7 +2,9 @@ package com.quest.etna.service.impl;
 
 import com.quest.etna.model.Game;
 import com.quest.etna.model.DTO.GameDTO;
+import com.quest.etna.model.GameType;
 import com.quest.etna.repositories.GameRepository;
+import com.quest.etna.repositories.GameTypeRepository;
 import com.quest.etna.service.IGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,9 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService implements IGameService {
@@ -21,6 +22,8 @@ public class GameService implements IGameService {
     GameRepository gameRepository;
     @Autowired
     PlayerService playerService;
+    @Autowired
+    GameTypeRepository gameTypeRepository;
 
     private static final String ADMIN = "ROLE_ADMIN";
     private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
@@ -95,6 +98,9 @@ public class GameService implements IGameService {
         if (updateGameDTO.getAverageDuration() != null) {
             toChangeGameDTO.setAverageDuration(updateGameDTO.getAverageDuration());
         }
+        if (updateGameDTO.getGameType() != null) {
+            toChangeGameDTO.setTypes(updateGameDTO.getGameType());
+        }
         return toChangeGameDTO;
     }
 
@@ -113,5 +119,12 @@ public class GameService implements IGameService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
         }
         return false;
+    }
+
+    public GameDTO addType(Integer GameId, Integer typeId) {
+        Game game = gameRepository.findById(GameId).get();
+        GameType gameType = gameTypeRepository.findById(typeId).get();
+        game.addType(gameType);
+        return new GameDTO(gameRepository.save(game));
     }
 }

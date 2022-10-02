@@ -1,17 +1,10 @@
 package com.quest.etna.model;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
@@ -31,12 +24,15 @@ public class GameType {
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "types", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	private Set<Game> games;
+	//@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "type_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+	private Set<Game> games= new HashSet<>();
 
+	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "creation_date", columnDefinition = "datetime")
 	private Instant creationDate;
 
+	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "updated_date", columnDefinition = "datetime")
 	private Instant updatedDate;
