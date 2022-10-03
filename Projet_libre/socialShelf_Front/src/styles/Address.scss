@@ -1,0 +1,34 @@
+.update {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #171515;
+        padding: 20px;
+        input {
+            margin: 10px;
+        }
+    }
+    .title {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    .alert {
+        margin: 10px;
+    }
+}
+
+.address {
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    padding: 10px;
+    .address_details {
+        padding: 10px;
+        width: 300px;
+    }
+}
