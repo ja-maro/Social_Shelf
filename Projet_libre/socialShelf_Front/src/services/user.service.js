@@ -22,7 +22,7 @@ const deleteUser = async (id) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .delete(API_URL + "user" + "/" + id, {
+        .delete(API_URL + "user/" + id, {
             headers: { Authorization: "Bearer " + token },
         })
         .then((result) => {
@@ -31,7 +31,6 @@ const deleteUser = async (id) => {
         .catch((error) => {
             response = error.toJSON();
         });
-
     return response;
 };
 

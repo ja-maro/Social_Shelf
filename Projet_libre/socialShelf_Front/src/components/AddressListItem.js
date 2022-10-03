@@ -2,10 +2,6 @@ import UserListitem from "./UserListItem";
 import "../styles/Address.scss";
 
 const AddressListItem = ({ address }) => {
-    const handleSubmit = async (event) => {
-        "Hello World";
-    };
-
     return (
         <li>
             <div className="address">
