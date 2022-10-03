@@ -1,8 +1,10 @@
 const UserListItem = ({ item }) => (
     <div>
-        <div>({item.user_id}) {item.username}</div>
+        <div>
+            ({item.playerId}) {item.username}
+        </div>
         <div>{item.role}</div>
-    </div> 
+    </div>
 );
 
 export default UserListItem;

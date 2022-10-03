@@ -20,8 +20,8 @@ const Users = () => {
     }, []);
 
     function handleClickDetails(item) {
-        console.log("id : " + item.user_id);
-        navigate(`/users/` + item.user_id);
+        console.log("id : " + item.playerId);
+        navigate(`/users/` + item.playerId);
     }
 
     return (
@@ -29,8 +29,8 @@ const Users = () => {
             <h1>User list</h1>
             <ul>
                 {users.map((item) => (
-                    <li key={item.user_id}>
-                        <UserListItem key={item.user_id} item={item} />
+                    <li key={item.playerId}>
+                        <UserListItem key={item.playerId} item={item} />
                         <button onClick={() => handleClickDetails(item)}>
                             More
                         </button>

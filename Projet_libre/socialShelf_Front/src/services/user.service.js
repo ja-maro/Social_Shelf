@@ -7,22 +7,22 @@ const getUserDetails = () => {
 };
 
 const getAll = () => {
-    return sendRequest("user");
+    return sendRequest("player");
 };
 
 const getById = (id) => {
-    return getRequestParam("user", id);
+    return getRequestParam("player", id);
 };
 
-const update = (id, username, role) => {
-    return putRequest("user/" + id, username, role);
+const update = (id, username, role, email) => {
+    return putRequest("player/" + id, username, role, email);
 };
 
 const deleteUser = async (id) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .delete(API_URL + "user/" + id, {
+        .delete(API_URL + "player/" + id, {
             headers: { Authorization: "Bearer " + token },
         })
         .then((result) => {
@@ -64,7 +64,7 @@ const getRequestParam = async (route, id) => {
     return response;
 };
 
-const putRequest = async (route, username, role) => {
+const putRequest = async (route, username, role, email) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
@@ -73,6 +73,7 @@ const putRequest = async (route, username, role) => {
             {
                 username,
                 role,
+                email,
             },
             { headers: { Authorization: "Bearer " + token } }
         )

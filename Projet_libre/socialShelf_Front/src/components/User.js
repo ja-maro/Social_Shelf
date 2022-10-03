@@ -9,7 +9,7 @@ const User = () => {
 
     const handleSubmit = () => {
         console.log("OK");
-        UserService.update(user.user_id, user.username, user.role);
+        UserService.update(user.playerId, user.username, user.role, user.email);
         navigate("/");
     };
 
@@ -25,8 +25,8 @@ const User = () => {
     }, [id]);
 
     function handleDelete(item) {
-        console.log("delete id : " + item.user_id);
-        UserService.deleteUser(item.user_id);
+        console.log("delete id : " + item.playerId);
+        UserService.deleteUser(item.playerId);
         navigate("/users");
     }
 
@@ -50,6 +50,15 @@ const User = () => {
                         type="text"
                         name="username"
                         defaultValue={user.username}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label>
+                    Email :
+                    <input
+                        type="text"
+                        name="email"
+                        defaultValue={user.email}
                         onChange={handleChange}
                     />
                 </label>
