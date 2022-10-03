@@ -6,6 +6,7 @@ import { Alert } from "@mui/material";
 function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [isAlert, setIsAlert] = useState(false);
     const [authMessage, setAuthMessage] = useState({
         severity: "",
@@ -16,7 +17,7 @@ function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response;
-        await AuthService.register(username, password).then(
+        await AuthService.register(username, email, password).then(
             (res) => (response = res)
         );
         if (response.status === 201) {
@@ -30,7 +31,7 @@ function Register() {
             setIsAlert(true);
             setAuthMessage({
                 severity: "error",
-                message: "Username already exist",
+                message: "Username/Email already exist",
                 status: "409",
             });
         } else {
@@ -53,6 +54,15 @@ function Register() {
                     name="username"
                     placeholder="John"
                     onChange={(event) => setUsername(event.target.value)}
+                />
+            </label>
+            <label>
+                Email :
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="John@Wick.fr"
+                    onChange={(event) => setEmail(event.target.value)}
                 />
             </label>
             <label>

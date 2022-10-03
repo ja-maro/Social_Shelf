@@ -2,11 +2,12 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8090/";
 
-const register = async (username, password) => {
+const register = async (username, email, password) => {
     let response;
     await axios
         .post(API_URL + "register", {
             username,
+            email,
             password,
         })
         .then((result) => {
