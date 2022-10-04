@@ -3,6 +3,9 @@ package com.quest.etna.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -53,6 +56,7 @@ public class ShelfService implements IShelfService {
 	}
 
 
+	@Transactional
 	@Override
 	public Boolean remove(Integer gameId, Authentication auth) {
 		Optional<Game> gameOptional = gameRepository.findById(gameId);
@@ -60,6 +64,9 @@ public class ShelfService implements IShelfService {
 			Game game = gameOptional.get();
 			Player player = playerService.getAuthenticatedPlayer(auth);
 			player = playerRepository.getPlayerAndShelf(player.getId());
+			if (!player.getGames().contains(game)) {
+				 throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
+			}
 			try {
 				player.removeGame(game);
 				playerRepository.save(player);
