@@ -6,7 +6,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quest.etna.model.DTO.GameDTO;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -39,21 +41,26 @@ public class Game {
 	@Column(name = "average_duration", columnDefinition = "SMALLINT not null")
 	private int averageDuration;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany
+	(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
 	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "type_id"))
 	private Set<GameType> types = new HashSet<>();
 	
-	@ManyToMany(mappedBy = "games", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Player> owners;
+	@ManyToMany(mappedBy = "games")
+	@JsonIgnore
+	private Set<Player> players = new HashSet<>();
 
-	@OneToMany(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "game", cascade =  { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	private Set<Event> events;
 
+	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "creation_date", columnDefinition = "datetime")
 	private Instant creationDate;
 
+	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "updated_date", columnDefinition = "datetime")
 	private Instant updatedDate;
@@ -132,12 +139,12 @@ public class Game {
 		this.averageDuration = averageDuration;
 	}
 
-	public Set<Player> getOwners() {
-		return owners;
+	public Set<Player> getPlayers() {
+		return players;
 	}
 
-	public void setOwners(Set<Player> owners) {
-		this.owners = owners;
+	public void setPlayers(Set<Player> players) {
+		this.players = players;
 	}
 
 	public Instant getCreationDate() {
@@ -179,5 +186,6 @@ public class Game {
 	public void removeType(GameType gameType) {
 		types.remove(gameType);
 		gameType.getGames().remove(this);
-	}
+	}	
+	
 }

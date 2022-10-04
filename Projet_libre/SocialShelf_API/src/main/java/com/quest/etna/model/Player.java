@@ -1,6 +1,7 @@
 package com.quest.etna.model;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -20,7 +21,10 @@ import javax.persistence.Table;
 
 import com.quest.etna.model.DTO.PlayerDTO;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -48,9 +52,12 @@ public class Player {
 	@OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Address> addresses;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
-	@JoinTable(name = "owns", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
-	private Set<Game> games;
+	@ManyToMany
+	(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@Fetch(FetchMode.JOIN)
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
+	@JoinTable(name = "players_games", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+	private Set<Game> games = new HashSet<>();
 
 	@OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Event> organized_events;
@@ -189,6 +196,15 @@ public class Player {
 
 	public void setUpdatedDate(Instant updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+	
+	public void addGame(Game game) {
+		this.games.add(game);
+	}
+
+	public void removeGame(Game game) {	
+		games.remove(game);
+		game.getPlayers().remove(this);
 	}
 
 }

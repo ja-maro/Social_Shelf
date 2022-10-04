@@ -9,7 +9,7 @@ import com.quest.etna.model.DTO.GameDTO;
 public interface IShelfService {
 
 	List<GameDTO> getAll(Authentication auth);
-	GameDTO Add(int gameId, String playerName);
+	GameDTO add(int gameId, Authentication auth);
 	Boolean remove(Integer id);
 
 }

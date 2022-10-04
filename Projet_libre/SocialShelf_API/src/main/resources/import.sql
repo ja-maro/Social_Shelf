@@ -4,7 +4,7 @@ TRUNCATE TABLE address;
 TRUNCATE TABLE game;
 TRUNCATE TABLE type;
 TRUNCATE TABLE games_types;
-TRUNCATE TABLE owns;
+TRUNCATE TABLE players_games;
 
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('1', '2022-10-01 14:49:26', 'brice@brice.fr', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_USER', '2022-10-01 14:49:26', 'Brice');
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('2', '2022-10-01 14:49:26', 'ja@mail.com', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_ADMIN', '2022-10-01 14:49:26', 'Jean-Antoine');
@@ -42,10 +42,10 @@ INSERT INTO `social_shelf`.`games_types` (`game_id`, `type_id`) VALUES ('4', '2'
 INSERT INTO `social_shelf`.`games_types` (`game_id`, `type_id`) VALUES ('4', '6');
 INSERT INTO `social_shelf`.`games_types` (`game_id`, `type_id`) VALUES ('4', '8');
 
-INSERT INTO `social_shelf`.`owns` (`player_id`, `game_id`) VALUES ('1', '1');
-INSERT INTO `social_shelf`.`owns` (`player_id`, `game_id`) VALUES ('2', '3');
-INSERT INTO `social_shelf`.`owns` (`player_id`, `game_id`) VALUES ('2', '4');
-INSERT INTO `social_shelf`.`owns` (`player_id`, `game_id`) VALUES ('2', '2');
+INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('1', '1');
+INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2', '3');
+INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2', '4');
+INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2', '2');
 
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('1', '2022-09-29 14:39:26', '150', '3', '1', 'Venez découvrir Aeon\'s End, un super jeu coop ! Je ferai des gâteaux, amenez à boire !', '2022-10-21 18:00:00', 'Aeon\'sEnd à Paris', '2022-09-29 14:39:26', '4', '2', '2');
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('2', '2022-09-29 14:39:26', '40', '9', '2', 'Quelques parties de Uno sur l\'heure de pause dej ?', '2022-10-14 12:00:00', 'Uno chez moi', '2022-09-29 14:39:26', '1', '1', '1');
