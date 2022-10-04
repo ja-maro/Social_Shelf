@@ -54,8 +54,7 @@ public class AuthenticationControllerTest {
 
 	@Test
 	public void testAuthenticate() throws Exception {
-		MvcResult tokenResult = mockMvc
-				.perform(MockMvcRequestBuilders.post("/authenticate").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(MockMvcRequestBuilders.post("/authenticate").contentType(MediaType.APPLICATION_JSON)
 						.content(jsonBody.toString()))
 				.andExpect(status().isOk()).andExpect(jsonPath("$.token").exists()).andReturn();
 	}
