@@ -122,24 +122,6 @@ public class PlayerService implements IPlayerService {
 		}
 	}
 
-	@Override
-	public boolean hasRole (String roleName)
-	{
-		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-				.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
-	}
-
-	@Override
-	public boolean isUser(Authentication authentication, int id) {
-		try {
-			String currentUser = authentication.getName();
-			Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(currentUser);
-			Player userToModify = playerRepository.findById(id).get();
-			return userToModify.equals(userAuthenticated);
-		} catch (Exception e) {
-			return false;
-		}
-	}
 
 	private Player updatePlayer(PlayerDTO formPlayer, Player player) {
 		if (null != formPlayer.getUsername()) {
@@ -156,5 +138,28 @@ public class PlayerService implements IPlayerService {
 			player.setRole(formPlayer.getRole());
 		}
 		return player;
+	}
+
+	@Override
+	public boolean hasRole (String roleName) {
+		return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+				.anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
+	}
+	
+	@Override
+	public boolean isUser(Authentication authentication, int id) {
+		try {
+			Player userAuthenticated = getAuthenticatedPlayer(authentication);		
+			Player userToModify = playerRepository.findById(id).get();
+			return userToModify.equals(userAuthenticated);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public Player getAuthenticatedPlayer(Authentication auth) {
+		Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(auth.getName());
+		return userAuthenticated;
 	}
 }

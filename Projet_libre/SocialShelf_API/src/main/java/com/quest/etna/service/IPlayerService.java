@@ -19,5 +19,7 @@ public interface IPlayerService {
 	public ResponseEntity<String> disable(Integer id, Authentication auth);
 	public boolean hasRole (String roleName);
 	public boolean isUser(Authentication authentication, int id);
+	
+	public Player getAuthenticatedPlayer(Authentication auth);
 
 }
