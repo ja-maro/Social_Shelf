@@ -53,7 +53,7 @@ public class Player {
 	private Set<Address> addresses;
 
 	@ManyToMany
-	(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
 	@JoinTable(name = "players_games", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))

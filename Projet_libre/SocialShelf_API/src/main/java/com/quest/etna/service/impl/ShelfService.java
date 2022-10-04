@@ -26,9 +26,8 @@ public class ShelfService implements IShelfService {
 	@Autowired
 	private PlayerRepository playerRepository;
 
-	private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
 	private static final String NOT_FOUND = "{\"message\": \"Not Found\"}";
-	private static final String CONFLICT = "{\"message\": \"Conflict\"}";
+	private static final String CONFLICT = "{\"message\": \"Conflit\"}";
 
 	@Override
 	public GameDTO add(int gameId, Authentication auth) {		
@@ -37,6 +36,10 @@ public class ShelfService implements IShelfService {
 			Game game = gameOptional.get();
 			Player player = playerService.getAuthenticatedPlayer(auth);
 			player = playerRepository.getPlayerAndShelf(player.getId());
+			
+			if (player.getGames().contains(game)) {
+				 throw new ResponseStatusException(HttpStatus.CONFLICT, CONFLICT);
+			}
 			try {
 				player.addGame(game);
 				playerRepository.save(player);
@@ -51,9 +54,22 @@ public class ShelfService implements IShelfService {
 
 
 	@Override
-	public Boolean remove(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean remove(Integer gameId, Authentication auth) {
+		Optional<Game> gameOptional = gameRepository.findById(gameId);
+		if (gameOptional.isPresent()) {
+			Game game = gameOptional.get();
+			Player player = playerService.getAuthenticatedPlayer(auth);
+			player = playerRepository.getPlayerAndShelf(player.getId());
+			try {
+				player.removeGame(game);
+				playerRepository.save(player);
+				return true;
+			} catch (Exception e) {
+               return false;
+			}					
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
+		}
 	}
 
 	@Override

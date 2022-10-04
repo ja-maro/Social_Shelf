@@ -10,6 +10,6 @@ public interface IShelfService {
 
 	List<GameDTO> getAll(Authentication auth);
 	GameDTO add(int gameId, Authentication auth);
-	Boolean remove(Integer id);
+	Boolean remove(Integer gameId, Authentication auth);
 
 }

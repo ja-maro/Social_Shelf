@@ -2,6 +2,7 @@ package com.quest.etna.model;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quest.etna.model.DTO.GameDTO;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -42,8 +44,8 @@ public class Game {
 	private int averageDuration;
 
 	@ManyToMany
-	(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-//	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
+	(cascade = CascadeType.PERSIST)
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
 	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "games_types", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "type_id"))
 	private Set<GameType> types = new HashSet<>();
@@ -186,6 +188,28 @@ public class Game {
 	public void removeType(GameType gameType) {
 		types.remove(gameType);
 		gameType.getGames().remove(this);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(averageDuration, creationDate, description, id, maxPlayer, minPlayer, name, publisher,
+				updatedDate);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Game other = (Game) obj;
+		return averageDuration == other.averageDuration && Objects.equals(creationDate, other.creationDate)
+				&& Objects.equals(description, other.description) && id == other.id && maxPlayer == other.maxPlayer
+				&& minPlayer == other.minPlayer && Objects.equals(name, other.name)
+				&& Objects.equals(publisher, other.publisher) && Objects.equals(updatedDate, other.updatedDate);
 	}	
+
 	
 }

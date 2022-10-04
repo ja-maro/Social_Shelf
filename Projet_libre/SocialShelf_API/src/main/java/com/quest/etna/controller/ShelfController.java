@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,5 +39,11 @@ public class ShelfController {
 		GameDTO addedGame = shelfService.add(gameId, authentication);
 		return new ResponseEntity<>(addedGame, HttpStatus.OK);
 	}
+	
+	 @DeleteMapping("/{gameId}")
+	    public ResponseEntity<Boolean> removeType (@PathVariable Integer gameId, 
+	    		@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+	        return new ResponseEntity<>(shelfService.remove(gameId, authentication), HttpStatus.OK);
+	    }
 
 }
