@@ -3,8 +3,10 @@ TRUNCATE TABLE player;
 TRUNCATE TABLE address;
 TRUNCATE TABLE game;
 TRUNCATE TABLE type;
+TRUNCATE TABLE event;
 TRUNCATE TABLE games_types;
 TRUNCATE TABLE players_games;
+TRUNCATE TABLE participants;
 
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('1', '2022-10-01 14:49:26', 'brice@brice.fr', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_USER', '2022-10-01 14:49:26', 'Brice');
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('2', '2022-10-01 14:49:26', 'ja@mail.com', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_ADMIN', '2022-10-01 14:49:26', 'Jean-Antoine');
