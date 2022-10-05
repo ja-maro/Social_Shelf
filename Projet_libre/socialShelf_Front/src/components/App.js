@@ -8,10 +8,11 @@ import Home from "./Home";
 import Profile from "./authentication/Profile";
 import UserList from "./user/UserList";
 import User from "./user/User";
-import AddressList from "./adress/AddressList";
-import CreateAddress from "./adress/CreateAddress";
-import Address from "./adress/Address";
+import AddressList from "./address/AddressList";
+import CreateAddress from "./address/CreateAddress";
+import Address from "./address/Address";
 import { DataContext } from "./DataContext";
+import GameList from "./games/GameList";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -31,6 +32,7 @@ const App = () => {
                     <Route path="/address/:id" element={<Address />} />
                     <Route path="/address" element={<AddressList />} />
                     <Route path="/createAddress" element={<CreateAddress />} />
+                    <Route path="/games" element={<GameList />} />
                 </Routes>
             </DataContext.Provider>
         </div>

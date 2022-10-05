@@ -23,6 +23,9 @@ const NavBar = () => {
                 <Link to="/address" className="link">
                     <h4>Addresses</h4>
                 </Link>
+                <Link to="/games" className="link">
+                    <h4>Games</h4>
+                </Link>
             </div>
 
             <div className="navbar-log">
