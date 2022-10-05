@@ -1,16 +1,16 @@
 import "../styles/App.scss";
-import Login from "./Login";
+import Login from "./authentication/Login";
 import { Routes, Route } from "react-router-dom";
-import Register from "./Register";
+import Register from "./authentication/Register";
 import React, { useState } from "react";
 import NavBar from "./NavBar";
 import Home from "./Home";
-import Profile from "./Profile";
-import UserList from "./UserList";
-import User from "./User.js";
-import AddressList from "./AddressList";
-import CreateAddress from "./CreateAddress";
-import Address from "./Address";
+import Profile from "./authentication/Profile";
+import UserList from "./user/UserList";
+import User from "./user/User";
+import AddressList from "./adress/AddressList";
+import CreateAddress from "./adress/CreateAddress";
+import Address from "./adress/Address";
 import { DataContext } from "./DataContext";
 
 const App = () => {

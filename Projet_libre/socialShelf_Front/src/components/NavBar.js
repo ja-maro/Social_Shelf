@@ -6,10 +6,9 @@ import { DataContext } from "./DataContext";
 const NavBar = () => {
     const logout = () => {
         AuthService.logout();
-        setIsLog(false);
+        context.setIsLog(false);
     };
     const context = React.useContext(DataContext);
-    const { setIsLog } = React.useContext(DataContext);
 
     return context.isLog ? (
         <nav className="navbar">

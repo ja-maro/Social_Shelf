@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
-import UserService from "../services/user.service";
+import AuthService from "../../services/auth.service";
+import UserService from "../../services/user.service";
 import UserListItem from "./UserListItem";
 
 const Users = () => {
@@ -26,7 +26,7 @@ const Users = () => {
 
     return (
         <div className="wrapper">
-            <h1>User list</h1>
+            <h1>All Players</h1>
             <ul>
                 {users.map((item) => (
                     <li key={item.playerId}>

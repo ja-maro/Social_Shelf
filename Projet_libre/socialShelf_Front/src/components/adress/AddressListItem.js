@@ -1,5 +1,5 @@
-import UserListitem from "./UserListItem";
-import "../styles/Address.scss";
+import UserListitem from "../user/UserListItem";
+import "../../styles/Address.scss";
 
 const AddressListItem = ({ address }) => {
     return (

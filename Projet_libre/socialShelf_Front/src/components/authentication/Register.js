@@ -1,30 +1,23 @@
-import "../styles/Login.scss";
+import "../../styles/Login.scss";
+import AuthService from "../../services/auth.service";
 import { useState } from "react";
 import { Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import AddressService from "../services/address.service";
 
-function CreateAddress() {
-    const [street, setStreet] = useState("");
-    const [postalCode, setPostalCode] = useState("");
-    const [city, setCity] = useState("");
-    const [country, setCountry] = useState("");
+function Register() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
     const [isAlert, setIsAlert] = useState(false);
     const [authMessage, setAuthMessage] = useState({
         severity: "",
         message: "",
         status: "",
     });
-    let navigate = useNavigate(); 
-    const routeChange = () =>{ 
-        let path = `/address`; 
-        navigate(path);
-    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response;
-        await AddressService.create(street, postalCode, city, country).then(
+        await AuthService.register(username, email, password).then(
             (res) => (response = res)
         );
         if (response.status === 201) {
@@ -34,12 +27,11 @@ function CreateAddress() {
                 message: "Created",
                 status: "201",
             });
-            routeChange();
         } else if (response.status === 409) {
             setIsAlert(true);
             setAuthMessage({
                 severity: "error",
-                message: "Address already exists",
+                message: "Username/Email already exist",
                 status: "409",
             });
         } else {
@@ -54,41 +46,32 @@ function CreateAddress() {
 
     const form = (
         <form onSubmit={handleSubmit}>
-            <h1 className="title"> Create new personal address </h1>
+            <h1 className="title"> Register </h1>
             <label>
-                Street :
+                Username :
                 <input
                     type="text"
-                    name="street"
-                    placeholder="12 rue du Bac"
-                    onChange={(event) => setStreet(event.target.value)}
+                    name="username"
+                    placeholder="John"
+                    onChange={(event) => setUsername(event.target.value)}
                 />
             </label>
             <label>
-                Postal Code :
+                Email :
                 <input
-                    type="text"
-                    name="postalCode"
-                    placeholder="95230"
-                    onChange={(event) => setPostalCode(event.target.value)}
+                    type="email"
+                    name="email"
+                    placeholder="John@Wick.fr"
+                    onChange={(event) => setEmail(event.target.value)}
                 />
             </label>
             <label>
-                City :
+                Password :
                 <input
-                    type="text"
-                    name="city"
-                    placeholder="Vernouillet"
-                    onChange={(event) => setCity(event.target.value)}
-                />
-            </label>
-            <label>
-                Country :
-                <input
-                    type="text"
-                    name="country"
-                    placeholder="France"
-                    onChange={(event) => setCountry(event.target.value)}
+                    type="password"
+                    name="password"
+                    placeholder="Wick"
+                    onChange={(event) => setPassword(event.target.value)}
                 />
             </label>
             <input type="submit" value="Send" />
@@ -112,4 +95,4 @@ function CreateAddress() {
         );
     }
 }
-export default CreateAddress;
+export default Register;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AddressService from "../services/address.service";
+import AddressService from "../../services/address.service";
 
 const Address = () => {
     const [address, setAddress] = useState({});

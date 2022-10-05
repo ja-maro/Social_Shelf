@@ -1,52 +1,59 @@
-import "../styles/Login.scss";
-import AuthService from "../services/auth.service";
-import { useState } from "react";
+import "../../styles/Login.scss";
+import React, { useState } from "react";
+import AuthService from "../../services/auth.service";
 import { Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { DataContext } from "../DataContext";
 
-function Register() {
+function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
     const [isAlert, setIsAlert] = useState(false);
     const [authMessage, setAuthMessage] = useState({
         severity: "",
         message: "",
         status: "",
     });
+    let navigate = useNavigate();
+    const context = React.useContext(DataContext);
+    const { setIsLog } = React.useContext(DataContext);
+
+    const routeChange = () => {
+        let path = `/profile`;
+        navigate(path);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response;
-        await AuthService.register(username, email, password).then(
+        await AuthService.login(username, password).then(
             (res) => (response = res)
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
             setIsAlert(true);
             setAuthMessage({
                 severity: "success",
-                message: "Created",
-                status: "201",
+                message: "Connected",
+                status: "200",
             });
-        } else if (response.status === 409) {
+            setIsLog(true);
+            props.setIsLog(true);
+            console.log(context.isLog);
+            routeChange();
+        } else if (response.status === 401) {
+            console.log("Error : " + response.status);
             setIsAlert(true);
             setAuthMessage({
                 severity: "error",
-                message: "Username/Email already exist",
-                status: "409",
-            });
-        } else {
-            setIsAlert(true);
-            setAuthMessage({
-                severity: "error",
-                message: "Error",
-                status: "",
+                message: "Wrong Username/Password",
+                status: "401",
             });
         }
     };
 
     const form = (
         <form onSubmit={handleSubmit}>
-            <h1 className="title"> Register </h1>
+            <h1 className="title"> Login </h1>
             <label>
                 Username :
                 <input
@@ -54,15 +61,6 @@ function Register() {
                     name="username"
                     placeholder="John"
                     onChange={(event) => setUsername(event.target.value)}
-                />
-            </label>
-            <label>
-                Email :
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="John@Wick.fr"
-                    onChange={(event) => setEmail(event.target.value)}
                 />
             </label>
             <label>
@@ -80,7 +78,8 @@ function Register() {
 
     if (!isAlert) {
         return <div className="login">{form}</div>;
-    } else {
+    }
+    if (isAlert && !props.isLog) {
         return (
             <div className="login">
                 {form}
@@ -95,4 +94,5 @@ function Register() {
         );
     }
 }
-export default Register;
+
+export default Login;

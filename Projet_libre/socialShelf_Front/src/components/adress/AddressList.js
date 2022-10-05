@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AddressListItem from "./AddressListItem";
-import AddressService from "../services/address.service";
+import AddressService from "../../services/address.service";
 import { useNavigate } from "react-router-dom";
 
 const AddressList = (props) => {
