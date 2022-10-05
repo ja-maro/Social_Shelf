@@ -8,7 +8,6 @@ const GameList = () => {
     const [gameList, setGameList] = useState([]);
 
     useEffect(() => {
-        console.log(context.isAdmin);
         GamesService.getAllGames().then((response) => {
             if (response.status === 200) {
                 console.log(response);
@@ -22,6 +21,11 @@ const GameList = () => {
     const context = useContext(DataContext);
     let navigate = useNavigate();
 
+    const handleClickGame = (game) => {
+        setGameList([]);
+        navigate("/games/" + game.id);
+    };
+
     return (
         <div className="wrapper">
             {context.isAdmin === true ? (
@@ -34,9 +38,13 @@ const GameList = () => {
                 {gameList.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
-                        {/* <button onClick={() => handleClickAddress(address)}>
+                        {context.isAdmin === true ? (
+                            <button onClick={() => handleClickGame(game)}>
                                 Modify
-                            </button> */}
+                            </button>
+                        ) : (
+                            <div></div>
+                        )}
                     </div>
                 ))}
             </ul>

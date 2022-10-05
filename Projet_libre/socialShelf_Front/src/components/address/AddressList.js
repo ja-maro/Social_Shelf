@@ -23,7 +23,6 @@ const AddressList = (props) => {
     }, []);
 
     const handleClickAddress = (address) => {
-        console.log("id : " + address.id);
         setAddressList([]);
         navigate("/address/" + address.id);
     };

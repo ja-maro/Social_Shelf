@@ -68,6 +68,57 @@ const add = async (
     return response;
 };
 
-const GamesService = { getAllGames, getById, add };
+const update = async (
+    id,
+    name,
+    publisher,
+    description,
+    minPlayer,
+    maxPlayer,
+    averageDuration
+) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .put(
+            API_URL + "game/" + id,
+            {
+                name,
+                publisher,
+                description,
+                minPlayer,
+                maxPlayer,
+                averageDuration,
+            },
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
+const deleteGame = async (id) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .delete(API_URL + "game/" + id, {
+            headers: { Authorization: "Bearer " + token },
+        })
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
+const GamesService = { getAllGames, getById, add, update, deleteGame };
 
 export default GamesService;

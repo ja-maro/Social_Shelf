@@ -20,17 +20,15 @@ const Address = () => {
     };
 
     useEffect(() => {
-        if (!address.street) {
-            AddressService.getById(id).then((response) => {
-                if (response.status === 200) {
-                    console.log(response);
-                    setAddress(response.data);
-                } else {
-                    console.log(response);
-                }
-            });
-        }
-    });
+        AddressService.getById(id).then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                setAddress(response.data);
+            } else {
+                console.log(response);
+            }
+        });
+    }, [id]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

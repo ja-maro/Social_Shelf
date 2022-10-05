@@ -1,11 +1,18 @@
+import { useContext } from "react";
+import { DataContext } from "../DataContext";
+
 const GameListItem = ({ game }) => {
+    const context = useContext(DataContext);
+
     return (
         <li>
             <div className="game">
                 <div className="game_details">
                     <div>{game.id}</div>
                     <div>
-                        {game.name} ({game.publisher})
+                        <h4>
+                            {game.name} ({game.publisher})
+                        </h4>
                     </div>
                     <div>{game.description}</div>
                     <div>

@@ -14,6 +14,7 @@ import Address from "./address/Address";
 import { DataContext } from "./DataContext";
 import GameList from "./games/GameList";
 import GameAdd from "./games/GameAdd";
+import Game from "./games/Game";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -38,6 +39,7 @@ const App = () => {
                     <Route path="/createAddress" element={<CreateAddress />} />
                     <Route path="/games" element={<GameList />} />
                     <Route path="/games/new" element={<GameAdd />} />
+                    <Route path="/games/:id" element={<Game />} />
                 </Routes>
             </DataContext.Provider>
         </div>
