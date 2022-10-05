@@ -151,7 +151,8 @@ public class PlayerService implements IPlayerService {
 		try {
 			Player userAuthenticated = getAuthenticatedPlayer(authentication);		
 			Player userToModify = playerRepository.findById(id).get();
-			return userToModify.equals(userAuthenticated);
+			System.out.print("auth : " + userAuthenticated.getUsername() + "; modification : " + userToModify.getUsername());
+			return (userToModify.getId() == userAuthenticated.getId());
 		} catch (Exception e) {
 			return false;
 		}
@@ -159,7 +160,6 @@ public class PlayerService implements IPlayerService {
 
 	@Override
 	public Player getAuthenticatedPlayer(Authentication auth) {
-		Player userAuthenticated = playerRepository.findByUsernameIgnoreCase(auth.getName());
-		return userAuthenticated;
+		return playerRepository.findByUsernameIgnoreCase(auth.getName());
 	}
 }

@@ -8,8 +8,8 @@ const AddressListItem = ({ address }) => {
                 <div className="address_details">
                     <div>
                         <UserListitem
-                            key={address.user.user_id}
-                            item={address.user}
+                            key={address.player.playerId}
+                            item={address.player}
                         />
                     </div>
                     <div>{address.id}</div>

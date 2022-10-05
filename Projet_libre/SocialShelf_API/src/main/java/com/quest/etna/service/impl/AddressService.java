@@ -38,6 +38,7 @@ public class AddressService implements IAddressService {
     @Override
     public ResponseEntity getById(Integer id, Authentication authentication) {
         Optional<Address> dbAddress = addressRepository.findById(id);
+        System.out.print("is user ? " + playerService.isUser(authentication, id));
         if (dbAddress.isPresent()) {
             if (playerService.isUser(authentication, id) || playerService.hasRole("ROLE_ADMIN")) {
                 AddressDTO addressDTO = new AddressDTO(dbAddress.get());

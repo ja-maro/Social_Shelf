@@ -13,7 +13,7 @@ const AddressList = (props) => {
                 console.log(response);
                 setAddressList(
                     response.data.sort(
-                        (a, b) => a.user.user_id - b.user.user_id
+                        (a, b) => a.player.player_id - b.player.player_id
                     )
                 );
             } else if (response.status === 401) {
