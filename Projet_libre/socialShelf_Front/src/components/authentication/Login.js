@@ -5,7 +5,7 @@ import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../DataContext";
 
-function Login(props) {
+function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isAlert, setIsAlert] = useState(false);
@@ -16,12 +16,6 @@ function Login(props) {
     });
     let navigate = useNavigate();
     const context = React.useContext(DataContext);
-    const { setIsLog } = React.useContext(DataContext);
-
-    const routeChange = () => {
-        let path = `/profile`;
-        navigate(path);
-    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,10 +30,8 @@ function Login(props) {
                 message: "Connected",
                 status: "200",
             });
-            setIsLog(true);
-            props.setIsLog(true);
-            console.log(context.isLog);
-            routeChange();
+            context.setIsLog(true);
+            navigate("/profile");
         } else if (response.status === 401) {
             console.log("Error : " + response.status);
             setIsAlert(true);
@@ -79,7 +71,7 @@ function Login(props) {
     if (!isAlert) {
         return <div className="login">{form}</div>;
     }
-    if (isAlert && !props.isLog) {
+    if (isAlert && !context.isLog) {
         return (
             <div className="login">
                 {form}

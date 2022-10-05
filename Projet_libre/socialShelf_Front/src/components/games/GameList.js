@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import GameListItem from "./GameListItem";
 import GamesService from "../../services/games.service";
+import { DataContext } from "../DataContext";
+import { useNavigate } from "react-router-dom";
 
 const GameList = () => {
     const [gameList, setGameList] = useState([]);
 
     useEffect(() => {
+        console.log(context.isAdmin);
         GamesService.getAllGames().then((response) => {
             if (response.status === 200) {
                 console.log(response);
@@ -16,11 +19,16 @@ const GameList = () => {
         });
     }, []);
 
+    const context = useContext(DataContext);
+    let navigate = useNavigate();
+
     return (
         <div className="wrapper">
-            {/* <button onClick={() => navigate(`/createAddress/`)}>
-                Add new address
-            </button> */}
+            {context.isAdmin === true ? (
+                <button onClick={() => navigate("/games/new")}>New game</button>
+            ) : (
+                <div></div>
+            )}
             <h1>All games</h1>
             <ul>
                 {gameList.map((game) => (

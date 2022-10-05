@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import UserService from "../../services/user.service";
+import { DataContext } from "../DataContext";
 
 const Profile = () => {
     const [userDetails, setUserDetails] = useState({
@@ -8,11 +9,17 @@ const Profile = () => {
         role: "",
     });
 
+    const context = useContext(DataContext);
+
     useEffect(() => {
         if (userDetails.username === "") {
             UserService.getUserDetails().then((response) => {
                 if (response.status === 200) {
                     console.log(response);
+                    console.log(response.data.role);
+                    if (response.data.role === "ROLE_ADMIN") {
+                        context.setIsAdmin(true);
+                    }
                     setUserDetails({
                         username: response.data.username,
                         email: response.data.email,

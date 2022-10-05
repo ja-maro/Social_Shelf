@@ -40,7 +40,6 @@ const login = async (username, password) => {
 };
 
 const logout = () => {
-    console.log(localStorage.getItem("token"));
     localStorage.removeItem("token");
 };
 

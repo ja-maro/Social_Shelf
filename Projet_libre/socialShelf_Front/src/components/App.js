@@ -13,13 +13,17 @@ import CreateAddress from "./address/CreateAddress";
 import Address from "./address/Address";
 import { DataContext } from "./DataContext";
 import GameList from "./games/GameList";
+import GameAdd from "./games/GameAdd";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     return (
         <div>
-            <DataContext.Provider value={{ isLog, setIsLog }}>
+            <DataContext.Provider
+                value={{ isLog, setIsLog, isAdmin, setIsAdmin }}
+            >
                 <NavBar />
                 <Routes>
                     <Route path="/login" element={<Login />} />
@@ -33,6 +37,7 @@ const App = () => {
                     <Route path="/address" element={<AddressList />} />
                     <Route path="/createAddress" element={<CreateAddress />} />
                     <Route path="/games" element={<GameList />} />
+                    <Route path="/games/new" element={<GameAdd />} />
                 </Routes>
             </DataContext.Provider>
         </div>
