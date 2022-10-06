@@ -1,5 +1,6 @@
 package com.quest.etna.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,9 +59,27 @@ public class ShelfControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$").isArray())
 		.andExpect(jsonPath("$", hasSize(1)))
-		.andExpect(jsonPath("$[*].id", containsInAnyOrder(1)))
-		.andExpect(jsonPath("$[*].name", containsInAnyOrder("Uno")))
-		.andExpect(jsonPath("$[*].publisher", containsInAnyOrder("Mattel")));
+		.andExpect(jsonPath("$[*].id", contains(1)))
+		.andExpect(jsonPath("$[*].name", contains("Uno")))
+		.andExpect(jsonPath("$[*].publisher", contains("Mattel")))
+		.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(2, 3, 4))))
+		.andExpect(jsonPath("$[*].name", not(containsInAnyOrder("7 Wonders", "Catan", "Aeon's End"))))
+		.andExpect(jsonPath("$[*].publisher", not(containsInAnyOrder("Repos Production", "Kosmos", "Matagot"))));
+	}
+	
+	@Test
+	@Order(1)
+	public void testGetNotOwned() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/notowned").header("Authorization", token))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(3)))
+		.andExpect(jsonPath("$[*].id", containsInAnyOrder(2, 3, 4)))
+		.andExpect(jsonPath("$[*].id", not(contains(1))))
+		.andExpect(jsonPath("$[*].name", containsInAnyOrder("7 Wonders", "Catan", "Aeon's End")))
+		.andExpect(jsonPath("$[*].name", not(contains("Uno"))))
+		.andExpect(jsonPath("$[*].publisher", containsInAnyOrder("Repos Production", "Kosmos", "Matagot")))
+		.andExpect(jsonPath("$[*].publisher", not(contains("Mattel"))));
 	}
 	
 	@Test
@@ -75,6 +94,15 @@ public class ShelfControllerTest {
 		.andExpect(jsonPath("$[*].id", containsInAnyOrder(1, 2)))
 		.andExpect(jsonPath("$[*].name", containsInAnyOrder("Uno", "7 Wonders")))
 		.andExpect(jsonPath("$[*].publisher", containsInAnyOrder("Mattel", "Repos Production")));
+		
+		mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/notowned").header("Authorization", token))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(2)))
+		.andExpect(jsonPath("$[*].id", not(contains(2))))
+		.andExpect(jsonPath("$[*].name", not(contains("7 Wonders"))))
+		.andExpect(jsonPath("$[*].publisher", not(contains("Repos Production"))));
 	}
 	
 	@Test

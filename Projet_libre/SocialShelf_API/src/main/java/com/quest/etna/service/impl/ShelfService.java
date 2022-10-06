@@ -81,11 +81,36 @@ public class ShelfService implements IShelfService {
 
 	@Override
 	public List<GameDTO> getAll(Authentication auth) {
+//		Player player = playerService.getAuthenticatedPlayer(auth);
+//		Iterable<Game> dbShelf = gameRepository.findGamesByPlayersId(player.getId());
+//		List<GameDTO> gameDTOs = new ArrayList<>();
+//		dbShelf.forEach(game -> gameDTOs.add(new GameDTO(game)));
+//		return gameDTOs;
+		return getGamesOwnedOrNot(auth, true);
+	}
+
+
+	@Override
+	public List<GameDTO> getAllNotOwned(Authentication auth) {
+//		Player player = playerService.getAuthenticatedPlayer(auth);
+//		Iterable<Game> dbShelf = gameRepository.findGamesByPlayersIdNot(player.getId());
+//		List<GameDTO> gameDTOs = new ArrayList<>();
+//		dbShelf.forEach(game -> gameDTOs.add(new GameDTO(game)));
+//		return gameDTOs;
+		return getGamesOwnedOrNot(auth, false);
+	}
+	
+	private List<GameDTO> getGamesOwnedOrNot(Authentication auth, boolean isOwned) {
 		Player player = playerService.getAuthenticatedPlayer(auth);
-		Iterable<Game> dbShelf = gameRepository.findGamesByPlayersId(player.getId());
+		Iterable<Game> dbGames = ( 
+				isOwned
+				? gameRepository.findGamesByPlayersId(player.getId())
+				: gameRepository.findGamesByPlayersIdNot(player.getId())
+				);
 		List<GameDTO> gameDTOs = new ArrayList<>();
-		dbShelf.forEach(game -> gameDTOs.add(new GameDTO(game)));
+		dbGames.forEach(game -> gameDTOs.add(new GameDTO(game)));
 		return gameDTOs;
+		
 	}
 
 }

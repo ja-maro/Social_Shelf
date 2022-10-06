@@ -32,6 +32,13 @@ public class ShelfController {
 		List<GameDTO> shelvedGames = shelfService.getAll(authentication);
 		return ResponseEntity.ok(shelvedGames);
 	}
+	
+	@GetMapping("/notowned")
+	public ResponseEntity<List<GameDTO>> getAllNotOwned(
+			@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+		List<GameDTO> notOwnedGames = shelfService.getAllNotOwned(authentication);
+		return ResponseEntity.ok(notOwnedGames);
+	}
 
 	@PutMapping("/{gameId}")
 	public ResponseEntity<GameDTO> add(@PathVariable Integer gameId,
