@@ -17,9 +17,10 @@ const NavBar = () => {
                 context.isLog ? (
                     <nav className="navbar">
                         <div className="navbar-left">
-                            <h2>Quest Web</h2>
-                            <Link to="/" className="link">
-                                <h4>Home</h4>
+                        <Link to="/" className="link">
+                            <h2>Social Shelf</h2>
+                            
+                                {/* <h4>Home</h4> */}
                             </Link>
                             <Link to="/users" className="link">
                                 <h4>Users</h4>
@@ -44,9 +45,10 @@ const NavBar = () => {
                 ) : (
                     <nav className="navbar">
                         <div className="navbar-left">
-                            <h2>Quest Web</h2>
-                            <Link to="/" className="link">
-                                <h4>Home</h4>
+                        <Link to="/" className="link">
+                            <h2>Social Shelf</h2>
+                            
+                                {/* <h4>Home</h4> */}
                             </Link>
                         </div>
 
