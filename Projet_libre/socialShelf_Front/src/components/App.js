@@ -5,6 +5,7 @@ import Register from "./authentication/Register";
 import React, { useState } from "react";
 import NavBar from "./NavBar";
 import Home from "./Home";
+import NotFound from "./NotFound";
 import Profile from "./authentication/Profile";
 import UserList from "./user/UserList";
 import User from "./user/User";
@@ -40,6 +41,7 @@ const App = () => {
                     <Route path="/games" element={<GameList />} />
                     <Route path="/games/new" element={<GameAdd />} />
                     <Route path="/games/:id" element={<Game />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </DataContext.Provider>
         </div>
