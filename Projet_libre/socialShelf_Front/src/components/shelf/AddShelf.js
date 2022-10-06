@@ -4,14 +4,14 @@ import ShelfService from "../../services/shelf.service";
 import { DataContext } from "../DataContext";
 import { useNavigate } from "react-router-dom";
 
-const Shelf = () => {
-    const [shelf, setShelf] = useState([]);
+const AddShelf = () => {
+    const [games, setGames] = useState([]);
 
     useEffect(() => {
-        ShelfService.getShelf().then((response) => {
+        ShelfService.getNotOwned().then((response) => {
             if (response.status === 200) {
                 console.log(response);
-                setShelf(response.data);
+                setGames(response.data);
             } else if (response.status === 401) {
                 console.log(response);
             }
@@ -22,20 +22,19 @@ const Shelf = () => {
     let navigate = useNavigate();
 
     const handleClickGame = (game) => {
-        setShelf([]);
+        setGames([]);
     };
 
     return (
         <div className="wrapper">
            
-            <h1>My Shelf</h1>
-            <button onClick={() => navigate("/shelf/add")}>Add a game to your shelf</button>
+            <h1>Games available :</h1>
             <ul>
-                {shelf.map((game) => (
+                {games.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
                             <button onClick={() => handleClickGame(game)}>
-                                Remove
+                                Add
                             </button>
                     </div>
                 ))}
@@ -44,4 +43,4 @@ const Shelf = () => {
     );
 };
 
-export default Shelf;
+export default AddShelf;
