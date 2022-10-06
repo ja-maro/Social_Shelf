@@ -1,28 +1,48 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import GameListItem from "../games/GameListItem";
 import ShelfService from "../../services/shelf.service";
-import { DataContext } from "../DataContext";
 import { useNavigate } from "react-router-dom";
 
 const AddShelf = () => {
-    const [games, setGames] = useState([]);
+    const [gamesNotOwned, setGamesNotOwned] = useState([]);
+    let navigate = useNavigate();
 
     useEffect(() => {
+        refresh();
+    }, []);
+
+    const refresh = () => {
         ShelfService.getNotOwned().then((response) => {
             if (response.status === 200) {
                 console.log(response);
-                setGames(response.data);
+                setGamesNotOwned(response.data);
             } else if (response.status === 401) {
                 console.log(response);
             }
         });
-    }, []);
+    };
 
-    const context = useContext(DataContext);
-    let navigate = useNavigate();
+    // useEffect(() => {
+    //     ShelfService.getNotOwned().then((response) => {
+    //         if (response.status === 200) {
+    //             console.log(response);
+    //             setGamesNotOwned(response.data);
+    //         } else if (response.status === 401) {
+    //             console.log(response);
+    //         }
+    //     });
+    // }, []);
 
     const handleClickGame = (game) => {
-        setGames([]);
+        ShelfService.add(game.id).then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                setGamesNotOwned([]);
+                navigate("/shelf");
+            } else {
+                console.log(response);
+            }
+        });  
     };
 
     return (
@@ -30,7 +50,7 @@ const AddShelf = () => {
            
             <h1>Games available :</h1>
             <ul>
-                {games.map((game) => (
+                {gamesNotOwned.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
                             <button onClick={() => handleClickGame(game)}>

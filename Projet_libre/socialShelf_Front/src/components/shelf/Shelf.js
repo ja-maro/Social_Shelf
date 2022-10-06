@@ -1,13 +1,17 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import GameListItem from "../games/GameListItem";
 import ShelfService from "../../services/shelf.service";
-import { DataContext } from "../DataContext";
 import { useNavigate } from "react-router-dom";
 
 const Shelf = () => {
     const [shelf, setShelf] = useState([]);
+    let navigate = useNavigate();
 
     useEffect(() => {
+        refresh();
+    }, []);
+
+    const refresh = () => {
         ShelfService.getShelf().then((response) => {
             if (response.status === 200) {
                 console.log(response);
@@ -16,13 +20,18 @@ const Shelf = () => {
                 console.log(response);
             }
         });
-    }, []);
-
-    const context = useContext(DataContext);
-    let navigate = useNavigate();
+    };
 
     const handleClickGame = (game) => {
-        setShelf([]);
+
+        ShelfService.remove(game.id).then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                refresh();
+            } else {
+                console.log(response);
+            }
+        });    
     };
 
     return (
