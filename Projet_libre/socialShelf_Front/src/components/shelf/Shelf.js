@@ -19,13 +19,20 @@ const Shelf = () => {
 
     let navigate = useNavigate();
 
-    const handleClickGame = (game) => {
-        setShelf([]);
+    const handleClickDeleteGame = async (game) => {
+        ShelfService.remove(game.id);
+        await ShelfService.getShelf().then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                window.location.reload(false);
+            } else if (response.status === 401) {
+                console.log(response);
+            }
+        });
     };
 
     const handleClickAddGame = () => {
-        setShelf(null);
-        console.log(shelf);
+        setShelf([]);
         navigate("/shelf/add");
     };
 
@@ -37,7 +44,7 @@ const Shelf = () => {
                 {shelf.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
-                        <button onClick={() => handleClickGame(game)}>
+                        <button onClick={() => handleClickDeleteGame(game)}>
                             Remove
                         </button>
                     </div>
