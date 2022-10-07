@@ -1,7 +1,6 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import GameListItem from "../games/GameListItem";
 import ShelfService from "../../services/shelf.service";
-import { DataContext } from "../DataContext";
 import { useNavigate } from "react-router-dom";
 
 const Shelf = () => {
@@ -18,24 +17,29 @@ const Shelf = () => {
         });
     }, []);
 
-    const context = useContext(DataContext);
     let navigate = useNavigate();
 
     const handleClickGame = (game) => {
         setShelf([]);
     };
 
+    const handleClickAddGame = () => {
+        setShelf(null);
+        console.log(shelf);
+        navigate("/shelf/add");
+    };
+
     return (
         <div className="wrapper">
-           
             <h1>My Shelf</h1>
+            <button onClick={() => handleClickAddGame()}>Add game</button>
             <ul>
                 {shelf.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
-                            <button onClick={() => handleClickGame(game)}>
-                                Remove
-                            </button>
+                        <button onClick={() => handleClickGame(game)}>
+                            Remove
+                        </button>
                     </div>
                 ))}
             </ul>

@@ -1,9 +1,4 @@
-import { useContext } from "react";
-import { DataContext } from "../DataContext";
-
 const GameListItem = ({ game }) => {
-    const context = useContext(DataContext);
-
     return (
         <li>
             <div className="game">
