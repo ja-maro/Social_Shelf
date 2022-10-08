@@ -18,15 +18,24 @@ import GameAdd from "./games/GameAdd";
 import Game from "./games/Game";
 import Shelf from "./shelf/Shelf";
 import ShelfAdd from "./shelf/ShelfAdd";
+import EventList from "./events/EventList";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [playerId, setPlayerId] = useState(0);
 
     return (
         <div>
             <DataContext.Provider
-                value={{ isLog, setIsLog, isAdmin, setIsAdmin }}
+                value={{
+                    isLog,
+                    setIsLog,
+                    isAdmin,
+                    setIsAdmin,
+                    playerId,
+                    setPlayerId,
+                }}
             >
                 <NavBar />
                 <Routes>
@@ -46,6 +55,7 @@ const App = () => {
                     <Route path="/shelf" element={<Shelf />} />
                     <Route path="/shelf/add" element={<ShelfAdd />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/events" element={<EventList />} />
                 </Routes>
             </DataContext.Provider>
         </div>
