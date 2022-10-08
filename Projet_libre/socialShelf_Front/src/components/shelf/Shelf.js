@@ -22,30 +22,34 @@ const Shelf = () => {
         });
     };
 
-    const handleClickGame = (game) => {
-
-        ShelfService.remove(game.id).then((response) => {
+    const handleClickDeleteGame = async (game) => {
+        ShelfService.remove(game.id);
+        await ShelfService.getShelf().then((response) => {
             if (response.status === 200) {
                 console.log(response);
-                refresh();
-            } else {
+                window.location.reload(false);
+            } else if (response.status === 401) {
                 console.log(response);
             }
-        });    
+        });
+    };
+
+    const handleClickAddGame = () => {
+        setShelf([]);
+        navigate("/shelf/add");
     };
 
     return (
         <div className="wrapper">
-           
             <h1>My Shelf</h1>
-            <button onClick={() => navigate("/shelf/add")}>Add a game to your shelf</button>
+            <button onClick={() => handleClickAddGame()}>Add game</button>
             <ul>
                 {shelf.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
-                            <button onClick={() => handleClickGame(game)}>
-                                Remove
-                            </button>
+                        <button onClick={() => handleClickDeleteGame(game)}>
+                            Remove
+                        </button>
                     </div>
                 ))}
             </ul>

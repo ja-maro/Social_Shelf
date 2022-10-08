@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.quest.etna.model.DTO.EventDTO;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -81,6 +83,19 @@ public class Event {
 		super();
 	}
 
+	public Event(EventDTO eventDTO) {
+		this.id = eventDTO.getId();
+		this.title = eventDTO.getTitle();
+		this.pitch = eventDTO.getPitch();
+		this.minPlayer = eventDTO.getMinPlayer();
+		this.maxPlayer = eventDTO.getMaxPlayer();
+		this.duration = eventDTO.getDuration();
+		this.startDate = eventDTO.getStartDate();
+		this.cancellationDate = eventDTO.getCancellationDate();
+		this.place = new Address(eventDTO.getPlace());
+		this.game = new Game(eventDTO.getGame());
+		this.organizer = new Player(eventDTO.getOrganizer());
+	}
 
 // GETTERS & SETTERS
 	public int getId() {

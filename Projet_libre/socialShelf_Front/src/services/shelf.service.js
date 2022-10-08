@@ -18,7 +18,7 @@ const getShelf = async () => {
     return response;
 };
 
-const getNotOwned = async () => {
+const notOwned = async () => {
     let response;
     const token = localStorage.getItem("token");
     await axios
@@ -34,15 +34,17 @@ const getNotOwned = async () => {
     return response;
 };
 
-
-
 const add = async (id) => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .put(API_URL + "shelf/" + id, {
-            headers: { Authorization: "Bearer " + token },
-        })
+        .put(
+            API_URL + "shelf/" + id,
+            {},
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
         .then((result) => {
             response = result;
         })
@@ -51,8 +53,6 @@ const add = async (id) => {
         });
     return response;
 };
-
-
 
 const remove = async (id) => {
     let response;
@@ -70,6 +70,6 @@ const remove = async (id) => {
     return response;
 };
 
-const GamesService = { getShelf, getNotOwned, add, remove };
+const ShelfService = { getShelf, add, remove, notOwned };
 
-export default GamesService;
+export default ShelfService;

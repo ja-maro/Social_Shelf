@@ -54,7 +54,7 @@ public class Game {
 	@JsonIgnore
 	private Set<Player> players = new HashSet<>();
 
-	@OneToMany(mappedBy = "game", cascade =  { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "game", cascade =  { CascadeType.ALL })
 	private Set<Event> events;
 
 	@JsonIgnore

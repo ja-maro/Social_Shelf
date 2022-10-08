@@ -17,7 +17,7 @@ import GameList from "./games/GameList";
 import GameAdd from "./games/GameAdd";
 import Game from "./games/Game";
 import Shelf from "./shelf/Shelf";
-import AddShelf from "./shelf/AddShelf";
+import ShelfAdd from "./shelf/ShelfAdd";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -44,7 +44,7 @@ const App = () => {
                     <Route path="/games/new" element={<GameAdd />} />
                     <Route path="/games/:id" element={<Game />} />
                     <Route path="/shelf" element={<Shelf />} />
-                    <Route path="/shelf/add" element={<AddShelf />} />
+                    <Route path="/shelf/add" element={<ShelfAdd />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </DataContext.Provider>
