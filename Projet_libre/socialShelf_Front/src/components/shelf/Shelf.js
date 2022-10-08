@@ -27,7 +27,7 @@ const Shelf = () => {
         await ShelfService.getShelf().then((response) => {
             if (response.status === 200) {
                 console.log(response);
-                window.location.reload(false);
+                refresh();
             } else if (response.status === 401) {
                 console.log(response);
             }
