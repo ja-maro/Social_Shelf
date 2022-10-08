@@ -3,7 +3,9 @@ package com.quest.etna.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -48,9 +50,14 @@ public class ShelfController {
 	}
 	
 	 @DeleteMapping("/{gameId}")
-	    public ResponseEntity<Boolean> removeType (@PathVariable Integer gameId, 
+	    public ResponseEntity<String> removeType (@PathVariable Integer gameId,
 	    		@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-	        return new ResponseEntity<>(shelfService.remove(gameId, authentication), HttpStatus.OK);
+		 	HttpHeaders headers = new HttpHeaders();
+		 	headers.setContentType(MediaType.APPLICATION_JSON);
+	        return ResponseEntity
+					.status(HttpStatus.OK)
+					.headers(headers)
+					.body(shelfService.remove(gameId, authentication));
 	    }
 
 }

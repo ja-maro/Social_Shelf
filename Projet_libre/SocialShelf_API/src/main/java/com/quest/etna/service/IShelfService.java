@@ -11,6 +11,6 @@ public interface IShelfService {
 	List<GameDTO> getAll(Authentication auth);
 	List<GameDTO> getAllNotOwned(Authentication auth);
 	GameDTO add(int gameId, Authentication auth);
-	Boolean remove(Integer gameId, Authentication auth);
+	String remove(Integer gameId, Authentication auth);
 
 }

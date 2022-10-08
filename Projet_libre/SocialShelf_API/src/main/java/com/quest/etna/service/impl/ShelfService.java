@@ -58,7 +58,7 @@ public class ShelfService implements IShelfService {
 
 	@Transactional
 	@Override
-	public Boolean remove(Integer gameId, Authentication auth) {
+	public String remove(Integer gameId, Authentication auth) {
 		Optional<Game> gameOptional = gameRepository.findById(gameId);
 		if (gameOptional.isPresent()) {
 			Game game = gameOptional.get();
@@ -70,9 +70,9 @@ public class ShelfService implements IShelfService {
 			try {
 				player.removeGame(game);
 				playerRepository.save(player);
-				return true;
+				return "{\"Message\": \"Success\"}";
 			} catch (Exception e) {
-               return false;
+               return "{\"Message\": \"Fail\"}";
 			}					
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND);
