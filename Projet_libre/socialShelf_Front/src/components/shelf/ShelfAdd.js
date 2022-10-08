@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ShelfService from "../../services/shelf.service";
 import GameListItem from "../games/GameListItem";
+import { DataContext } from "../DataContext";
 
 const ShelfAdd = () => {
     const [gamesNotOwned, setGamesNotOwned] = useState([]);
     const navigate = useNavigate();
+    const context = useContext(DataContext);
 
     const handleClickAddGame = async (game) => {
         console.log(game.id);
@@ -32,7 +34,12 @@ const ShelfAdd = () => {
 
     return (
         <div>
-            <h1>Add game to my Shelf</h1>
+            <h1>Add game to my Shelf</h1> 
+            {context.isAdmin === true ? (
+                            <div></div>
+                        ) : (
+                            <div>One of your games is missing ? Ask your favorite admin to add it to the list !</div> 
+                        )}
             <button onClick={() => navigate("/shelf")}>Back to my shelf</button>
             <ul>
                 {gamesNotOwned.map((game) => (

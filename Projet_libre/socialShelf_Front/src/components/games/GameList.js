@@ -34,6 +34,11 @@ const GameList = () => {
                 <div></div>
             )}
             <h1>All games</h1>
+            {context.isAdmin === true ? (
+                            <div></div>
+                        ) : (
+                            <div>One of your games is missing ? Ask your favorite admin to add it to the list !</div> 
+                        )}
             <ul>
                 {gameList.map((game) => (
                     <div key={game.id}>
