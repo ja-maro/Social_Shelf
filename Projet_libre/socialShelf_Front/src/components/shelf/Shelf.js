@@ -22,7 +22,7 @@ const Shelf = () => {
         });
     };
 
-    const handleClickDeleteGame = async (game) => {
+    const handleClickRemoveGame = async (game) => {
         ShelfService.remove(game.id);
         await ShelfService.getShelf().then((response) => {
             if (response.status === 200) {
@@ -47,7 +47,7 @@ const Shelf = () => {
                 {shelf.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
-                        <button onClick={() => handleClickDeleteGame(game)}>
+                        <button onClick={() => handleClickRemoveGame(game)}>
                             Remove
                         </button>
                     </div>

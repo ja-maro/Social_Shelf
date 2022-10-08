@@ -4,7 +4,7 @@ import ShelfService from "../../services/shelf.service";
 import GameListItem from "../games/GameListItem";
 
 const ShelfAdd = () => {
-    const [games, setGames] = useState([]);
+    const [gamesNotOwned, setGamesNotOwned] = useState([]);
     const navigate = useNavigate();
 
     const handleClickAddGame = async (game) => {
@@ -12,25 +12,30 @@ const ShelfAdd = () => {
         await ShelfService.add(game.id).then((response) => {
             console.log(response);
         });
-        navigate("/shelf");
+        refresh();
     };
 
     useEffect(() => {
-        ShelfService.notOwned().then((response) => {
+        refresh();
+    }, []);
+
+    const refresh = () => {
+        ShelfService.getNotOwned().then((response) => {
             if (response.status === 200) {
                 console.log(response);
-                setGames(response.data);
+                setGamesNotOwned(response.data);
             } else if (response.status === 401) {
                 console.log(response);
             }
         });
-    }, []);
+    };
 
     return (
         <div>
             <h1>Add game to my Shelf</h1>
+            <button onClick={() => navigate("/shelf")}>Back to my shelf</button>
             <ul>
-                {games.map((game) => (
+                {gamesNotOwned.map((game) => (
                     <div key={game.id}>
                         <GameListItem key={game.id} game={game} />
                         <button onClick={() => handleClickAddGame(game)}>

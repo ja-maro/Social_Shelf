@@ -18,7 +18,7 @@ const getShelf = async () => {
     return response;
 };
 
-const notOwned = async () => {
+const getNotOwned = async () => {
     let response;
     const token = localStorage.getItem("token");
     await axios
@@ -70,6 +70,6 @@ const remove = async (id) => {
     return response;
 };
 
-const ShelfService = { getShelf, add, remove, notOwned };
+const ShelfService = { getShelf, add, remove, getNotOwned };
 
 export default ShelfService;
