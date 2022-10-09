@@ -15,7 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,7 +52,44 @@ class EventControllerTest {
         String token = setup("Brice", "1234");
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH).header("Authorization", token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$").isArray())
+        		.andExpect(jsonPath("$", hasSize(4)));
+    }
+    
+    @Test
+    @Order(1)
+    void testGetAllFutureEventsOrganizer() throws Exception {
+    	String token = setup("Brice", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/futureorganizer").header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(1)))
+		.andExpect(jsonPath("$[*].id", contains(2)))
+    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(1, 3, 4))));
+    }
+    
+    @Test
+    @Order(1)
+    void testGetAllFutureEventParticipant() throws Exception {
+    	String token = setup("Brice", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/futureparticipant").header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(1)))
+		.andExpect(jsonPath("$[*].id", contains(1)))
+    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(2, 3, 4))));
+    }
+    
+    @Test
+    @Order(1)
+    void testGetAllEventsCanParticipate() throws Exception {
+    	String token = setup("Brice", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/future").header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(1)))
+		.andExpect(jsonPath("$[*].id", contains(4)))
+    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(1, 2, 3))));
     }
 
     @Test
@@ -119,7 +160,7 @@ class EventControllerTest {
         String token = setup("Jean-Antoine", "1234");
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("title", "new event modified");
-        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/3")
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/5")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody.toString())
                         .header("Authorization", token))
@@ -132,7 +173,7 @@ class EventControllerTest {
     void deleteEvent () throws Exception {
         createEvent();
         String token = setup("Jean-Antoine", "1234");
-        mockMvc.perform(MockMvcRequestBuilders.delete(CONTROLLER_PATH + "/3")
+        mockMvc.perform(MockMvcRequestBuilders.delete(CONTROLLER_PATH + "/5")
                         .header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("Message", is("Success")));

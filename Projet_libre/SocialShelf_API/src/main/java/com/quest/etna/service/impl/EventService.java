@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -130,6 +131,33 @@ public class EventService implements IEventService {
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@Override
+	public List<EventDTO> getAllFutureByOrganizer(Authentication authentication) {
+		Player organizer = playerService.getAuthenticatedPlayer(authentication);
+		Iterable<Event> events = eventRepository.findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(organizer.getId(), Instant.now());
+		List<EventDTO> eventDTOS = new ArrayList<>();
+		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
+		return eventDTOS;
+	}
+
+	@Override
+	public List<EventDTO> getAllFutureByParticipant(Authentication authentication) {
+		Player participant = playerService.getAuthenticatedPlayer(authentication);
+		Iterable<Event> events = eventRepository.findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate(participant.getId(), Instant.now());
+		List<EventDTO> eventDTOS = new ArrayList<>();
+		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
+		return eventDTOS;
+	}
+
+	@Override
+	public List<EventDTO> getAllFutureParticipationPossible(Authentication authentication) {
+		Player player = playerService.getAuthenticatedPlayer(authentication);
+		Iterable<Event> events = eventRepository.findFutureEventPlayerCanParticipate(player.getId());
+		List<EventDTO> eventDTOS = new ArrayList<>();
+		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
+		return eventDTOS;
 	}
 	
 }

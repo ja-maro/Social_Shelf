@@ -24,6 +24,19 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getAll() {
         return ResponseEntity.ok(iEventService.getAll());
     }
+    
+    @GetMapping(value="/future")
+    public ResponseEntity<List<EventDTO>> getFutureEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.getAllFutureParticipationPossible(authentication));
+    }
+    @GetMapping(value="/futureorganizer")
+    public ResponseEntity<List<EventDTO>> getFutureOrganizer(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.getAllFutureByOrganizer(authentication));
+    }
+    @GetMapping(value="/futureparticipant")
+    public ResponseEntity<List<EventDTO>> getFutureParticipant(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.getAllFutureByParticipant(authentication));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> getById(@PathVariable Integer id) {
