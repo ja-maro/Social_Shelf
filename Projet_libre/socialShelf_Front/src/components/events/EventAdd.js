@@ -6,6 +6,7 @@ import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Login.scss";
 
+
 const EventAdd = () => {
     const [title, setTitle] = useState("");
     const [pitch, setPitch] = useState("");
@@ -97,7 +98,7 @@ const EventAdd = () => {
 
     const form = (
         <form onSubmit={handleSubmit}>
-            <h1 className="title"> New game </h1>
+            <h1 className="title"> New Event </h1>
             <label>
                 Title :
                 <input
@@ -158,6 +159,15 @@ const EventAdd = () => {
                     onChange={(event) => setDuration(event.target.value)}
                 />
                 (in minutes)
+            </label>
+
+            <label>
+                Date :
+                <input
+                    type="datetime-local"
+                    name="startDate"
+                    onChange={(event) => setStartDate(event.target.value)}
+                />
             </label>
 
             <label>
