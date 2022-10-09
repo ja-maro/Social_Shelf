@@ -5,4 +5,6 @@ export let DataContext = createContext({
     setIsLog: (isLog) => {},
     isAdmin: false,
     setIsAdmin: (isAdmin) => {},
+    playerId: 0,
+    setPlayerId: (playerId) => {},
 });

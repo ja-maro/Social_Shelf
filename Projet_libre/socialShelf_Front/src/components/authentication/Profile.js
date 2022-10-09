@@ -20,6 +20,7 @@ const Profile = () => {
                     if (response.data.role === "ROLE_ADMIN") {
                         context.setIsAdmin(true);
                     }
+                    context.setPlayerId(response.data.playerId);
                     setUserDetails({
                         username: response.data.username,
                         email: response.data.email,
