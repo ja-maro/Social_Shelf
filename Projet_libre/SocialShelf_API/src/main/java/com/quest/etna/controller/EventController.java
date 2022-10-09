@@ -44,8 +44,8 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<EventDTO> create(@RequestBody EventDTO eventDTO) {
-        EventDTO newEvent = iEventService.create(eventDTO);
+    public ResponseEntity<EventDTO> create(@RequestBody EventDTO eventDTO,  @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+        EventDTO newEvent = iEventService.create(eventDTO, authentication);
         return new ResponseEntity<>(newEvent, HttpStatus.CREATED);
     }
 

@@ -2,6 +2,7 @@ package com.quest.etna.service.impl;
 
 import com.quest.etna.model.Address;
 import com.quest.etna.model.DTO.GameDTO;
+import com.quest.etna.model.DTO.PlayerDTO;
 import com.quest.etna.model.Game;
 import com.quest.etna.model.Player;
 import com.quest.etna.repositories.GameRepository;
@@ -51,7 +52,8 @@ public class EventService implements IEventService {
 		}
 	}
 
-	public EventDTO create(EventDTO eventDTO) {
+	public EventDTO create(EventDTO eventDTO, Authentication authentication) {
+		eventDTO.setOrganizer(new PlayerDTO(playerService.getAuthenticatedPlayer(authentication)));
 		Integer gameId = eventDTO.getGame().getId();
 		Optional<Game> gameOptional = gameRepository.findById(gameId);
 		if (gameOptional.isPresent()) {

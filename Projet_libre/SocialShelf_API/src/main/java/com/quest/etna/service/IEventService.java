@@ -11,7 +11,7 @@ public interface IEventService {
 	List<EventDTO> getAllFutureByParticipant(Authentication authentication);
 	List<EventDTO> getAllFutureParticipationPossible(Authentication authentication);
 	EventDTO getById(Integer id);
-	EventDTO create(EventDTO eventDTO);
+	EventDTO create(EventDTO eventDTO, Authentication authentication);
 	EventDTO update (EventDTO eventDTO, Integer id, Authentication authentication);
 	String delete(Integer id, Authentication authentication);
 }
