@@ -63,7 +63,7 @@ const User = () => {
                     />
                 </label>
                 <label>
-                    Role :
+                    Role :  
                     <select
                         name="role"
                         value={user.role}
@@ -73,6 +73,7 @@ const User = () => {
                         <option value="ROLE_ADMIN">Admin</option>
                     </select>
                 </label>
+                <br />
                 <button type="submit">Modify</button>
             </form>
             <button onClick={() => handleDelete(user)}>Delete user</button>

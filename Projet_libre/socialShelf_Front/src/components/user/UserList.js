@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import UserService from "../../services/user.service";
 import UserListItem from "./UserListItem";
+import { DataContext } from "../DataContext";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
     let navigate = useNavigate();
+    const context = useContext(DataContext);
 
     useEffect(() => {
         UserService.getAll().then((response) => {
@@ -31,9 +33,14 @@ const Users = () => {
                 {users.map((item) => (
                     <li key={item.playerId}>
                         <UserListItem key={item.playerId} item={item} />
-                        <button onClick={() => handleClickDetails(item)}>
+                        {context.isAdmin === true ? (
+                            <button onClick={() => handleClickDetails(item)}>
                             More
-                        </button>
+                            </button>
+                        ) : (
+                            <div></div>
+                        )}
+                        
                         <br />
                     </li>
                 ))}

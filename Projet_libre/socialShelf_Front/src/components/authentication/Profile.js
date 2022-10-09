@@ -1,13 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import UserService from "../../services/user.service";
 import { DataContext } from "../DataContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const [userDetails, setUserDetails] = useState({
+        playerId: "",
         username: "",
         email: "",
         role: "",
     });
+    let navigate = useNavigate();
 
     const context = useContext(DataContext);
 
@@ -22,6 +25,7 @@ const Profile = () => {
                     }
                     context.setPlayerId(response.data.playerId);
                     setUserDetails({
+                        playerId: response.data.playerId,
                         username: response.data.username,
                         email: response.data.email,
                         role: response.data.role,
@@ -33,12 +37,21 @@ const Profile = () => {
         }
     });
 
+    function handleClickDetails(item) {
+        console.log("id : " + item.playerId);
+        navigate(`/users/` + item.playerId);
+    }
+
     return (
         <div className="login">
             <h2>Profile</h2>
             <p>Username : {userDetails.username}</p>
             <p>Email : {userDetails.email}</p>
             <p>Role : {userDetails.role}</p>
+            <br />
+            <button onClick={() => handleClickDetails(userDetails)}>
+                            Edit
+                        </button>
         </div>
     );
 };
