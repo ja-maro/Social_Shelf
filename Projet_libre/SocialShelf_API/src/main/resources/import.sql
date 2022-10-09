@@ -49,11 +49,15 @@ INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2',
 INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2', '4');
 INSERT INTO `social_shelf`.`players_games` (`player_id`, `game_id`) VALUES ('2', '2');
 
-INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('1', '2022-09-29 14:39:26', '150', '3', '1', 'Venez découvrir Aeon\'s End, un super jeu coop ! Je ferai des gâteaux, amenez à boire !', '2022-10-21 18:00:00', 'Aeon\'sEnd à Paris', '2022-09-29 14:39:26', '4', '2', '2');
+INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('1', '2022-09-29 14:39:26', '150', '3', '1', 'Venez découvrir Aeon\'s End, un super jeu coop ! Je ferai des gâteaux, amenez à boire !', '2022-10-21 18:00:00', 'Aeon\'s End à Paris', '2022-09-29 14:39:26', '4', '2', '2');
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('2', '2022-09-29 14:39:26', '40', '9', '2', 'Quelques parties de Uno sur l\'heure de pause dej ?', '2022-10-14 12:00:00', 'Uno chez moi', '2022-09-29 14:39:26', '1', '1', '1');
+INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('3', '2022-09-29 14:39:26', '40', '9', '4', 'Je vais vous éclater !', '2022-09-30 18:00:00', 'Uno', '2022-09-29 14:39:26', '1', '1', '1');
+INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('4', '2022-09-29 14:39:26', '180', '6', '2', 'Tournoi de 7 wonders ! Le vainqueur remporte une tarte aux quetsches !', '2022-10-19 18:00:00', 'Tournoi 7 Wonders', '2022-09-29 14:39:26', '2', '2', '2');
 
 
 INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('1', '1');
+INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('2', '2');
+INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('2', '3');
 
 		
 SET FOREIGN_KEY_CHECKS = 1;
