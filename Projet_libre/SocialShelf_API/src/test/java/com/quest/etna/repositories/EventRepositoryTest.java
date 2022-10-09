@@ -27,13 +27,24 @@ public class EventRepositoryTest {
 
 	@Test
 	public void findByOrganizerId_When1_ShouldReturn2Events() {
-		 List<Event> result = eventRepository.findByOrganizerId(1);
+		 List<Event> result = eventRepository.findByOrganizerIdOrderByStartDate(1);
 	        
 	        assertEquals(2, result.size());
 	        assertTrue(result.stream()
 	                .map(Event::getId)
 	                .allMatch(id -> Arrays.asList(2, 3).contains(id)));
+	}	
+	
+	@Test
+	public void findByParticipantsId_When2_ShouldReturn2Events() {
+		List<Event> result = eventRepository.findByParticipantsIdOrderByStartDate(2);
+		
+		assertEquals(2, result.size());
+		assertTrue(result.stream()
+				.map(Event::getId)
+				.allMatch(id -> Arrays.asList(2, 3).contains(id)));
 	}
+
 	
 	@Test
     public void findByOrganizerIdAndStartDateAfter_whenId1AndOctober1st_shouldReturnUnoChezMoi() {
