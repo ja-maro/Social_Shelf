@@ -41,6 +41,9 @@ const NavBar = () => {
                             <Link to="/events/organizer" className="link">
                                 <h4>Events (Organizer)</h4>
                             </Link>
+                            <Link to="/events/new" className="link">
+                                <h4>Create Event</h4>
+                            </Link>
                         </div>
 
                         <div className="navbar-log">

@@ -22,7 +22,7 @@ import EventList from "./events/EventList";
 import Event from "./events/Event";
 import EventOrganizerList from "./events/EventOrganizerList";
 import EventParticipantList from "./events/EventParticipantList";
-import EventListItem from "./events/EventListItem";
+import EventAdd from "./events/EventAdd";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -60,6 +60,7 @@ const App = () => {
                     <Route path="/shelf/add" element={<ShelfAdd />} />
                     <Route path="/events" element={<EventList />} />
                     <Route path="/events/:id" element={<Event />} />
+                    <Route path="/events/new" element={<EventAdd />} />
                     <Route path="/events/organizer" element={<EventOrganizerList />} />
                     <Route path="/events/participant" element={<EventParticipantList />} />
                     <Route path="*" element={<NotFound />} />

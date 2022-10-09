@@ -44,7 +44,7 @@ const GameAdd = () => {
             setIsAlert(true);
             setAuthMessage({
                 severity: "error",
-                message: "Address already exists",
+                message: "Game already exists",
                 status: "409",
             });
         } else {

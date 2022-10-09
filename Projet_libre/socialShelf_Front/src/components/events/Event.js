@@ -1,14 +1,11 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import EventsService from "../../services/events.service";
-import { DataContext } from "../DataContext";
 import { useParams, useNavigate } from "react-router-dom";
 import EventListItem from "./EventListItem";
 
 const Event = () => {
     const [event, setEvent] = useState({});
     const { id } = useParams();
-    let navigate = useNavigate();
-    const context = useContext(DataContext);
 
     useEffect(() => {
         EventsService.getById(id).then((response) => {
@@ -21,9 +18,10 @@ const Event = () => {
         });
     }, [id]);
 
+
     return (
         <div>
-        <h1>Event</h1>
+        <h1>Event (details)</h1>
        
                 <EventListItem event={event} />
                 <br />
@@ -34,7 +32,3 @@ const Event = () => {
 };
 
 export default Event;
-
-
-
-

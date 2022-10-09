@@ -82,6 +82,44 @@ const getById = async (id) => {
     return response;
 };
 
-const EventsService = { getById, getAll, getAllParticipant, getAllOrganizer, getAllJoin };
+const add = async (
+            title,
+            pitch,
+            minPlayer,
+            maxPlayer,
+            duration,
+            startDate,
+            place,
+            game
+) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .post(
+            API_URL + "event/",
+            {
+                title,
+                pitch,
+                minPlayer,
+                maxPlayer,
+                duration,
+                startDate,
+                place,
+                game,
+            },
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
+const EventsService = { add, getById, getAll, getAllParticipant, getAllOrganizer, getAllJoin };
 
 export default EventsService;
