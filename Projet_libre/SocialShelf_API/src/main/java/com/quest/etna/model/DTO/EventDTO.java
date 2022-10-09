@@ -20,7 +20,7 @@ public class EventDTO {
 	private int maxPlayer;
 	private int duration;
 	private Instant startDate;
-	private Instant cancellationDate;
+	private Instant cancelDate;
 	private AddressDTO place;
 	private GameDTO game;
 	private PlayerDTO organizer;
@@ -34,7 +34,7 @@ public class EventDTO {
 	}
 	
 	public EventDTO(int id, String title, String pitch, int minPlayer, int maxPlayer, int duration, Instant startDate,
-			Instant cancellationDate, AddressDTO place, GameDTO game, PlayerDTO organizer) {
+			Instant cancelDate, AddressDTO place, GameDTO game, PlayerDTO organizer) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -43,7 +43,7 @@ public class EventDTO {
 		this.maxPlayer = maxPlayer;
 		this.duration = duration;
 		this.startDate = startDate;
-		this.cancellationDate = cancellationDate;
+		this.cancelDate = cancelDate;
 		this.place = place;
 		this.game = game;
 		this.organizer = organizer;
@@ -57,7 +57,7 @@ public class EventDTO {
 		this.maxPlayer = event.getMaxPlayer();
 		this.duration = event.getDuration();
 		this.startDate = event.getStartDate();
-		this.cancellationDate = event.getCancellationDate();
+		this.cancelDate = event.getCancelDate();
 		
 		this.place = new AddressDTO(event.getPlace());
 		this.game = new GameDTO(event.getGame());
@@ -109,11 +109,11 @@ public class EventDTO {
 	public void setStartDate(Instant startDate) {
 		this.startDate = startDate;
 	}
-	public Instant getCancellationDate() {
-		return cancellationDate;
+	public Instant getCancelDate() {
+		return cancelDate;
 	}
-	public void setCancellationDate(Instant cancellationDate) {
-		this.cancellationDate = cancellationDate;
+	public void setCancelDate(Instant cancellationDate) {
+		this.cancelDate = cancellationDate;
 	}
 	public AddressDTO getPlace() {
 		return place;

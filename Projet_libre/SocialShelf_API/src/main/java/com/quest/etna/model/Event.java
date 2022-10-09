@@ -49,7 +49,7 @@ public class Event {
 	private Instant startDate;
 
 	@Column(name = "cancel_date", columnDefinition = "datetime")
-	private Instant cancellationDate;
+	private Instant cancelDate;
 
 	@ManyToOne
 	@JoinColumn(referencedColumnName = "id", nullable = false)
@@ -91,7 +91,7 @@ public class Event {
 		this.maxPlayer = eventDTO.getMaxPlayer();
 		this.duration = eventDTO.getDuration();
 		this.startDate = eventDTO.getStartDate();
-		this.cancellationDate = eventDTO.getCancellationDate();
+		this.cancelDate = eventDTO.getCancelDate();
 		this.place = new Address(eventDTO.getPlace());
 		this.game = new Game(eventDTO.getGame());
 		this.organizer = new Player(eventDTO.getOrganizer());
@@ -168,13 +168,13 @@ public class Event {
 	}
 
 
-	public Instant getCancellationDate() {
-		return cancellationDate;
+	public Instant getCancelDate() {
+		return cancelDate;
 	}
 
 
-	public void setCancellationDate(Instant cancellationDate) {
-		this.cancellationDate = cancellationDate;
+	public void setCancelDate(Instant cancelDate) {
+		this.cancelDate = cancelDate;
 	}
 
 

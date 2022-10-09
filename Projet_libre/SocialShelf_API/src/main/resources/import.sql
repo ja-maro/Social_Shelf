@@ -13,6 +13,7 @@ INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`,
 
 INSERT INTO `social_shelf`.`address` (`id`, `city`, `country`, `creation_date`, `postal_code`, `street`, `updated_date`, `player_id`) VALUES ('1', 'Gagny', 'France', '2022-10-01 14:49:26', '93220', '1 rue de la mairie', '2022-10-01 14:49:26', '1');
 INSERT INTO `social_shelf`.`address` (`id`, `city`, `country`, `creation_date`, `postal_code`, `street`, `updated_date`, `player_id`) VALUES ('2', 'Paris', 'France', '2022-10-01 14:49:26', '75001', '22 rue de Rivoli', '2022-10-01 14:49:26', '2');
+INSERT INTO `social_shelf`.`address` (`id`, `city`, `country`, `creation_date`, `postal_code`, `street`, `updated_date`, `player_id`) VALUES ('3', 'Pleucadeuc', 'France', '2022-10-01 14:49:26', '52420', '5 rue du dolmen', '2022-10-01 14:49:26', '1');
 
 
 INSERT INTO `social_shelf`.`game` (`id`, `average_duration`, `creation_date`, `description`, `max_player`, `min_player`, `name`, `publisher`, `updated_date`) VALUES ('1', '20', '2022-10-01 14:49:26', 'L\'objectif du jeu Uno est simple. Il s\'agit d\'être le premier joueur de la table à ne plus avoir de cartes en main. À la fin d\'une manche, le vainqueur établit les scores en additionnant tous les points des mains des autres joueurs.', '10', '2', 'Uno', 'Mattel', '2022-10-01 14:49:26');		
@@ -53,7 +54,7 @@ INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_part
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('2', '2022-09-29 14:39:26', '40', '9', '2', 'Quelques parties de Uno sur l\'heure de pause dej ?', '2022-10-14 12:00:00', 'Uno chez moi', '2022-09-29 14:39:26', '1', '1', '1');
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('3', '2022-09-29 14:39:26', '40', '9', '4', 'Je vais vous éclater !', '2022-09-30 18:00:00', 'Uno', '2022-09-29 14:39:26', '1', '1', '1');
 INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('4', '2022-09-29 14:39:26', '180', '6', '2', 'Tournoi de 7 wonders ! Le vainqueur remporte une tarte aux quetsches !', '2022-10-19 18:00:00', 'Tournoi 7 Wonders', '2022-09-29 14:39:26', '2', '2', '2');
-
+INSERT INTO `social_shelf`.`event` (`id`, `creation_date`, `cancel_date`, `duration`, `max_participants`, `min_participants`, `pitch`, `start_date`, `title`, `updated_date`, `game_id`, `organizer_id`, `place_id`) VALUES ('5', '2022-09-29 14:39:26', '2022-09-29 14:39:26', '180', '6', '2', 'Tournoi de 7 wonders ! Le vainqueur remporte une tarte aux qusches !', '2022-10-19 18:00:00', 'Tournoi 7 Wonders annulé', '2022-09-29 14:39:26', '2', '2', '2');
 
 INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('1', '1');
 INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('2', '2');

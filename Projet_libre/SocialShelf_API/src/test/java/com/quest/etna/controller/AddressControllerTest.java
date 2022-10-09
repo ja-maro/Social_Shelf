@@ -71,7 +71,7 @@ public class AddressControllerTest {
 	                .andExpect(status().isOk())
 	                .andReturn();
 	        String token2 = JsonPath.read(tokenResult2.getResponse().getContentAsString(), "$.token");
-	        mockMvc.perform(MockMvcRequestBuilders.delete("/address/1")
+	        mockMvc.perform(MockMvcRequestBuilders.delete("/address/3")
 	                        .header("Authorization", "Bearer " + token2))
 	                .andExpect(status().isOk());
 	    }

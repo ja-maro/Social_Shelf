@@ -99,8 +99,8 @@ public class EventService implements IEventService {
 			dbEvent.setDuration(newEvent.getDuration());
 		if (newEvent.getStartDate() != null)
 			dbEvent.setStartDate(newEvent.getStartDate());
-		if (newEvent.getCancellationDate() != null)
-			dbEvent.setCancellationDate(newEvent.getCancellationDate());
+		if (newEvent.getCancelDate() != null)
+			dbEvent.setCancelDate(newEvent.getCancelDate());
 		if (newEvent.getPlace() != null)
 			dbEvent.setPlace(new Address(newEvent.getPlace()));
 		if (newEvent.getGame() != null) {

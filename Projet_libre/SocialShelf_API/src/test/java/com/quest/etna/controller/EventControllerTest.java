@@ -53,7 +53,7 @@ class EventControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH).header("Authorization", token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-        		.andExpect(jsonPath("$", hasSize(4)));
+        		.andExpect(jsonPath("$", hasSize(5)));
     }
     
     @Test

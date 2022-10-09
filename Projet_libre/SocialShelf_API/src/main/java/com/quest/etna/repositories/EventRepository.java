@@ -18,7 +18,7 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	List<Event> findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(int organizerId, Instant instant);
 	List<Event> findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate(int participantsId, Instant instant);
 
-	@Query("SELECT e FROM Event e WHERE e.organizer.id <>:playerId AND e.startDate >= CURRENT_DATE() AND NOT EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId) ORDER BY e.startDate")
+	@Query("SELECT e FROM Event e WHERE e.organizer.id <>:playerId AND e.startDate >= CURRENT_DATE() AND e.cancelDate IS NULL AND NOT EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId) ORDER BY e.startDate")
 	List<Event> findFutureEventPlayerCanParticipate(@Param("playerId") int playerId);
 
 	
