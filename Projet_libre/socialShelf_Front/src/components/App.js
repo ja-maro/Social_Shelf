@@ -19,6 +19,10 @@ import Game from "./games/Game";
 import Shelf from "./shelf/Shelf";
 import ShelfAdd from "./shelf/ShelfAdd";
 import EventList from "./events/EventList";
+import Event from "./events/Event";
+import EventOrganizerList from "./events/EventOrganizerList";
+import EventParticipantList from "./events/EventParticipantList";
+import EventListItem from "./events/EventListItem";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -54,8 +58,11 @@ const App = () => {
                     <Route path="/games/:id" element={<Game />} />
                     <Route path="/shelf" element={<Shelf />} />
                     <Route path="/shelf/add" element={<ShelfAdd />} />
-                    <Route path="*" element={<NotFound />} />
                     <Route path="/events" element={<EventList />} />
+                    <Route path="/events/:id" element={<Event />} />
+                    <Route path="/events/organizer" element={<EventOrganizerList />} />
+                    <Route path="/events/participant" element={<EventParticipantList />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </DataContext.Provider>
         </div>

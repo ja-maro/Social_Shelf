@@ -35,6 +35,12 @@ const NavBar = () => {
                             <Link to="/events" className="link">
                                 <h4>Events</h4>
                             </Link>
+                            <Link to="/events/participant" className="link">
+                                <h4>Events (Participant)</h4>
+                            </Link>
+                            <Link to="/events/organizer" className="link">
+                                <h4>Events (Organizer)</h4>
+                            </Link>
                         </div>
 
                         <div className="navbar-log">

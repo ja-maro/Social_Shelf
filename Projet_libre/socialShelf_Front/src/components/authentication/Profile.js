@@ -11,7 +11,6 @@ const Profile = () => {
         role: "",
     });
     let navigate = useNavigate();
-
     const context = useContext(DataContext);
 
     useEffect(() => {
@@ -50,8 +49,8 @@ const Profile = () => {
             <p>Role : {userDetails.role}</p>
             <br />
             <button onClick={() => handleClickDetails(userDetails)}>
-                            Edit
-                        </button>
+                Edit
+            </button>
         </div>
     );
 };
