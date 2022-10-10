@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import EventsService from "../../services/events.service";
 import ShelfService from "../../services/shelf.service";
 import AddressService from "../../services/address.service";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Login.scss";
-
+import UserService from "../../services/user.service";
+import { DataContext } from "../DataContext";
 
 const EventAdd = () => {
     const [title, setTitle] = useState("");
@@ -14,11 +15,11 @@ const EventAdd = () => {
     const [maxPlayer, setMaxPlayer] = useState("");
     const [duration, setDuration] = useState("");
     const [startDate, setStartDate] = useState("");
-    const [place, setPlace] = useState("");
-    const [game, setGame] = useState("");
+    const [place, setPlace] = useState({});
+    const [game, setGame] = useState({});
     const [shelf, setShelf] = useState([]);
     const [addressList, setAddressList] = useState([]);
-
+    const [organizer, setOrganizer] = useState({});
     const [isAlert, setIsAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState({
         severity: "",
@@ -29,7 +30,10 @@ const EventAdd = () => {
     useEffect(() => {
         getShelf();
         getAddress();
+        getUser();
     }, []);
+
+    const context = useContext(DataContext);
 
     const getShelf = () => {
         ShelfService.getShelf().then((response) => {
@@ -56,11 +60,20 @@ const EventAdd = () => {
         });
     };
 
+    const getUser = () => {
+        UserService.getById(context.playerId).then((res) => {
+            setOrganizer(res.data);
+        });
+    };
+
     let navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         let response;
+        console.log(game);
+        console.log(organizer);
+        console.log(place);
         await EventsService.add(
             title,
             pitch,
@@ -70,6 +83,7 @@ const EventAdd = () => {
             startDate,
             place,
             game,
+            organizer
         ).then((res) => (response = res));
         if (response.status === 201) {
             setIsAlert(true);
@@ -123,9 +137,9 @@ const EventAdd = () => {
                     type="text"
                     onKeyPress={(event) => {
                         if (!/[0-9]/.test(event.key)) {
-                          event.preventDefault();
+                            event.preventDefault();
                         }
-                      }}
+                    }}
                     name="minPlayer"
                     placeholder="2"
                     onChange={(event) => setMinPlayer(event.target.value)}
@@ -137,9 +151,9 @@ const EventAdd = () => {
                     type="text"
                     onKeyPress={(event) => {
                         if (!/[0-9]/.test(event.key)) {
-                          event.preventDefault();
+                            event.preventDefault();
                         }
-                      }}
+                    }}
                     name="maxPlayer"
                     placeholder="12"
                     onChange={(event) => setMaxPlayer(event.target.value)}
@@ -151,9 +165,9 @@ const EventAdd = () => {
                     type="text"
                     onKeyPress={(event) => {
                         if (!/[0-9]/.test(event.key)) {
-                          event.preventDefault();
+                            event.preventDefault();
                         }
-                      }}
+                    }}
                     name="duration"
                     placeholder="45"
                     onChange={(event) => setDuration(event.target.value)}
@@ -166,43 +180,61 @@ const EventAdd = () => {
                 <input
                     type="datetime-local"
                     name="startDate"
-                    onChange={(event) => setStartDate(event.target.value)}
+                    onChange={(event) =>
+                        setStartDate(event.target.value + ":00Z")
+                    }
                 />
             </label>
 
             <label>
-                    Game :  
-                    <select
-                        name="game"
-                        value={game}
-                        onChange={(event) => setGame(event.target.value)}
-                    >
+                Game :
+                <select
+                    name="game"
+                    onChange={(event) => {
+                        console.log("event : " + event.target.value);
+                        let gamefind = shelf.find(
+                            (game) => (game.id = event.target.value)
+                        );
+                        setGame(gamefind);
+                        console.log("game : " + JSON.stringify(game));
+                    }}
+                >
+                    <option disabled selected value>
+                        -- select an option --
+                    </option>
                     {shelf.map((game) => (
-                     <option key={game.id} value={game}>{game.name}</option>
+                        <option key={game.id} value={game.id}>
+                            {game.name}
+                        </option>
                     ))}
+                </select>
+            </label>
 
-                    </select>
-                </label>
-
-
-                <label>
-                    Place :  
-                    <select
-                        name="place"
-                        value={place}
-                        onChange={(event) => setPlace(event.target.value)}
-                    >
+            <label>
+                Place :
+                <select
+                    name="place"
+                    value={place}
+                    onChange={(event) => {
+                        console.log("place : " + event.target.value);
+                        let placefind = addressList.find(
+                            (place) => (place.id = event.target.value)
+                        );
+                        setPlace(placefind);
+                        console.log(place);
+                    }}
+                >
+                    <option disabled selected value>
+                        -- select an option --
+                    </option>
                     {addressList.map((place) => (
-                     <option key={place.id} value={place}>{place.street} {place.city}</option>
+                        <option key={place.id} value={place.id}>
+                            {place.street} {place.city}
+                        </option>
                     ))}
-                       
-                    </select>
-                </label>
+                </select>
+            </label>
             <input type="submit" value="Create" />
-
-
-
-
         </form>
     );
 
