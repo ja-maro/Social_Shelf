@@ -7,12 +7,15 @@ const EventJoinList = () => {
     const [eventList, setEventList] = useState([]);
     let navigate = useNavigate();
 
-    function handleClickDetails(event) {
-        console.log("id : " + event.id);
-        navigate(`/events/` + event.id);
-    }
+    const handleClickJoin = async (event) => {
+        console.log("join id : " + event.id);
+        await EventsService.join(event.id).then((response) => {
+            console.log(response);
+        });
+        refresh();
+    };
 
-    useEffect(() => {
+    const refresh = () => {
         EventsService.getAllJoin().then((response) => {
             if (response.status === 200) {
                 console.log(response);
@@ -21,6 +24,11 @@ const EventJoinList = () => {
                 console.log(response);
             }
         });
+    }
+
+    useEffect(() => {
+       refresh();
+
     }, []);
 
     return (
@@ -29,9 +37,8 @@ const EventJoinList = () => {
             {eventList.map((event) => (
                 <div key={event.id}>
                     <EventListItem key={event.id} event={event} />
-                    <br />
-                    <button onClick={() => handleClickDetails(event)}>
-                            More info
+                    <button onClick={() => handleClickJoin(event)}>
+                            Join event
                         </button>
                     <br />
                     <br />
