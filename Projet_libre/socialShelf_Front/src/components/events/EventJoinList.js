@@ -3,7 +3,7 @@ import EventsService from "../../services/events.service";
 import EventListItem from "./EventListItem";
 import { useNavigate } from "react-router-dom";
 
-const EventParticipantList = () => {
+const EventJoinList = () => {
     const [eventList, setEventList] = useState([]);
     let navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const EventParticipantList = () => {
     }
 
     useEffect(() => {
-        EventsService.getAllParticipant().then((response) => {
+        EventsService.getAllJoin().then((response) => {
             if (response.status === 200) {
                 console.log(response);
                 setEventList(response.data);
@@ -25,7 +25,7 @@ const EventParticipantList = () => {
 
     return (
         <div>
-            <h1>Your events to come (Participant)</h1>
+            <h1>Events you can join</h1>
             {eventList.map((event) => (
                 <div key={event.id}>
                     <EventListItem key={event.id} event={event} />
@@ -41,4 +41,4 @@ const EventParticipantList = () => {
     );
 };
 
-export default EventParticipantList;
+export default EventJoinList;

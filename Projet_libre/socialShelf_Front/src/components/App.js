@@ -20,8 +20,9 @@ import Shelf from "./shelf/Shelf";
 import ShelfAdd from "./shelf/ShelfAdd";
 import EventList from "./events/EventList";
 import Event from "./events/Event";
-import EventOrganizerList from "./events/EventOrganizerList";
-import EventParticipantList from "./events/EventParticipantList";
+import MyEventList from "./events/MyEventList";
+import MyPastEventList from "./events/MyPastEventList";
+import EventJoinList from "./events/EventJoinList";
 import EventAdd from "./events/EventAdd";
 
 const App = () => {
@@ -61,8 +62,9 @@ const App = () => {
                     <Route path="/events" element={<EventList />} />
                     <Route path="/events/:id" element={<Event />} />
                     <Route path="/events/new" element={<EventAdd />} />
-                    <Route path="/events/organizer" element={<EventOrganizerList />} />
-                    <Route path="/events/participant" element={<EventParticipantList />} />
+                    <Route path="/events/mine" element={<MyEventList />} />
+                    <Route path="/events/past" element={<MyPastEventList />} />
+                    <Route path="/events/join" element={<EventJoinList />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </DataContext.Provider>
