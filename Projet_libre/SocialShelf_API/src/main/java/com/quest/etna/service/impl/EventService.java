@@ -177,23 +177,18 @@ public class EventService implements IEventService {
 			Event event = eventOptional.get();
 			Player player = playerService.getAuthenticatedPlayer(authentication);
 			int eventOrganizerId = event.getOrganizer().getId();
-			
-			
+			int playerNumber = playerRepository.findByParticipatedEventsId(id).size();
+
 			if(playerService.isUser(authentication, eventOrganizerId)
 				|| isParticipant(player.getId(), event.getId())
-				|| event.getStartDate().isBefore(Instant.now())) {
+				|| event.getStartDate().isBefore(Instant.now())
+				|| event.getMaxPlayer() == playerNumber
+				) {
 				throw new ResponseStatusException(HttpStatus.CONFLICT);
-			} else
-//				
-//			if (
-//					!playerService.isUser(authentication, eventOrganizerId) 
-//					&& !isParticipant(player.getId(), event.getId())
-//					&& event.getStartDate().isAfter(Instant.now())) {
+			} else {
 				eventRepository.joinEvent(player.getId(), event.getId());
 				return new EventDTO(event);
-//			} else {
-//				throw new ResponseStatusException(HttpStatus.CONFLICT);
-//			}
+			}
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}

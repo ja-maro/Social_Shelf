@@ -47,6 +47,7 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 			+ "AND e.startDate >= :date "
 			+ "AND e.cancelDate IS NULL "
 			+ "AND NOT EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId) "
+			+ "AND e.maxPlayer > (SELECT COUNT(p) FROM e.participants p) "
 			+ "ORDER BY e.startDate")
 	List<Event> findFutureEventPlayerCanParticipate(@Param("playerId") int playerId, @Param("date") Instant instant);
 
