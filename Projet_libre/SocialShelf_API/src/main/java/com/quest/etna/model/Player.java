@@ -60,11 +60,14 @@ public class Player {
 	private Set<Game> games = new HashSet<>();
 
 	@OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Event> organized_events;
+	private Set<Event> organizedEvents;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@ManyToMany
+	(cascade = CascadeType.PERSIST)
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE) 
+	@Fetch(FetchMode.JOIN)
 	@JoinTable(name = "participants", joinColumns = @JoinColumn(name = "player_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
-	private Set<Event> participated_events;
+	private Set<Event> participatedEvents;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Message> messages;
@@ -150,20 +153,20 @@ public class Player {
 		this.games = games;
 	}
 
-	public Set<Event> getOrganized_events() {
-		return organized_events;
+	public Set<Event> getOrganizedEvents() {
+		return organizedEvents;
 	}
 
-	public void setOrganized_events(Set<Event> organized_events) {
-		this.organized_events = organized_events;
+	public void setOrganizedEvents(Set<Event> organizedEvents) {
+		this.organizedEvents = organizedEvents;
 	}
 
-	public Set<Event> getParticipated_events() {
-		return participated_events;
+	public Set<Event> getParticipatedEvents() {
+		return participatedEvents;
 	}
 
-	public void setParticipated_events(Set<Event> participated_events) {
-		this.participated_events = participated_events;
+	public void setParticipatedEvents(Set<Event> participatedEvents) {
+		this.participatedEvents = participatedEvents;
 	}
 
 	public Set<Message> getMessages() {

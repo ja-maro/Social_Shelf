@@ -63,7 +63,7 @@ public class Event {
 	@JoinColumn(referencedColumnName = "id", nullable = false)
 	private Player organizer;
 
-	@ManyToMany(mappedBy = "participated_events", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "participatedEvents", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Player> participants;
 
 	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -245,6 +245,15 @@ public class Event {
 
 	public void setUpdatedDate(Instant updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+	
+	public void addParticipant(Player player) {
+		participants.add(player);
+	}
+
+	public void removeParticipant(Player player) {
+		participants.remove(player);
+		player.getParticipatedEvents().remove(this);
 	}
 	
 }

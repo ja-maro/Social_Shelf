@@ -167,6 +167,27 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("title", is("new event modified")));
     }
+    
+    @Test
+    @Order(4)
+    void joinEvent () throws Exception {
+        createEvent();
+        String token = setup("Brice", "1234");
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/join/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", token))
+                .andExpect(status().isOk());
+        
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/join/5")
+        		.contentType(MediaType.APPLICATION_JSON)
+        		.header("Authorization", token))
+        .andExpect(status().isConflict());
+        
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/join/2")
+        		.contentType(MediaType.APPLICATION_JSON)
+        		.header("Authorization", token))
+        .andExpect(status().isConflict());
+    }
 
     @Test
     @Order(5)

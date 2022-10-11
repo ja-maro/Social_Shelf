@@ -18,6 +18,8 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     
     Set<Player> findByGamesId(int gameId);
     
+    Set<Player> findByParticipatedEventsId(int eventId);
+    
     @Query("SELECT p FROM Player p LEFT JOIN FETCH p.games WHERE p.id=:idParam")
 	public Player getPlayerAndShelf (@Param("idParam") int playerId);
 

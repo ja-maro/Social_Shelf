@@ -29,6 +29,13 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getFutureEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     	return ResponseEntity.ok(iEventService.getAllFutureParticipationPossible(authentication));
     }
+    
+    @PutMapping(value="/join/{id}")
+    public ResponseEntity<EventDTO> joinEvent(@PathVariable Integer id,
+                                           @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+        return ResponseEntity.ok(iEventService.join(id, authentication));
+    }
+    
     @GetMapping(value="/past")
     public ResponseEntity<List<EventDTO>> getPastPlayerEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     	return ResponseEntity.ok(iEventService.getAllPastByPlayer(authentication));

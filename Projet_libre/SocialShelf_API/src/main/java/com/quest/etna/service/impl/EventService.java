@@ -4,8 +4,11 @@ import com.quest.etna.model.Address;
 import com.quest.etna.model.DTO.GameDTO;
 import com.quest.etna.model.DTO.PlayerDTO;
 import com.quest.etna.model.Game;
+import com.quest.etna.model.GameType;
 import com.quest.etna.model.Player;
 import com.quest.etna.repositories.GameRepository;
+import com.quest.etna.repositories.PlayerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.quest.etna.model.Event;
@@ -20,8 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EventService implements IEventService {
@@ -31,6 +36,9 @@ public class EventService implements IEventService {
 
 	@Autowired
 	private GameRepository gameRepository;
+	
+	@Autowired
+	private PlayerRepository playerRepository;
 
 	@Autowired
 	private PlayerService playerService;
@@ -161,5 +169,48 @@ public class EventService implements IEventService {
 		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
 		return eventDTOS;
 	}
+
+	@Override
+	public EventDTO join(Integer id, Authentication authentication) {
+		Optional<Event> eventOptional= eventRepository.findById(id);
+		if (eventOptional.isPresent()) {
+			Event event = eventOptional.get();
+			Player player = playerService.getAuthenticatedPlayer(authentication);
+			int eventOrganizerId = event.getOrganizer().getId();
+			
+			
+			if(playerService.isUser(authentication, eventOrganizerId)
+				|| isParticipant(player.getId(), event.getId())
+				|| event.getStartDate().isBefore(Instant.now())) {
+				throw new ResponseStatusException(HttpStatus.CONFLICT);
+			} else
+//				
+//			if (
+//					!playerService.isUser(authentication, eventOrganizerId) 
+//					&& !isParticipant(player.getId(), event.getId())
+//					&& event.getStartDate().isAfter(Instant.now())) {
+				eventRepository.joinEvent(player.getId(), event.getId());
+				return new EventDTO(event);
+//			} else {
+//				throw new ResponseStatusException(HttpStatus.CONFLICT);
+//			}
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	public boolean isParticipant(int playerId, int eventId) {
+		Set<Player> participants = playerRepository.findByParticipatedEventsId(eventId);
+		if (null == participants || participants.size() == 0)
+			return false;
+		for (Player player : participants) {
+			if (player.getId() == playerId)
+				return true;
+		}
+		return false;
+	}
+	
+	
+	
 	
 }
