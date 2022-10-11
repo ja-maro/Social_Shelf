@@ -25,6 +25,17 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	@Query(value="INSERT INTO participants (player_id, event_id) VALUES (:playerId, :eventId);",
 			nativeQuery = true)
 	void joinEvent(@Param("playerId")int playerId, @Param("eventId") int eventId);
+
+	@Modifying
+	@Transactional
+	@Query(value="DELETE FROM participants WHERE player_id=:playerId AND event_id=:eventId);",
+	nativeQuery = true)
+	void quitEvent(@Param("playerId")int playerId, @Param("eventId") int eventId);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE Event e SET e.cancelDate = CURRENT_DATE() WHERE e.id=:eventId")
+	void cancelEvent(@Param("eventId") int eventId); 
 	
 	@Query("SELECT e FROM Event e "
 			+ "WHERE (e.organizer.id =:playerId "
