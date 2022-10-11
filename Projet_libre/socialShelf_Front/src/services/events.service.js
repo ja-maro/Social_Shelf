@@ -18,11 +18,11 @@ const getAll = async () => {
     return response;
 };
 
-const getAllOrganizer = async () => {
+const getFutureMine = async () => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .get(API_URL + "futureorganizer", {
+        .get(API_URL + "future", {
             headers: { Authorization: "Bearer " + token },
         })
         .then((result) => {
@@ -34,11 +34,11 @@ const getAllOrganizer = async () => {
     return response;
 };
 
-const getAllParticipant = async () => {
+const getPastMine = async () => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .get(API_URL + "futureparticipant", {
+        .get(API_URL + "past", {
             headers: { Authorization: "Bearer " + token },
         })
         .then((result) => {
@@ -54,7 +54,7 @@ const getAllJoin = async () => {
     let response;
     const token = localStorage.getItem("token");
     await axios
-        .get(API_URL + "future", {
+        .get(API_URL + "join", {
             headers: { Authorization: "Bearer " + token },
         })
         .then((result) => {
@@ -126,8 +126,8 @@ const EventsService = {
     add,
     getById,
     getAll,
-    getAllParticipant,
-    getAllOrganizer,
+    getPastMine,
+    getFutureMine,
     getAllJoin,
 };
 

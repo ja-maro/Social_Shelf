@@ -35,11 +35,14 @@ const NavBar = () => {
                             <Link to="/events" className="link">
                                 <h4>Events</h4>
                             </Link>
-                            <Link to="/events/participant" className="link">
-                                <h4>Events (Participant)</h4>
+                            <Link to="/events/join" className="link">
+                                <h4>Events (Join)</h4>
                             </Link>
-                            <Link to="/events/organizer" className="link">
-                                <h4>Events (Organizer)</h4>
+                            <Link to="/events/mine" className="link">
+                                <h4>My Events</h4>
+                            </Link>
+                            <Link to="/events/past" className="link">
+                                <h4>My past Events</h4>
                             </Link>
                             <Link to="/events/new" className="link">
                                 <h4>Create Event</h4>

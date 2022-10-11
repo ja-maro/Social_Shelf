@@ -50,12 +50,8 @@ const EventAdd = () => {
             if (response.status === 200) {
                 console.log(response);
                 setAddressList(
-                    response.data
-                    .filter(address => address.player.playerId === context.playerId)
-                    
-                    // .sort(
-                    //     (a, b) => a.player.player_id - b.player.player_id
-                    // )
+                    response.data.filter(address => 
+                        address.player.playerId === context.playerId)
                 );
                 console.log(addressList);
             } else if (response.status === 401) {

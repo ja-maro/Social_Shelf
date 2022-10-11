@@ -3,7 +3,7 @@ import EventsService from "../../services/events.service";
 import EventListItem from "./EventListItem";
 import { useNavigate } from "react-router-dom";
 
-const EventOrganizerList = () => {
+const MyEventList = () => {
     const [eventList, setEventList] = useState([]);
     let navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const EventOrganizerList = () => {
     }
 
     useEffect(() => {
-        EventsService.getAllOrganizer().then((response) => {
+        EventsService.getFutureMine().then((response) => {
             if (response.status === 200) {
                 console.log(response);
                 setEventList(response.data);
@@ -25,7 +25,7 @@ const EventOrganizerList = () => {
 
     return (
         <div>
-            <h1>Your events to come (Organizer)</h1>
+            <h1>Your events to come </h1>
             {eventList.map((event) => (
                 <div key={event.id}>
                     <EventListItem key={event.id} event={event} />
@@ -41,4 +41,4 @@ const EventOrganizerList = () => {
     );
 };
 
-export default EventOrganizerList;
+export default MyEventList;
