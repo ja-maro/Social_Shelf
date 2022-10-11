@@ -1,22 +1,5 @@
 const EventListItem = ({ event }) => {
 
-    // const FormatDate = (data) => {
-    //     let dateTimeString =
-    //       data.getDate() +
-    //       '/' +
-    //       (data.getMonth() + 1) +
-    //       '/' +
-    //       data.getFullYear() +
-    //       ' ';
-    
-    //     let hours = data.getHours();
-    //     let minutes = data.getMinutes();
-    //     minutes = minutes < 10 ? '0' + minutes : minutes;
-    //     dateTimeString = dateTimeString + hours + ':' + minutes;
-    
-    //     return dateTimeString; // 4/5/2021 15:34
-    //   };
-
     return (
         <div>
              {event.cancelDate ? (
