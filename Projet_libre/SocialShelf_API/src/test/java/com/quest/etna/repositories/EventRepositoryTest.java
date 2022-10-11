@@ -49,9 +49,9 @@ public class EventRepositoryTest {
 	@Test
     public void findByOrganizerIdAndStartDateAfter_whenId1AndOctober1st_shouldReturnUnoChezMoi() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu/MM/dd HH:mm" , Locale.FRENCH );
-		Instant instant = LocalDateTime.parse( "2022/10/01 18:00" , formatter ).atZone(ZoneId.of( "Europe/Paris" )).toInstant() ;
+		Instant now = LocalDateTime.parse( "2022/10/01 18:00" , formatter ).atZone(ZoneId.of( "Europe/Paris" )).toInstant() ;
 		
-        List<Event> result = eventRepository.findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(1, instant);
+        List<Event> result = eventRepository.findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(1, now);
         
         assertEquals(1, result.size());
         assertEquals("Uno chez moi", result.get(0).getTitle());
@@ -59,20 +59,29 @@ public class EventRepositoryTest {
     }
 	
 	@Test
-	public void findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate_whenId2AndOctober1st_shouldReturnUnoChezMoi() {
+	public void findFuturePlayerEvents_whenId2AndOctober1st_shouldReturn4() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu/MM/dd HH:mm" , Locale.FRENCH );
-		Instant instant = LocalDateTime.parse( "2022/10/01 18:00" , formatter ).atZone(ZoneId.of( "Europe/Paris" )).toInstant() ;
+		Instant now = LocalDateTime.parse( "2022/10/01 18:00" , formatter ).atZone(ZoneId.of( "Europe/Paris" )).toInstant() ;
 		
-		List<Event> result = eventRepository.findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate(2, instant);
+		List<Event> result = eventRepository.findFuturePlayerEvents(2, now);
 		
-		assertEquals(1, result.size());
+		assertEquals(4, result.size());
 		assertEquals("Uno chez moi", result.get(0).getTitle());
+		assertEquals("Tournoi 7 Wonders", result.get(1).getTitle());
+		assertEquals("Tournoi 7 Wonders annulé", result.get(2).getTitle());
+		assertEquals("Aeon's End à Paris", result.get(3).getTitle());
 		assertEquals(2, result.get(0).getId());
+		assertEquals(4, result.get(1).getId());
+		assertEquals(5, result.get(2).getId());
+		assertEquals(1, result.get(3).getId());
 	}
 	
 	@Test
-	public void findFutureEventPlayerCanParticipate_whenId1_shouldReturnournoi7Wonders() {		
-		List<Event> result = eventRepository.findFutureEventPlayerCanParticipate(1);
+	public void findFutureEventPlayerCanParticipate_whenId1AndOctober1st_shouldReturnTournoi7Wonders() {		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "uuuu/MM/dd HH:mm" , Locale.FRENCH );
+		Instant now = LocalDateTime.parse( "2022/10/01 18:00" , formatter ).atZone(ZoneId.of( "Europe/Paris" )).toInstant() ;
+		
+		List<Event> result = eventRepository.findFutureEventPlayerCanParticipate(1, now);
 		
 		assertEquals(1, result.size());
 		assertEquals("Tournoi 7 Wonders", result.get(0).getTitle());

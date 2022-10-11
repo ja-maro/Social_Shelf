@@ -136,18 +136,18 @@ public class EventService implements IEventService {
 	}
 
 	@Override
-	public List<EventDTO> getAllFutureByOrganizer(Authentication authentication) {
-		Player organizer = playerService.getAuthenticatedPlayer(authentication);
-		Iterable<Event> events = eventRepository.findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(organizer.getId(), Instant.now());
+	public List<EventDTO> getAllPastByPlayer(Authentication authentication) {
+		Player player = playerService.getAuthenticatedPlayer(authentication);
+		Iterable<Event> events = eventRepository.findPastPlayerEvents(player.getId(), Instant.now());
 		List<EventDTO> eventDTOS = new ArrayList<>();
 		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
 		return eventDTOS;
 	}
 
 	@Override
-	public List<EventDTO> getAllFutureByParticipant(Authentication authentication) {
-		Player participant = playerService.getAuthenticatedPlayer(authentication);
-		Iterable<Event> events = eventRepository.findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate(participant.getId(), Instant.now());
+	public List<EventDTO> getAllFutureByPlayer(Authentication authentication) {
+		Player player = playerService.getAuthenticatedPlayer(authentication);
+		Iterable<Event> events = eventRepository.findFuturePlayerEvents(player.getId(), Instant.now());
 		List<EventDTO> eventDTOS = new ArrayList<>();
 		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
 		return eventDTOS;
@@ -156,7 +156,7 @@ public class EventService implements IEventService {
 	@Override
 	public List<EventDTO> getAllFutureParticipationPossible(Authentication authentication) {
 		Player player = playerService.getAuthenticatedPlayer(authentication);
-		Iterable<Event> events = eventRepository.findFutureEventPlayerCanParticipate(player.getId());
+		Iterable<Event> events = eventRepository.findFutureEventPlayerCanParticipate(player.getId(), Instant.now());
 		List<EventDTO> eventDTOS = new ArrayList<>();
 		events.forEach(event -> eventDTOS.add(new EventDTO(event)));
 		return eventDTOS;
