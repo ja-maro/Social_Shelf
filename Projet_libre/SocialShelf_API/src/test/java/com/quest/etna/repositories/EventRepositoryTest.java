@@ -1,5 +1,7 @@
 package com.quest.etna.repositories;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +89,19 @@ public class EventRepositoryTest {
 		assertEquals(1, result.size());
 		assertEquals("Tournoi 7 Wonders", result.get(0).getTitle());
 		assertEquals(4, result.get(0).getId());
+	}
+	
+	@Test
+	public void cancelEvent_ShouldAddCancelDate() {		
+				
+		Optional<Event> result = eventRepository.findById(1);
+		assertTrue(result.isPresent());
+		assertNull(result.get().getCancelDate());
+		
+		eventRepository.cancelEvent(1);
+		
+		Optional<Event> cancelled = eventRepository.findById(1);
+		assertTrue(cancelled.isPresent());
+		assertNotNull(cancelled.get().getCancelDate());
 	}
 }
