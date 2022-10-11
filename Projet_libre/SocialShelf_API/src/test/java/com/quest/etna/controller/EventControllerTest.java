@@ -58,33 +58,33 @@ class EventControllerTest {
     
     @Test
     @Order(1)
-    void testGetAllFutureEventsOrganizer() throws Exception {
+    void testGetAllPastEventPlayer() throws Exception {
     	String token = setup("Brice", "1234");
-    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/futureorganizer").header("Authorization", token))
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/past").header("Authorization", token))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$").isArray())
 		.andExpect(jsonPath("$", hasSize(1)))
-		.andExpect(jsonPath("$[*].id", contains(2)))
-    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(1, 3, 4))));
+		.andExpect(jsonPath("$[*].id", contains(3)))
+    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(1, 2, 4, 5))));
     }
     
     @Test
     @Order(1)
-    void testGetAllFutureEventParticipant() throws Exception {
-    	String token = setup("Brice", "1234");
-    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/futureparticipant").header("Authorization", token))
-    	.andExpect(status().isOk())
-    	.andExpect(jsonPath("$").isArray())
-		.andExpect(jsonPath("$", hasSize(1)))
-		.andExpect(jsonPath("$[*].id", contains(1)))
-    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(2, 3, 4))));
-    }
-    
-    @Test
-    @Order(1)
-    void testGetAllEventsCanParticipate() throws Exception {
+    void testGetAllFutureEventPlayer() throws Exception {
     	String token = setup("Brice", "1234");
     	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/future").header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(2)))
+		.andExpect(jsonPath("$[*].id", containsInAnyOrder(1, 2)))
+    	.andExpect(jsonPath("$[*].id", not(containsInAnyOrder(3, 4, 5))));
+    }
+    
+    @Test
+    @Order(1)
+    void testGetAllEventsCanJoin() throws Exception {
+    	String token = setup("Brice", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/join").header("Authorization", token))
     	.andExpect(status().isOk())
     	.andExpect(jsonPath("$").isArray())
 		.andExpect(jsonPath("$", hasSize(1)))

@@ -16,10 +16,30 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	List<Event> findByOrganizerIdOrderByStartDate(int organizerId);
 	List<Event> findByParticipantsIdOrderByStartDate(int organizerId);
 	List<Event> findByOrganizerIdAndStartDateGreaterThanEqualOrderByStartDate(int organizerId, Instant instant);
-	List<Event> findByParticipantsIdAndStartDateGreaterThanEqualOrderByStartDate(int participantsId, Instant instant);
+	
+	@Query("SELECT e FROM Event e "
+			+ "WHERE (e.organizer.id =:playerId "
+			+ "OR EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId)) "
+			+ "AND e.startDate < :date "
+//			+ "AND e.cancelDate IS NULL "
+			+ "ORDER BY e.startDate")
+	List<Event> findPastPlayerEvents(@Param("playerId") int playerId, @Param("date") Instant instant); 
+	
+	@Query("SELECT e FROM Event e "
+			+ "WHERE (e.organizer.id =:playerId "
+			+ "OR EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId)) "
+			+ "AND e.startDate >= :date "
+//			+ "AND e.cancelDate IS NULL "
+			+ "ORDER BY e.startDate")
+	List<Event> findFuturePlayerEvents(@Param("playerId") int playerId, @Param("date") Instant instant); 
 
-	@Query("SELECT e FROM Event e WHERE e.organizer.id <>:playerId AND e.startDate >= CURRENT_DATE() AND e.cancelDate IS NULL AND NOT EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId) ORDER BY e.startDate")
-	List<Event> findFutureEventPlayerCanParticipate(@Param("playerId") int playerId);
+	@Query("SELECT e FROM Event e "
+			+ "WHERE e.organizer.id <>:playerId "
+			+ "AND e.startDate >= :date "
+			+ "AND e.cancelDate IS NULL "
+			+ "AND NOT EXISTS (SELECT p FROM e.participants p WHERE p.id =:playerId) "
+			+ "ORDER BY e.startDate")
+	List<Event> findFutureEventPlayerCanParticipate(@Param("playerId") int playerId, @Param("date") Instant instant);
 
 	
 }

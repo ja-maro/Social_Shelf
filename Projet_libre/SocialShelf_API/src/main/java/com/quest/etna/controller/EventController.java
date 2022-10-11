@@ -25,17 +25,17 @@ public class EventController {
         return ResponseEntity.ok(iEventService.getAll());
     }
     
-    @GetMapping(value="/future")
+    @GetMapping(value="/join")
     public ResponseEntity<List<EventDTO>> getFutureEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     	return ResponseEntity.ok(iEventService.getAllFutureParticipationPossible(authentication));
     }
-    @GetMapping(value="/futureorganizer")
-    public ResponseEntity<List<EventDTO>> getFutureOrganizer(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-    	return ResponseEntity.ok(iEventService.getAllFutureByOrganizer(authentication));
+    @GetMapping(value="/past")
+    public ResponseEntity<List<EventDTO>> getPastPlayerEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.getAllPastByPlayer(authentication));
     }
-    @GetMapping(value="/futureparticipant")
-    public ResponseEntity<List<EventDTO>> getFutureParticipant(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-    	return ResponseEntity.ok(iEventService.getAllFutureByParticipant(authentication));
+    @GetMapping(value="/future")
+    public ResponseEntity<List<EventDTO>> getFuturePlayerEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.getAllFutureByPlayer(authentication));
     }
 
     @GetMapping("/{id}")

@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface IEventService {
 	List<EventDTO> getAll();
-	List<EventDTO> getAllFutureByOrganizer(Authentication authentication);
-	List<EventDTO> getAllFutureByParticipant(Authentication authentication);
+	List<EventDTO> getAllPastByPlayer(Authentication authentication);
+	List<EventDTO> getAllFutureByPlayer(Authentication authentication);
 	List<EventDTO> getAllFutureParticipationPossible(Authentication authentication);
 	EventDTO getById(Integer id);
 	EventDTO create(EventDTO eventDTO, Authentication authentication);
