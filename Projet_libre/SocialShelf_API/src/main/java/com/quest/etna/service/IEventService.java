@@ -15,4 +15,5 @@ public interface IEventService {
 	EventDTO update (EventDTO eventDTO, Integer id, Authentication authentication);
 	String delete(Integer id, Authentication authentication);
 	EventDTO join(Integer id, Authentication authentication);
+	EventDTO quit (Integer id, Authentication authentication);
 }

@@ -127,7 +127,6 @@ public class EventService implements IEventService {
 		Optional<Event> eventOptional = eventRepository.findById(id);
 		if (eventOptional.isPresent()) {
 			int organizer = eventOptional.get().getOrganizer().getId();
-			System.out.print("-------------------------- id : " + organizer);
 			if (playerService.hasRole("ROLE_ADMIN") || playerService.isUser(authentication, organizer)) {
 				try {
 					eventRepository.delete(eventOptional.get());
@@ -143,7 +142,6 @@ public class EventService implements IEventService {
 		}
 	}
 
-	@Override
 	public List<EventDTO> getAllPastByPlayer(Authentication authentication) {
 		Player player = playerService.getAuthenticatedPlayer(authentication);
 		Iterable<Event> events = eventRepository.findPastPlayerEvents(player.getId(), Instant.now());
@@ -152,7 +150,6 @@ public class EventService implements IEventService {
 		return eventDTOS;
 	}
 
-	@Override
 	public List<EventDTO> getAllFutureByPlayer(Authentication authentication) {
 		Player player = playerService.getAuthenticatedPlayer(authentication);
 		Iterable<Event> events = eventRepository.findFuturePlayerEvents(player.getId(), Instant.now());
@@ -161,7 +158,6 @@ public class EventService implements IEventService {
 		return eventDTOS;
 	}
 
-	@Override
 	public List<EventDTO> getAllFutureParticipationPossible(Authentication authentication) {
 		Player player = playerService.getAuthenticatedPlayer(authentication);
 		Iterable<Event> events = eventRepository.findFutureEventPlayerCanParticipate(player.getId(), Instant.now());
@@ -170,7 +166,6 @@ public class EventService implements IEventService {
 		return eventDTOS;
 	}
 
-	@Override
 	public EventDTO join(Integer id, Authentication authentication) {
 		Optional<Event> eventOptional= eventRepository.findById(id);
 		if (eventOptional.isPresent()) {
@@ -196,13 +191,30 @@ public class EventService implements IEventService {
 	
 	public boolean isParticipant(int playerId, int eventId) {
 		Set<Player> participants = playerRepository.findByParticipatedEventsId(eventId);
-		if (null == participants || participants.size() == 0)
+		if (null == participants || participants.isEmpty())
 			return false;
 		for (Player player : participants) {
 			if (player.getId() == playerId)
 				return true;
 		}
 		return false;
+	}
+
+	public EventDTO quit (Integer id, Authentication authentication) {
+		Optional<Event> eventOptional= eventRepository.findById(id);
+		if (eventOptional.isPresent()) {
+			Event event = eventOptional.get();
+			Player player = playerService.getAuthenticatedPlayer(authentication);
+			if (isParticipant(player.getId(), event.getId())) {
+				eventRepository.quitEvent(player.getId(), event.getId());
+				return new EventDTO(eventOptional.get());
+			} else {
+				throw new ResponseStatusException(HttpStatus.CONFLICT);
+			}
+
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	

@@ -28,7 +28,7 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 
 	@Modifying
 	@Transactional
-	@Query(value="DELETE FROM participants WHERE player_id=:playerId AND event_id=:eventId);",
+	@Query(value="DELETE FROM participants WHERE player_id = :playerId AND event_id = :eventId",
 	nativeQuery = true)
 	void quitEvent(@Param("playerId")int playerId, @Param("eventId") int eventId);
 	

@@ -35,6 +35,12 @@ public class EventController {
                                            @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
         return ResponseEntity.ok(iEventService.join(id, authentication));
     }
+
+    @PutMapping(value = "/quit/{id}")
+    public ResponseEntity<EventDTO> quitEvent(@PathVariable Integer id,
+                                              @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+        return ResponseEntity.ok(iEventService.quit(id, authentication));
+    }
     
     @GetMapping(value="/past")
     public ResponseEntity<List<EventDTO>> getPastPlayerEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
