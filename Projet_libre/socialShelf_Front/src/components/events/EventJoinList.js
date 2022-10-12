@@ -24,11 +24,10 @@ const EventJoinList = () => {
                 console.log(response);
             }
         });
-    }
+    };
 
     useEffect(() => {
-       refresh();
-
+        refresh();
     }, []);
 
     return (
@@ -38,8 +37,8 @@ const EventJoinList = () => {
                 <div key={event.id}>
                     <EventListItem key={event.id} event={event} />
                     <button onClick={() => handleClickJoin(event)}>
-                            Join event
-                        </button>
+                        Join event
+                    </button>
                     <br />
                     <br />
                 </div>

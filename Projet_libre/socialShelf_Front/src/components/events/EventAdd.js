@@ -31,7 +31,6 @@ const EventAdd = () => {
         getShelf();
         getAddress();
         getUser();
-
     }, []);
 
     const context = useContext(DataContext);
@@ -51,8 +50,10 @@ const EventAdd = () => {
             if (response.status === 200) {
                 console.log(response);
                 setAddressList(
-                    response.data.filter(address => 
-                        address.player.playerId === context.playerId)
+                    response.data.filter(
+                        (address) =>
+                            address.player.playerId === context.playerId
+                    )
                 );
                 console.log(addressList);
             } else if (response.status === 401) {
@@ -192,19 +193,18 @@ const EventAdd = () => {
                 <select
                     name="game"
                     onChange={(event) => {
-
-                        const selectedGameId = event.target.value;
-                        const selectedGame = shelf.filter((d) => d.id == selectedGameId)[0];
-                        console.log("event value : " + event.target.value)
-                        console.log("filter : " + selectedGame.name);
+                        const selectedGame = shelf.find(
+                            (game) => game.id === parseInt(event.target.value)
+                        );
                         setGame(selectedGame);
+                        console.log(game);
                     }}
                 >
                     <option key="selectGame" disabled selected value="none">
                         -- select an option --
                     </option>
-                    {shelf.map((game) => (
-                        <option key={game.id} value={game.id}>
+                    {shelf.map((game, index) => (
+                        <option key={index} value={game.id}>
                             {game.name}
                         </option>
                     ))}
@@ -215,19 +215,20 @@ const EventAdd = () => {
                 Place :
                 <select
                     name="place"
-                    onChange={(e) => {
-                        const selectedPlaceId = e.target.value;
-                        const selectedPlace = addressList.filter((d) => d.id == selectedPlaceId)[0];
-                        console.log("event value : " + e.target.value)
-                        console.log("filter : " + selectedPlace.street);
+                    onChange={(event) => {
+                        const selectedPlace = addressList.find(
+                            (address) =>
+                                (address.id = parseInt(event.target.value))
+                        );
                         setPlace(selectedPlace);
+                        console.log(place);
                     }}
                 >
                     <option key="selectPlace" disabled selected value="none">
                         -- select an option --
                     </option>
-                    {addressList.map((place) => (
-                        <option key={place.id} value={place.id}>
+                    {addressList.map((place, index) => (
+                        <option key={index} value={place.id}>
                             {place.street}, {place.city}
                         </option>
                     ))}

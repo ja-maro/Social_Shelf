@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import EventsService from "../../services/events.service";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EventListItem from "./EventListItem";
 
 const Event = () => {
@@ -18,16 +18,15 @@ const Event = () => {
         });
     }, [id]);
 
-
     return (
         <div>
-        <h1>Event (details)</h1>
-       
-                <EventListItem event={event} />
-                <br />
-                <br />
-                <br />
-            </div>
+            <h1>Event (details)</h1>
+
+            <EventListItem event={event} />
+            <br />
+            <br />
+            <br />
+        </div>
     );
 };
 
