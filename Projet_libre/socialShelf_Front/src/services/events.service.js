@@ -86,6 +86,26 @@ const join = async (id) => {
     return response;
 };
 
+const quit = async (id) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .put(
+            API_URL + "quit/" + id,
+            {},
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
 const getById = async (id) => {
     let response;
     const token = localStorage.getItem("token");
@@ -150,6 +170,7 @@ const EventsService = {
     getFutureMine,
     getAllJoin,
     join,
+    quit,
 };
 
 export default EventsService;
