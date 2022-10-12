@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import EventListItem from "./EventListItem";
 
 const Event = () => {
+    const [ready, setReady] = useState(false);
     const [event, setEvent] = useState({});
     const { id } = useParams();
 
@@ -12,17 +13,18 @@ const Event = () => {
             if (response.status === 200) {
                 console.log(response);
                 setEvent(response.data);
+                setReady(true);
             } else {
                 console.log(response);
             }
         });
-    }, [id]);
+    }, []);
 
-    return (
+    return ready === false ? null : (
         <div>
             <h1>Event (details)</h1>
 
-            <EventListItem event={event} />
+            <EventListItem key={event.id} event={event} />
             <br />
             <br />
             <br />

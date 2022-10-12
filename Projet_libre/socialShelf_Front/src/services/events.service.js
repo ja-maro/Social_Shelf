@@ -162,6 +162,45 @@ const add = async (
     return response;
 };
 
+const update = async (event) => {
+    let response;
+    const token = localStorage.getItem("token");
+    let title = event.title;
+    let pitch = event.pitch;
+    let minPlayer = event.minPlayer;
+    let maxPlayer = event.maxPlayer;
+    let duration = event.duration;
+    let startDate = event.startDate;
+    let place = event.place;
+    let game = event.game;
+    let organizer = event.organizer;
+    await axios
+        .put(
+            API_URL + event.id,
+            {
+                title,
+                pitch,
+                minPlayer,
+                maxPlayer,
+                duration,
+                startDate,
+                place,
+                game,
+                organizer,
+            },
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
 const EventsService = {
     add,
     getById,
@@ -171,6 +210,7 @@ const EventsService = {
     getAllJoin,
     join,
     quit,
+    update,
 };
 
 export default EventsService;
