@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "changeport": "PORT=3006 react-scripts start",
+    "changeport_linux": "PORT=3006 react-scripts start",
+    "changeport_windows": "set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
