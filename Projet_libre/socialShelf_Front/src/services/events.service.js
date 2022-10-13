@@ -106,6 +106,26 @@ const quit = async (id) => {
     return response;
 };
 
+const cancel = async (id) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .put(
+            API_URL + "cancel/" + id,
+            {},
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        })
+        .catch((error) => {
+            response = error.toJSON();
+        });
+    return response;
+};
+
 const getById = async (id) => {
     let response;
     const token = localStorage.getItem("token");
@@ -210,6 +230,7 @@ const EventsService = {
     getAllJoin,
     join,
     quit,
+    cancel,
     update,
 };
 

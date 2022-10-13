@@ -6,6 +6,7 @@ import { DataContext } from "../DataContext";
 
 const MyEventList = () => {
     const [eventList, setEventList] = useState([]);
+    const [hideCancelled, setHideCancelled] = useState(true);
     let navigate = useNavigate();
     const context = useContext(DataContext);
 
@@ -18,6 +19,18 @@ const MyEventList = () => {
         await EventsService.quit(event.id).then((response) => {
             console.log(response);
         });
+        refresh();
+    };
+
+    const handleClickCancel = async (event) => {
+        await EventsService.cancel(event.id).then((response) => {
+            console.log(response);
+        });
+        refresh();
+    };
+
+    const handleClickToggleCancelled = async () => {
+        setHideCancelled(hideCancelled ? false : true);
         refresh();
     };
 
@@ -39,26 +52,42 @@ const MyEventList = () => {
     return (
         <div>
             <h1>Your events to come </h1>
+                <button onClick={() => handleClickToggleCancelled()}>
+                    {hideCancelled ? "Show" : "Hide"} cancelled
+                </button>
             {eventList.map((event) => (
                 <div key={event.id}>
-                    <EventListItem key={event.id} event={event} />
-                    <br />
-                    <button onClick={() => handleClickDetails(event)}>
-                        More info
-                    </button>
-                    {context.playerId === event.organizer.playerId ? (
-                        <div></div>
+                    {hideCancelled && event.cancelDate ? (
+                         <div></div>
                     ) : (
-                        <button
-                            onClick={() => {
-                                handleClickQuit(event);
-                            }}
-                        >
-                            Quit
-                        </button>
+                        <div>
+                            <EventListItem key={event.id} event={event} />
+                            <br />
+                            <button onClick={() => handleClickDetails(event)}>
+                                More info
+                            </button>
+                            {context.playerId === event.organizer.playerId ? (
+                                <button
+                                onClick={() => {
+                                    handleClickCancel(event);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        handleClickQuit(event);
+                                    }}
+                                >
+                                    Quit
+                                </button>
+                            )}
+                            <br />
+                            <br />
+                        </div>
                     )}
-                    <br />
-                    <br />
+                    
                 </div>
             ))}
         </div>
