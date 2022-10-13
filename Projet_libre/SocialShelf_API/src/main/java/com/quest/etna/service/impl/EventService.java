@@ -175,7 +175,7 @@ public class EventService implements IEventService {
 			int playerNumber = playerRepository.findByParticipatedEventsId(id).size();
 
 			if(playerService.isUser(authentication, eventOrganizerId)
-				|| isParticipant(player.getId(), event.getId())
+				|| playerService.isParticipant(player.getId(), event.getId())
 				|| event.getStartDate().isBefore(Instant.now())
 				|| event.getMaxPlayer() == playerNumber
 				) {
@@ -189,30 +189,14 @@ public class EventService implements IEventService {
 		}
 	}
 
-	/**
-	 * Checks whether the player is one of the participants of the given event.
-	 * 
-	 * @param playerId Id of player
-	 * @param eventId Id of Event
-	 * @return 
-	 */
-	public boolean isParticipant(int playerId, int eventId) {
-		Set<Player> participants = playerRepository.findByParticipatedEventsId(eventId);
-		if (null == participants || participants.isEmpty())
-			return false;
-		for (Player player : participants) {
-			if (player.getId() == playerId)
-				return true;
-		}
-		return false;
-	}
+	
 
 	public EventDTO quit (Integer id, Authentication authentication) {
 		Optional<Event> eventOptional= eventRepository.findById(id);
 		if (eventOptional.isPresent()) {
 			Event event = eventOptional.get();
 			Player player = playerService.getAuthenticatedPlayer(authentication);
-			if (isParticipant(player.getId(), event.getId())) {
+			if (playerService.isParticipant(player.getId(), event.getId())) {
 				eventRepository.quitEvent(player.getId(), event.getId());
 				return new EventDTO(eventOptional.get());
 			} else {
@@ -231,8 +215,7 @@ public class EventService implements IEventService {
 			Event event = eventOptional.get();
 			Player player = playerService.getAuthenticatedPlayer(authentication);
 			if (
-//					isOrganizer(player.getId(), event.getId())
-					event.getOrganizer().getId() == player.getId()
+					playerService.isOrganizer(player.getId(), id)
 					&& null == event.getCancelDate()
 					) {
 				eventRepository.cancelEvent(event.getId());
@@ -247,22 +230,7 @@ public class EventService implements IEventService {
 		}
 	}
 	
-	/**
-	 * Checks whether player is the organizer of given event.
-	 * 
-	 * @param playerId
-	 * @param eventId
-	 * @return
-	 */
-	public boolean isOrganizer(int playerId, int eventId) {
-		Optional<Event> eventOptional= eventRepository.findById(eventId);
-		if (eventOptional.isPresent()) {
-			Event event = eventOptional.get();
-			if (event.getOrganizer().getId() == playerId)
-				return true;
-		}
-		return false;
-	}
+	
 	
 	
 	

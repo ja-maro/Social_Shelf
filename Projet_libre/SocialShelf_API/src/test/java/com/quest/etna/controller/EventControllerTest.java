@@ -102,6 +102,20 @@ class EventControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)));
     }
+    
+    @Test
+    @Order(2)
+    void testGetParticipants() throws Exception {
+    	String token = setup("Brice", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/participants/1").header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("$").isArray())
+		.andExpect(jsonPath("$", hasSize(1)))
+		.andExpect(jsonPath("$[0].playerId", is(1)))
+		.andExpect(jsonPath("$[*].username", contains("Brice")))
+    	.andExpect(jsonPath("$[*].playerId", not(contains(2))))
+    	.andExpect(jsonPath("$[*].username", not(contains("Jean-Antoine"))));
+    }
 
     @Test
     @Order(3)

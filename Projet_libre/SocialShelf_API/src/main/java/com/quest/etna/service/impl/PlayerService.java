@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.quest.etna.model.Event;
 import com.quest.etna.model.Player;
 import com.quest.etna.model.DTO.PlayerDTO;
+import com.quest.etna.repositories.EventRepository;
 import com.quest.etna.repositories.PlayerRepository;
 import com.quest.etna.service.IPlayerService;
 import com.quest.etna.service.JsonService;
@@ -27,6 +30,8 @@ public class PlayerService implements IPlayerService {
 
 	@Autowired
 	private PlayerRepository playerRepository;
+	@Autowired
+	private EventRepository eventRepository;
 	@Autowired
 	private JsonService jsonService;
 	private static final String FORBIDDEN = "{\"message\": \"Forbidden\"}";
@@ -161,5 +166,56 @@ public class PlayerService implements IPlayerService {
 	@Override
 	public Player getAuthenticatedPlayer(Authentication auth) {
 		return playerRepository.findByUsernameIgnoreCase(auth.getName());
+	}
+
+	@Override
+	public List<PlayerDTO> getParticipantsByEventId(Authentication auth, Integer id) {
+		int playerId = getAuthenticatedPlayer(auth).getId();
+		if (isOrganizer(playerId, id)
+				|| isParticipant(playerId, id)) {
+			List<PlayerDTO> results = new ArrayList<>();
+			Iterable<Player> players = playerRepository.findByParticipatedEventsId(id);
+			players.forEach(user -> {
+				PlayerDTO playerDTO = new PlayerDTO(user);
+				results.add(playerDTO);
+			});
+			return results;			
+		}
+		throw new ResponseStatusException(HttpStatus.FORBIDDEN, FORBIDDEN);
+	}
+	
+	/**
+	 * Checks whether the player is one of the participants of the given event.
+	 * 
+	 * @param playerId Id of player
+	 * @param eventId Id of Event
+	 * @return 
+	 */
+	public boolean isParticipant(int playerId, int eventId) {
+		Set<Player> participants = playerRepository.findByParticipatedEventsId(eventId);
+		if (null == participants || participants.isEmpty())
+			return false;
+		for (Player player : participants) {
+			if (player.getId() == playerId)
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether player is the organizer of given event.
+	 * 
+	 * @param playerId
+	 * @param eventId
+	 * @return
+	 */
+	public boolean isOrganizer(int playerId, int eventId) {
+		Optional<Event> eventOptional= eventRepository.findById(eventId);
+		if (eventOptional.isPresent()) {
+			Event event = eventOptional.get();
+			if (event.getOrganizer().getId() == playerId)
+				return true;
+		}
+		return false;
 	}
 }

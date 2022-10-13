@@ -12,6 +12,7 @@ public interface IPlayerService {
 	
 	public List<Player> getAll();
 	public List<PlayerDTO> getAllDTO();
+	public List<PlayerDTO> getParticipantsByEventId(Authentication auth, Integer id);
 	public PlayerDTO getById(Integer id);
 	public Player create(Player entity);
 	public ResponseEntity<PlayerDTO> update (Integer id, Authentication auth, PlayerDTO formPlayer);
