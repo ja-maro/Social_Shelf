@@ -24,6 +24,7 @@ import MyEventList from "./events/MyEventList";
 import MyPastEventList from "./events/MyPastEventList";
 import EventJoinList from "./events/EventJoinList";
 import EventAdd from "./events/EventAdd";
+import EventUpdate from "./events/EventUpdate";
 
 const App = () => {
     const [isLog, setIsLog] = useState(false);
@@ -65,6 +66,10 @@ const App = () => {
                     <Route path="/events/mine" element={<MyEventList />} />
                     <Route path="/events/past" element={<MyPastEventList />} />
                     <Route path="/events/join" element={<EventJoinList />} />
+                    <Route
+                        path="/events/update/:id"
+                        element={<EventUpdate />}
+                    />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </DataContext.Provider>

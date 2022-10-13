@@ -29,6 +29,10 @@ const MyEventList = () => {
         refresh();
     };
 
+    const handleClickUpdate = async (event) => {
+        navigate("/events/update/" + event.id);
+    };
+
     const handleClickToggleCancelled = async () => {
         setHideCancelled(hideCancelled ? false : true);
         refresh();
@@ -52,13 +56,13 @@ const MyEventList = () => {
     return (
         <div>
             <h1>Your events to come </h1>
-                <button onClick={() => handleClickToggleCancelled()}>
-                    {hideCancelled ? "Show" : "Hide"} cancelled
-                </button>
+            <button onClick={() => handleClickToggleCancelled()}>
+                {hideCancelled ? "Show" : "Hide"} cancelled
+            </button>
             {eventList.map((event) => (
                 <div key={event.id}>
                     {hideCancelled && event.cancelDate ? (
-                         <div></div>
+                        <div></div>
                     ) : (
                         <div>
                             <EventListItem key={event.id} event={event} />
@@ -67,27 +71,37 @@ const MyEventList = () => {
                                 More info
                             </button>
                             {context.playerId === event.organizer.playerId ? (
-                                <button
-                                onClick={() => {
-                                    handleClickCancel(event);
-                                }}
-                            >
-                                Cancel
-                            </button>
+                                <div>
+                                    <button
+                                        onClick={() => {
+                                            handleClickCancel(event);
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            handleClickUpdate(event);
+                                        }}
+                                    >
+                                        Update
+                                    </button>
+                                </div>
                             ) : (
-                                <button
-                                    onClick={() => {
-                                        handleClickQuit(event);
-                                    }}
-                                >
-                                    Quit
-                                </button>
+                                <div>
+                                    <button
+                                        onClick={() => {
+                                            handleClickQuit(event);
+                                        }}
+                                    >
+                                        Quit
+                                    </button>
+                                </div>
                             )}
                             <br />
                             <br />
                         </div>
                     )}
-                    
                 </div>
             ))}
         </div>
