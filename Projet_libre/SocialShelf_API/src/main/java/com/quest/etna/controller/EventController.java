@@ -42,6 +42,12 @@ public class EventController {
         return ResponseEntity.ok(iEventService.quit(id, authentication));
     }
     
+    @PutMapping(value = "/cancel/{id}")
+    public ResponseEntity<EventDTO> cancelEvent(@PathVariable Integer id,
+    		@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    	return ResponseEntity.ok(iEventService.cancel(id, authentication));
+    }
+    
     @GetMapping(value="/past")
     public ResponseEntity<List<EventDTO>> getPastPlayerEvents(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     	return ResponseEntity.ok(iEventService.getAllPastByPlayer(authentication));

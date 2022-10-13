@@ -34,7 +34,7 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
 	
 	@Modifying
 	@Transactional
-	@Query("UPDATE Event e SET e.cancelDate = CURRENT_DATE() WHERE e.id=:eventId")
+	@Query("UPDATE Event e SET e.cancelDate = CURRENT_TIMESTAMP() WHERE e.id=:eventId")
 	void cancelEvent(@Param("eventId") int eventId); 
 	
 	@Query("SELECT e FROM Event e "

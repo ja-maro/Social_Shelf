@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.core.IsNull;
+
 @Sql(scripts = "/import.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -191,12 +193,37 @@ class EventControllerTest {
 
     @Test
     @Order(5)
-    void deleteEvent () throws Exception {
-        createEvent();
-        String token = setup("Jean-Antoine", "1234");
-        mockMvc.perform(MockMvcRequestBuilders.delete(CONTROLLER_PATH + "/5")
+    void cancelEvent () throws Exception {
+        String token = setup("Brice", "1234");
+        
+        mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/1").header("Authorization", token))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("cancelDate").value(IsNull.nullValue()));
+
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/cancel/1")
+                .header("Authorization", token))
+        .andExpect(status().isConflict());
+        
+        token = setup("Jean-Antoine", "1234");
+        
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/cancel/1")
                         .header("Authorization", token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("Message", is("Success")));
+                .andExpect(jsonPath("cancelDate").exists());
+        
+        mockMvc.perform(MockMvcRequestBuilders.put(CONTROLLER_PATH + "/cancel/1")
+                .header("Authorization", token))
+        .andExpect(status().isConflict());
+    }
+    
+    @Test
+    @Order(6)
+    void deleteEvent () throws Exception {
+    	createEvent();
+    	String token = setup("Jean-Antoine", "1234");
+    	mockMvc.perform(MockMvcRequestBuilders.delete(CONTROLLER_PATH + "/5")
+    			.header("Authorization", token))
+    	.andExpect(status().isOk())
+    	.andExpect(jsonPath("Message", is("Success")));
     }
 }

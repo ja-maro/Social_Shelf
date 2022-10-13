@@ -188,7 +188,14 @@ public class EventService implements IEventService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	/**
+	 * Checks whether the player is one of the participants of the given event.
+	 * 
+	 * @param playerId Id of player
+	 * @param eventId Id of Event
+	 * @return 
+	 */
 	public boolean isParticipant(int playerId, int eventId) {
 		Set<Player> participants = playerRepository.findByParticipatedEventsId(eventId);
 		if (null == participants || participants.isEmpty())
@@ -216,7 +223,46 @@ public class EventService implements IEventService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@Override
+	public EventDTO cancel(Integer id, Authentication authentication) {
+		Optional<Event> eventOptional= eventRepository.findById(id);
+		if (eventOptional.isPresent()) {
+			Event event = eventOptional.get();
+			Player player = playerService.getAuthenticatedPlayer(authentication);
+			if (
+//					isOrganizer(player.getId(), event.getId())
+					event.getOrganizer().getId() == player.getId()
+					&& null == event.getCancelDate()
+					) {
+				eventRepository.cancelEvent(event.getId());
+				eventOptional= eventRepository.findById(id);
+				return new EventDTO(eventOptional.get());
+			} else {
+				throw new ResponseStatusException(HttpStatus.CONFLICT);
+			}
+
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+	}
 	
+	/**
+	 * Checks whether player is the organizer of given event.
+	 * 
+	 * @param playerId
+	 * @param eventId
+	 * @return
+	 */
+	public boolean isOrganizer(int playerId, int eventId) {
+		Optional<Event> eventOptional= eventRepository.findById(eventId);
+		if (eventOptional.isPresent()) {
+			Event event = eventOptional.get();
+			if (event.getOrganizer().getId() == playerId)
+				return true;
+		}
+		return false;
+	}
 	
 	
 	
