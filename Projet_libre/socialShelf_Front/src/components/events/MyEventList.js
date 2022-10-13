@@ -55,6 +55,7 @@ const MyEventList = () => {
 
     return (
         <div>
+             <button onClick={() => navigate("/events/new")}>Create a new event</button>
             <h1>Your events to come </h1>
             <button onClick={() => handleClickToggleCancelled()}>
                 {hideCancelled ? "Show" : "Hide"} cancelled

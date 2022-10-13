@@ -51,6 +51,13 @@ const Profile = () => {
             <button onClick={() => handleClickDetails(userDetails)}>
                 Edit
             </button>
+            <br />
+            <br />
+            <button onClick={() => navigate("/address")}>
+                {context.isAdmin ? "Manage addresses" : "My addresses"}  
+            </button>
+            <br />
+            <button onClick={() => navigate("/events/past")}>Past events</button>
         </div>
     );
 };
