@@ -18,6 +18,28 @@ const getByEventId = async (eventId) => {
     return response;
 };
 
-const MessageService = {  getByEventId };
+const add = async (
+    content,
+    eventId,
+) => {
+    let response;
+    const token = localStorage.getItem("token");
+    await axios
+        .post(
+            API_URL + "message/" + eventId,
+            {
+                content,
+            },
+            {
+                headers: { Authorization: "Bearer " + token },
+            }
+        )
+        .then((result) => {
+            response = result;
+        });
+    return response;
+};
+
+const MessageService = { add, getByEventId };
 
 export default MessageService;

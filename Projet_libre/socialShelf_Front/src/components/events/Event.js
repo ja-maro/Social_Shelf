@@ -4,6 +4,7 @@ import UserService from "../../services/user.service";
 import MessageService from "../../services/message.service";
 import { useParams, useNavigate } from "react-router-dom";
 import EventListItem from "./EventListItem";
+import MessageAdd from "../message/MessageAdd";
 
 const Event = () => {
     const [ready, setReady] = useState(false);
@@ -14,10 +15,15 @@ const Event = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+       refresh();
+    }, []);
+
+    const refresh= () => {
         UserService.getParticipantsByEventId(id).then((response) => {
             if (response.status === 200) {
                 console.log(response);
                 setParticipantsList(response.data);
+                
             } else {
                 console.log(response);
             }
@@ -39,8 +45,7 @@ const Event = () => {
                 console.log(response);
             }
         });
-        
-    }, []);
+    }
 
     return ready === false ? null : (
         <div>
@@ -56,6 +61,7 @@ const Event = () => {
                 ))}
             <br />
             <h2>Messages : </h2>
+          
             {messagesList.map((message) => (
                     <div key={message.id}>
                     <br />
@@ -65,6 +71,7 @@ const Event = () => {
                         </p>
                     </div>
                 ))}
+                <MessageAdd event={event} refresh={refresh} />
         </div>
     );
 };
