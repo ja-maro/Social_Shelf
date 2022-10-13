@@ -7,6 +7,7 @@ TRUNCATE TABLE event;
 TRUNCATE TABLE games_types;
 TRUNCATE TABLE players_games;
 TRUNCATE TABLE participants;
+TRUNCATE TABLE message;
 
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('1', '2022-10-01 14:49:26', 'brice@brice.fr', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_USER', '2022-10-01 14:49:26', 'Brice');
 INSERT INTO `social_shelf`.`player` (`id`, `creation_date`, `email`, `password`, `role`, `updated_date`, `username`) VALUES ('2', '2022-10-01 14:49:26', 'ja@mail.com', '$2a$10$huURGOgbVCTW0s09PwJZIOOOWF34iY/iZwddsX0S.qrfXybI6L1FW', 'ROLE_ADMIN', '2022-10-01 14:49:26', 'Jean-Antoine');
@@ -60,5 +61,7 @@ INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('1',
 INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('2', '2');
 INSERT INTO `social_shelf`.`participants` (`player_id`, `event_id`) VALUES ('2', '3');
 
+INSERT INTO `social_shelf`.`message` (`id`, `content`, `creation_date`, `updated_date`, `author_id`, `event_id`) VALUES ('1', 'Coucou les loulous !', '2022-09-29 14:39:26', '2022-09-29 14:39:26', '2', '1');
+INSERT INTO `social_shelf`.`message` (`id`, `content`, `creation_date`, `updated_date`, `author_id`, `event_id`) VALUES ('2', 'Hello, moi c\'est Brice et j\'aime les robots', '2022-09-30 14:39:26', '2022-09-30 14:39:26', '1', '1');
 		
 SET FOREIGN_KEY_CHECKS = 1;

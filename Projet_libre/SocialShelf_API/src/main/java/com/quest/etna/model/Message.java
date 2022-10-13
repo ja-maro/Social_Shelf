@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.quest.etna.model.DTO.MessageDTO;
+
 @Entity
 @Table(name="message")
 public class Message {
@@ -23,7 +25,7 @@ public class Message {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "name", columnDefinition = "varchar(4000) not null")
+	@Column(name = "content", columnDefinition = "varchar(4000) not null")
 	private String content;
 
 	@Column(name = "delete_date", columnDefinition = "datetime")
@@ -51,6 +53,17 @@ public class Message {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+public Message(MessageDTO messageDTO) {
+	super();
+	this.content = messageDTO.getContent();
+	this.event = new Event(messageDTO.getEvent());
+	this.author = new Player(messageDTO.getAuthor());
+}
+
+
 
 // GETTERS & SETTERS
 	

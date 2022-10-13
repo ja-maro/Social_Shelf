@@ -171,8 +171,7 @@ public class PlayerService implements IPlayerService {
 	@Override
 	public List<PlayerDTO> getParticipantsByEventId(Authentication auth, Integer id) {
 		int playerId = getAuthenticatedPlayer(auth).getId();
-		if (isOrganizer(playerId, id)
-				|| isParticipant(playerId, id)) {
+		if (isParticipantOrOrganizer(playerId, id)) {
 			List<PlayerDTO> results = new ArrayList<>();
 			Iterable<Player> players = playerRepository.findByParticipatedEventsId(id);
 			players.forEach(user -> {
@@ -217,5 +216,16 @@ public class PlayerService implements IPlayerService {
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Checks whether player is a participant or the organizer of a given event.
+	 * 
+	 * @param playerId
+	 * @param eventId
+	 * @return
+	 */
+	public boolean isParticipantOrOrganizer(int playerId, int eventId) {
+		return isParticipant(playerId, eventId) || isOrganizer(playerId, eventId);
 	}
 }
