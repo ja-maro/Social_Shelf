@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import EventsService from "../../services/events.service";
+import UserService from "../../services/user.service";
 import { useParams, useNavigate } from "react-router-dom";
 import EventListItem from "./EventListItem";
 
 const Event = () => {
     const [ready, setReady] = useState(false);
     const [event, setEvent] = useState({});
-    const [participantsList, setparticipantsList] = useState([]);
+    const [participantsList, setParticipantsList] = useState([]);
     const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
+        UserService.getParticipantsByEventId(id).then((response) => {
+            if (response.status === 200) {
+                console.log(response);
+                setParticipantsList(response.data);
+            } else {
+                console.log(response);
+            }
+        });
         EventsService.getById(id).then((response) => {
             if (response.status === 200) {
                 console.log(response);
@@ -20,6 +29,7 @@ const Event = () => {
                 console.log(response);
             }
         });
+        
     }, []);
 
     return ready === false ? null : (

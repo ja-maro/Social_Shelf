@@ -14,6 +14,10 @@ const getById = (id) => {
     return getRequestParam("player", id);
 };
 
+const getParticipantsByEventId = (id) => {
+    return getRequestParam("event/participants", id);
+};
+
 const update = (id, username, role, email) => {
     return putRequest("player/" + id, username, role, email);
 };
@@ -91,6 +95,7 @@ const putRequest = async (route, username, role, email) => {
 const UserService = {
     deleteUser,
     getAll,
+    getParticipantsByEventId,
     getById,
     getUserDetails,
     update,
