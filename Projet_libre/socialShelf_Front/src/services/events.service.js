@@ -175,9 +175,6 @@ const add = async (
         )
         .then((result) => {
             response = result;
-        })
-        .catch((error) => {
-            response = error.toJSON();
         });
     return response;
 };
