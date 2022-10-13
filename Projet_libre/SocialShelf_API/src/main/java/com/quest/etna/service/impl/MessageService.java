@@ -55,9 +55,10 @@ public class MessageService implements IMessageService {
 			Optional<Event> eventOptional = eventRepository.findById(eventId);
 			if (eventOptional.isPresent()) {
 				Event event = eventOptional.get();
-				Message newMessage = new Message(messageDTO);
+				Message newMessage = new Message();
 				newMessage.setEvent(event);
 				newMessage.setAuthor(player);
+				newMessage.setContent(messageDTO.getContent());
 				try {
 					messageRepository.save(newMessage);
 					return new MessageDTO(newMessage);
