@@ -6,8 +6,8 @@ services:
     container_name: social_shelf_db
     ports:
       - "3306:3306"
-#    volumes:
-#      - ./mysql-db:/var/lib/mysql
+    volumes:
+      - ./mysql-db:/var/lib/mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=password
